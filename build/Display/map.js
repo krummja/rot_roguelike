@@ -52,8 +52,8 @@ var Map = /** @class */ (function () {
     });
     ;
     ;
-    Map.generate = function (map) {
-        var generator = new ROT.Map.Cellular(80, 40);
+    Map.generate = function (map, width, height) {
+        var generator = new ROT.Map.Cellular(width, height);
         generator.randomize(0.5);
         var totalIterations = 3;
         for (var i = 0; i < totalIterations - 1; i++) {

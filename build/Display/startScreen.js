@@ -25,7 +25,6 @@ var _1 = require("./");
 var StartScreen = /** @class */ (function () {
     function StartScreen(game) {
         this.game = game;
-        // super(game);
     }
     StartScreen.prototype.enter = function () {
         console.log("StartScreen.enter: Entered start screen.");

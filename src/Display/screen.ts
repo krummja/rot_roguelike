@@ -1,5 +1,5 @@
 import * as ROT from 'rot-js';
-import { Game } from '../game';
+
 
 interface IScreen
 {

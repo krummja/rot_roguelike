@@ -1,5 +1,10 @@
 import * as ROT from 'rot-js';
-import { DisplayOptions } from 'rot-js/lib/display/types';
 
+type Screen = {
+  enter(): void;
+  exit(): void;
+  render(display: ROT.Display): void;
+  handleInput(inputType: string, inputData: any): void;
+}
 
-export {};
+export { Screen };

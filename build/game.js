@@ -26,8 +26,10 @@ var Game = /** @class */ (function () {
         var _a;
         this._display = null;
         this._currentScreen = null;
-        console.log("Game:              Setting up game instance. One sec...");
-        this.display = new ROT.Display({ width: 80, height: 40 });
+        this._screenWidth = 80;
+        this._screenHeight = 40;
+        console.log('Game:              Setting up game instance. One sec...');
+        this.display = new ROT.Display({ width: this._screenWidth, height: this._screenHeight });
         this.container = this.display.getContainer();
         (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);
     }
@@ -37,42 +39,52 @@ var Game = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    ;
-    ;
     Object.defineProperty(Game.prototype, "currentScreen", {
         get: function () { return this._currentScreen; },
         set: function (v) { this._currentScreen = v; },
         enumerable: false,
         configurable: true
     });
-    ;
-    ;
+    Object.defineProperty(Game.prototype, "screenWidth", {
+        get: function () { return this._screenWidth; },
+        set: function (v) { this._screenWidth = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Game.prototype, "screenHeight", {
+        get: function () { return this._screenHeight; },
+        set: function (v) { this._screenHeight = v; },
+        enumerable: false,
+        configurable: true
+    });
     Game.prototype.init = function () {
         var game = this;
         var bindEventToScreen = function (event) {
             window.addEventListener(event, function (e) {
                 if (game.currentScreen !== null) {
                     game.currentScreen.handleInput(event, e);
+                    game.display.clear();
+                    game.currentScreen.render(game.display);
                 }
             });
         };
         bindEventToScreen('keydown');
-        bindEventToScreen('keyup');
-        bindEventToScreen('keypress');
-        console.log("Game.init:         Game successfully initialized on port 8080.");
+        // bindEventToScreen('keyup');
+        // bindEventToScreen('keypress');
+        console.log('Game.init:         Game successfully initialized on port 8080.');
     };
     Game.prototype.switchScreen = function (screen) {
         if (this.currentScreen !== null) {
-            console.log("Game.switchScreen: A scene is running. Exiting first...");
+            console.log('Game.switchScreen: A scene is running. Exiting first...');
             this.currentScreen.exit();
-            console.log("Game.switchScreen: OK, continuing.");
+            console.log('Game.switchScreen: OK, continuing.');
         }
         this.display.clear();
         this.currentScreen = screen;
         if (this.currentScreen) {
-            console.log("Game.switchScreen: Either no prior screen, or first init.");
+            console.log('Game.switchScreen: Either no prior screen, or first init.');
             this.currentScreen.enter();
-            console.log("Game.switchScreen: Starting renderer.");
+            console.log('Game.switchScreen: Starting renderer.');
             this.currentScreen.render(this.display);
         }
     };

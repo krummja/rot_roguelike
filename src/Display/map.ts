@@ -27,14 +27,13 @@ class Map
   }
 
 
-  public static generate(map: Array<Array<Tile>>)
+  public static generate(map: Array<Array<Tile>>, width: number, height: number)
   {
-    let generator = new ROT.Map.Cellular(80, 40);
+    let generator = new ROT.Map.Cellular(width, height);
     generator.randomize(0.5);
 
     let totalIterations = 3;
-    for (let i = 0; i < totalIterations - 1; i++)
-    {
+    for (let i = 0; i < totalIterations - 1; i++) {
       generator.create();
     }
 
