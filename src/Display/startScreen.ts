@@ -1,16 +1,17 @@
 import * as ROT from 'rot-js';
 
-import { PlayScreen, Screen } from './';
 import { Game } from '../game';
+import { PlayScreen, IScreen } from './';
 
 
-class StartScreen
+class StartScreen implements IScreen
 {
   public game: Game;
+
+
   constructor(game: Game)
   {
     this.game = game;
-    // super(game);
   }
 
 

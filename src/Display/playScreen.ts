@@ -1,9 +1,9 @@
 import * as ROT from 'rot-js';
 import { Game } from '../game';
-import { Map, Screen, Tile } from './';
+import { Map, IScreen, Tile } from './';
 
 
-class PlayScreen
+class PlayScreen implements IScreen
 {
   private _map: Map;
   private map: Array<Array<Tile>> = null;
