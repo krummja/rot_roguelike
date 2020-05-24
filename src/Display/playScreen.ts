@@ -56,7 +56,8 @@ class PlayScreen implements IScreen
     // Put bounds on the viewport movement relative to the map edge
     for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
       for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
-        let glyph = this._map.getTile(x, y).glyph;
+        // FIXME: 'glyph' property has been removed during extension of Glyph -> Tile class
+        let glyph = this._map.getTile(x, y);
         display.draw(x - topLeftX, y - topLeftY, glyph.char, glyph.fg, glyph.bg);
       }
     }

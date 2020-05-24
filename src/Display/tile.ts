@@ -1,32 +1,36 @@
 import * as ROT from 'rot-js';
 
 import { Glyph } from './';
+import { IProperties } from '../types';
 
-class Tile
+
+class Tile extends Glyph
 {
-  private _glyph: Glyph;
 
-  public get glyph(): Glyph { return this._glyph };
-  public set glyph(v: Glyph) { this._glyph = v };
-
-
-  constructor(glyph: Glyph)
+  constructor(properties: IProperties)
   {
-    this._glyph = glyph;
+    super(properties)
   }
 
 
   public static nullTile(): Tile
   {
-    return new Tile(new Glyph());
+    return new Tile({});
   }
   public static floorTile(): Tile
   {
-    return new Tile(new Glyph('.'));
+    return new Tile({
+      character: '.',
+      isWalkable: true
+    });
   }
   public static wallTile(): Tile
   {
-    return new Tile(new Glyph('#', 'goldenrod'));
+    return new Tile({
+      character: '#',
+      foreground: 'goldenrod',
+      isDiggable: true
+    });
   }
 }
 
