@@ -1,10 +1,10 @@
 import { Mixin, settings } from 'ts-mixer';
 
+import { IProperties } from '../types';
+import { Map, Glyph } from './';
+
+settings.prototypeStrategy = 'copy';
 settings.initFunction = 'init';
-
-import {Glyph} from '../Display';
-import {Constructor, IProperties} from '../types';
-
 
 class Entity extends Glyph
 {
@@ -36,27 +36,58 @@ class Entity extends Glyph
   }
 }
 
-function HitCounter<TBase extends Constructor>(Base: TBase) {
-  return class extends Base {
-    name: string;
-    multiplier: number;
-    hits: number;
-    incrementHit: Function;
-    getHitCount: Function;
+class HitCounter
+{
+  private readonly _multiplier: number;
+  private _totalHits: number;
 
-    constructor(...args: any[]) {
-      super(...args);
-      this.name = "HitCounter";
-      this.multiplier = 1;
-      this.hits = 0;
-      this.incrementHit = (): void => { this.hits += this.multiplier; }
-      this.getHitCount = (): number => { return this.hits; }
+  public incrementHit: Function;
+  public getTotalHits: Function;
+
+
+  constructor(properties: IProperties)
+  {
+    this._multiplier = properties["multiplier"];
+    this._totalHits = 0;
+    this.incrementHit = (): void => { this._totalHits += this._multiplier; }
+    this.getTotalHits = (): number => { return this._totalHits; }
+  }
+}
+
+class Combatant extends Mixin(Entity, HitCounter) {}
+
+class Moveable
+{
+  public x: number;
+  public y: number;
+  public properties: IProperties;
+  public tryMove: Function;
+
+  constructor(properties: IProperties)
+  {
+    this.properties = properties;
+    this.x = this.properties['x'];
+    this.y = this.properties['y'];
+  }
+
+  protected init(properties: IProperties): void
+  {
+    this.tryMove = (x: number, y: number, map: Map) => {
+      let tile = map.getTile(x, y);
+      if (tile.walkable) {
+        this.x = x;
+        this.y = y;
+        return true;
+      } else if (tile.diggable) {
+        map.dig(x, y);
+        return true;
+      }
+      return false;
     }
   }
 }
 
+class Player extends Mixin(Entity, Moveable) {}
 
 
-
-
-export { Entity };
+export { Entity, Player };

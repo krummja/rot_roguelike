@@ -1,9 +1,11 @@
 <component name="ProjectDictionaryState">
   <dictionary name="krummja">
     <words>
+      <w>activatable</w>
       <w>ctors</w>
       <w>diggable</w>
       <w>mixins</w>
+      <w>moveable</w>
     </words>
   </dictionary>
 </component>

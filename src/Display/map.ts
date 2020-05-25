@@ -26,7 +26,6 @@ class Map
     this._height = tiles[0].length;
   }
 
-
   public static generate(map: Array<Array<Tile>>, width: number, height: number)
   {
     let generator = new ROT.Map.Cellular(width, height);
@@ -46,6 +45,27 @@ class Map
     })
 
     return new Map(map);
+  }
+
+  public dig(x: number, y: number): void
+  {
+    if (this.getTile(x, y).diggable) {
+      this._tiles[x][y] = Tile.floorTile();
+    }
+  }
+
+  getRandomFloorPosition(): { x: number, y: number }
+  {
+    let x = 0;
+    let y = 0;
+
+    while (this.getTile(x, y).walkable === false) {
+      x = Math.floor(Math.random() * this._width);
+      y = Math.floor(Math.random() * this._height);
+    }
+
+    console.log(this.getTile(x, y))
+    return { x: x, y: y }
   }
 
   public getTile(x: number, y: number): Tile

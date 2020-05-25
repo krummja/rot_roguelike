@@ -69,6 +69,21 @@ var Map = /** @class */ (function () {
         });
         return new Map(map);
     };
+    Map.prototype.dig = function (x, y) {
+        if (this.getTile(x, y).diggable) {
+            this._tiles[x][y] = _1.Tile.floorTile();
+        }
+    };
+    Map.prototype.getRandomFloorPosition = function () {
+        var x = 0;
+        var y = 0;
+        while (this.getTile(x, y).walkable === false) {
+            x = Math.floor(Math.random() * this._width);
+            y = Math.floor(Math.random() * this._height);
+        }
+        console.log(this.getTile(x, y));
+        return { x: x, y: y };
+    };
     Map.prototype.getTile = function (x, y) {
         if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
             return _1.Tile.nullTile();

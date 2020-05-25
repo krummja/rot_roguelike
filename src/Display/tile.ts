@@ -7,6 +7,7 @@ import { IProperties } from '../types';
 class Tile extends Glyph
 {
 
+
   constructor(properties: IProperties)
   {
     super(properties)
@@ -17,6 +18,7 @@ class Tile extends Glyph
   {
     return new Tile({});
   }
+
   public static floorTile(): Tile
   {
     return new Tile({
@@ -24,6 +26,7 @@ class Tile extends Glyph
       isWalkable: true
     });
   }
+
   public static wallTile(): Tile
   {
     return new Tile({

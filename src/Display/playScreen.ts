@@ -1,13 +1,12 @@
 import * as ROT from 'rot-js';
 import { Game } from '../game';
-import { Map, IScreen, Tile } from './';
+import { Map, IScreen, Tile, Entity, Player } from './';
 
 
 class PlayScreen implements IScreen
 {
   private _map: Map;
-  private _centerX: number = 0;
-  private _centerY: number = 0;
+  private _player: Player;
 
   public game: Game;
   public map: Array<Array<Tile>> = null;
@@ -18,6 +17,13 @@ class PlayScreen implements IScreen
   constructor(game: Game)
   {
     this.game = game;
+    this._player = new Player({
+      character: '@',
+      name: 'Player',
+      foreground: 'white',
+      background: 'black'
+    })
+
   }
 
 
@@ -26,6 +32,7 @@ class PlayScreen implements IScreen
     console.log('PlayScreen.enter:  Entered play screen.');
 
     this.map = [];
+
     for (let x = 0; x < this.mapWidth; x++) {
       this.map.push([]);
       for (let y = 0; y < this.mapHeight; y++) {
@@ -34,7 +41,12 @@ class PlayScreen implements IScreen
     }
 
     this._map = Map.generate(this.map, this.mapWidth, this.mapHeight);
-    console.log(this._map);
+
+    // console.log(this._map);
+    // console.log(this.map);
+    let position = this._map.getRandomFloorPosition();
+    this._player.x = position.x;
+    this._player.y = position.y;
   }
 
   public exit(): void
@@ -48,22 +60,26 @@ class PlayScreen implements IScreen
     let screenHeight = this.game.screenHeight;
 
     // Figure out the viewport dimensions
-    let topLeftX = Math.max(0, this._centerX - (screenWidth / 2));
+    let topLeftX = Math.max(0, this._player.x - (screenWidth / 2));
     topLeftX = Math.min(topLeftX, this._map.width - screenWidth);
-    let topLeftY = Math.max(0, this._centerY - (screenHeight / 2));
+    let topLeftY = Math.max(0, this._player.y - (screenHeight / 2));
     topLeftY = Math.min(topLeftY, this._map.height - screenHeight);
 
     // Put bounds on the viewport movement relative to the map edge
     for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
       for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
-        // FIXME: 'glyph' property has been removed during extension of Glyph -> Tile class
-        let glyph = this._map.getTile(x, y);
-        display.draw(x - topLeftX, y - topLeftY, glyph.char, glyph.fg, glyph.bg);
+        let tile = this._map.getTile(x, y);
+        display.draw(x - topLeftX, y - topLeftY, tile.char, tile.fg, tile.bg);
       }
     }
-
     // Render the player
-    display.draw(this._centerX - topLeftX, this._centerY - topLeftY, '@', 'white', 'black');
+    display.draw(
+        this._player.x - topLeftX,
+        this._player.y - topLeftY,
+        this._player.char,
+        this._player.fg,
+        this._player.bg
+    );
   }
 
   public handleInput(inputType: string, inputData: any): void
@@ -84,11 +100,11 @@ class PlayScreen implements IScreen
     }
   }
 
-  // TODO: Refactor into a separate class, later into a component.
-  public move(dX: number, dY: number)
+  public move(dX: number, dY: number): void
   {
-    this._centerX = Math.max(0, Math.min(this._map.width - 1, this._centerX + dX));
-    this._centerY = Math.max(0, Math.min(this._map.height - 1, this._centerY + dY));
+    let newX = this._player.x + dX;
+    let newY = this._player.y + dY;
+    this._player.tryMove(newX, newY, this._map);
   }
 }
 
