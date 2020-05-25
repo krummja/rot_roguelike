@@ -20,5 +20,8 @@ interface IProperties {
   multiplier ?: number
 }
 
+// https://mariusschulz.com/blog/mixin-classes-in-typescript
+type Constructor<T = {}> = new (...args: any[]) => T;
 
-export { Screen, IProperties };
+
+export { Constructor, Screen, IProperties };
