@@ -26,10 +26,22 @@ var Game = /** @class */ (function () {
         var _a;
         this._display = null;
         this._currentScreen = null;
-        this._screenWidth = 80;
-        this._screenHeight = 40;
+        this._screenWidth = 64;
+        this._screenHeight = 50;
+        this._fontFamily = 'Fira Code';
+        this._fontStyle = 'bold';
+        this._fontSize = 12;
+        this._spacing = 1.0;
+        this._squareRatio = true;
         console.log('Game:              Setting up game instance. One sec...');
-        this.display = new ROT.Display({ width: this._screenWidth, height: this._screenHeight });
+        this.display = new ROT.Display({
+            width: this._screenWidth,
+            height: this._screenHeight,
+            fontFamily: this._fontFamily,
+            fontStyle: this._fontStyle,
+            spacing: this._spacing,
+            forceSquareRatio: this._squareRatio
+        });
         this.container = this.display.getContainer();
         (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);
     }
@@ -69,8 +81,6 @@ var Game = /** @class */ (function () {
             });
         };
         bindEventToScreen('keydown');
-        // bindEventToScreen('keyup');
-        // bindEventToScreen('keypress');
         console.log('Game.init:         Game successfully initialized on port 8080.');
     };
     Game.prototype.switchScreen = function (screen) {

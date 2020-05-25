@@ -43,14 +43,13 @@ class Map
         map[x][y] = Tile.wallTile();
       }
     })
-
     return new Map(map);
   }
 
   public dig(x: number, y: number): void
   {
     if (this.getTile(x, y).diggable) {
-      this._tiles[x][y] = Tile.floorTile();
+      this.tiles[x][y] = Tile.floorTile();
     }
   }
 
@@ -73,7 +72,7 @@ class Map
     if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
       return Tile.nullTile();
     } else {
-      return this._tiles[x][y] || Tile.nullTile();
+      return this.tiles[x][y] || Tile.nullTile();
     }
   }
 }

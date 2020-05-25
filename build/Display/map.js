@@ -71,7 +71,7 @@ var Map = /** @class */ (function () {
     };
     Map.prototype.dig = function (x, y) {
         if (this.getTile(x, y).diggable) {
-            this._tiles[x][y] = _1.Tile.floorTile();
+            this.tiles[x][y] = _1.Tile.floorTile();
         }
     };
     Map.prototype.getRandomFloorPosition = function () {
@@ -89,7 +89,7 @@ var Map = /** @class */ (function () {
             return _1.Tile.nullTile();
         }
         else {
-            return this._tiles[x][y] || _1.Tile.nullTile();
+            return this.tiles[x][y] || _1.Tile.nullTile();
         }
     };
     return Map;

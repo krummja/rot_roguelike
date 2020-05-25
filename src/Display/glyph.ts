@@ -4,6 +4,7 @@ import { IProperties } from '../types';
 class Glyph
 {
   private _char: string;
+  private _font: string;
   private _fg: string;
   private _bg: string;
   private _walkable: boolean;

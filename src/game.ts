@@ -7,8 +7,13 @@ class Game
 {
   private _display: ROT.Display = null;
   private _currentScreen: Screen = null;
-  private _screenWidth: number = 80;
-  private _screenHeight: number = 40;
+  private _screenWidth: number = 64;
+  private _screenHeight: number = 50;
+  private _fontFamily: string = 'Fira Code';
+  private _fontStyle: string = 'bold';
+  private _fontSize: number = 12;
+  private _spacing: number = 1.0;
+  private _squareRatio: boolean = true;
 
   public container: HTMLElement | null;
 
@@ -29,7 +34,14 @@ class Game
   public constructor()
   {
     console.log('Game:              Setting up game instance. One sec...');
-    this.display = new ROT.Display({width: this._screenWidth, height: this._screenHeight});
+    this.display = new ROT.Display({
+      width: this._screenWidth,
+      height: this._screenHeight,
+      fontFamily: this._fontFamily,
+      fontStyle: this._fontStyle,
+      spacing: this._spacing,
+      forceSquareRatio: this._squareRatio
+    });
     this.container = this.display.getContainer();
     document.getElementById('game')?.appendChild(this.container);
   }
@@ -51,8 +63,6 @@ class Game
     };
 
     bindEventToScreen('keydown');
-    // bindEventToScreen('keyup');
-    // bindEventToScreen('keypress');
 
     console.log('Game.init:         Game successfully initialized on port 8080.');
   }

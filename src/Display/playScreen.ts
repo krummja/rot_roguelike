@@ -20,10 +20,9 @@ class PlayScreen implements IScreen
     this._player = new Player({
       character: '@',
       name: 'Player',
-      foreground: 'white',
-      background: 'black'
+      foreground: '#e44fa3',
+      background: '' || 'black'
     })
-
   }
 
 
@@ -42,8 +41,6 @@ class PlayScreen implements IScreen
 
     this._map = Map.generate(this.map, this.mapWidth, this.mapHeight);
 
-    // console.log(this._map);
-    // console.log(this.map);
     let position = this._map.getRandomFloorPosition();
     this._player.x = position.x;
     this._player.y = position.y;
@@ -69,7 +66,13 @@ class PlayScreen implements IScreen
     for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
       for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
         let tile = this._map.getTile(x, y);
-        display.draw(x - topLeftX, y - topLeftY, tile.char, tile.fg, tile.bg);
+        display.draw(
+            x - topLeftX,
+            y - topLeftY,
+            tile.char,
+            tile.fg,
+            tile.bg
+        );
       }
     }
     // Render the player
@@ -78,7 +81,7 @@ class PlayScreen implements IScreen
         this._player.y - topLeftY,
         this._player.char,
         this._player.fg,
-        this._player.bg
+        this._player.getBgTint(this._player.x, this._player.y, this._map)
     );
   }
 

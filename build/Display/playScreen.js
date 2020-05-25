@@ -31,8 +31,8 @@ var PlayScreen = /** @class */ (function () {
         this._player = new _1.Player({
             character: '@',
             name: 'Player',
-            foreground: 'white',
-            background: 'black'
+            foreground: '#e44fa3',
+            background: '' || 'black'
         });
     }
     PlayScreen.prototype.enter = function () {
@@ -45,8 +45,6 @@ var PlayScreen = /** @class */ (function () {
             }
         }
         this._map = _1.Map.generate(this.map, this.mapWidth, this.mapHeight);
-        // console.log(this._map);
-        // console.log(this.map);
         var position = this._map.getRandomFloorPosition();
         this._player.x = position.x;
         this._player.y = position.y;
@@ -70,7 +68,7 @@ var PlayScreen = /** @class */ (function () {
             }
         }
         // Render the player
-        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.bg);
+        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this._map));
     };
     PlayScreen.prototype.handleInput = function (inputType, inputData) {
         if (inputType === 'keydown') {

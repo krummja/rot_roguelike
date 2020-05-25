@@ -24,18 +24,28 @@ var Tile = /** @class */ (function (_super) {
         return new Tile({});
     };
     Tile.floorTile = function () {
+        var colors = ['#29231c', '#332d25', '#25211d', '#292018'];
         return new Tile({
-            character: '.',
+            character: ' ',
+            background: pickColor(colors),
             isWalkable: true
         });
     };
     Tile.wallTile = function () {
+        var colors = ['#9a7e61', '#a78a6d', '#a08467', '#ad9173'];
         return new Tile({
-            character: '#',
-            foreground: 'goldenrod',
+            character: ' ',
+            background: pickColor(colors),
             isDiggable: true
         });
     };
     return Tile;
 }(_1.Glyph));
 exports.Tile = Tile;
+var pickColor = function (colors) {
+    var index = Math.floor(random(0, 4));
+    return colors[index];
+};
+var random = function (mn, mx) {
+    return Math.random() * (mx - mn) + mn;
+};

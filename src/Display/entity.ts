@@ -62,6 +62,7 @@ class Moveable
   public y: number;
   public properties: IProperties;
   public tryMove: Function;
+  public getBgTint: Function;
 
   constructor(properties: IProperties)
   {
@@ -72,7 +73,7 @@ class Moveable
 
   protected init(properties: IProperties): void
   {
-    this.tryMove = (x: number, y: number, map: Map) => {
+    this.tryMove = (x: number, y: number, map: Map): boolean => {
       let tile = map.getTile(x, y);
       if (tile.walkable) {
         this.x = x;
@@ -83,6 +84,10 @@ class Moveable
         return true;
       }
       return false;
+    }
+    this.getBgTint = (x: number, y: number, map: Map): string => {
+      let tile = map.getTile(x, y);
+      return tile.bg;
     }
   }
 }

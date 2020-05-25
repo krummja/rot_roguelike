@@ -87,6 +87,10 @@ var Moveable = /** @class */ (function () {
             }
             return false;
         };
+        this.getBgTint = function (x, y, map) {
+            var tile = map.getTile(x, y);
+            return tile.bg;
+        };
     };
     return Moveable;
 }());
