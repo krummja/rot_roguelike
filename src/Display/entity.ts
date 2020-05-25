@@ -1,3 +1,7 @@
+import { Mixin, settings } from 'ts-mixer';
+
+settings.initFunction = 'init';
+
 import {Glyph} from '../Display';
 import {Constructor, IProperties} from '../types';
 
@@ -32,7 +36,6 @@ class Entity extends Glyph
   }
 }
 
-
 function HitCounter<TBase extends Constructor>(Base: TBase) {
   return class extends Base {
     name: string;
@@ -52,64 +55,8 @@ function HitCounter<TBase extends Constructor>(Base: TBase) {
   }
 }
 
-function TestMixin<TBase extends Constructor>(Base: TBase) {
-  return class extends Base {
-    newProp: string;
-
-    constructor(...args: any[]) {
-      super(...args);
-      this.newProp = 'test property'
-    }
-  }
-}
 
 
-function newEntity(target: typeof Entity, mixins: any[], config: IProperties): Entity
-{
-  let targetArray = [];
-  targetArray.push(target);
-  let mixinArray = mixins;
-
-  while (mixinArray.length > 0) {
-    // Get the next mixin, if there is one.
-    let mixin = mixinArray.pop();
-    // Get the target object we're working on.
-    let target: typeof Entity = targetArray.pop();
-    // Apply the mixin to the working target.
-
-    let composite = mixin(target);
-    // Push the composite back into the targetArray.
-    targetArray.push(composite);
-  }
-
-  let FinalComposite: typeof Entity = targetArray.pop();
-  let bareComposite = new FinalComposite(config);
-
-  if (config['name']) {
-    bareComposite.name = config['name'];
-    return bareComposite;
-  } else {
-    return bareComposite;
-  }
-}
-
-let test = newEntity(Entity, [HitCounter, TestMixin], {
-  character: '#',
-  name: 'Test Object',
-  x: 0,
-  y: 0
-});
-
-test.incrementHit();
-
-let TestClass = TestMixin(HitCounter(Entity));
-let test2 = new TestClass({
-  character: '#',
-  x: 10,
-  y: 10
-})
-
-test2.incrementHit();
 
 
 export { Entity };
