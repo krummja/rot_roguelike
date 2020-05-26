@@ -94,11 +94,27 @@ var Moveable = /** @class */ (function () {
     };
     return Moveable;
 }());
+var Sight = /** @class */ (function () {
+    function Sight(properties) {
+        this.properties = properties;
+        this._sightRadius = properties['sightRadius'];
+    }
+    Object.defineProperty(Sight.prototype, "sightRadius", {
+        get: function () { return this._sightRadius; },
+        set: function (value) { this._sightRadius = value; },
+        enumerable: false,
+        configurable: true
+    });
+    Sight.prototype.init = function (properties) {
+        this._sightRadius = properties['sightRadius'] || 5;
+    };
+    return Sight;
+}());
 var Player = /** @class */ (function (_super) {
     __extends(Player, _super);
     function Player() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Player;
-}(ts_mixer_1.Mixin(Entity, Moveable)));
+}(ts_mixer_1.Mixin(Entity, Moveable, Sight)));
 exports.Player = Player;

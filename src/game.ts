@@ -1,5 +1,4 @@
 import * as ROT from 'rot-js';
-
 import {Screen} from './types';
 
 
@@ -8,9 +7,9 @@ class Game
   private _display: ROT.Display = null;
   private _currentScreen: Screen = null;
   private _screenWidth: number = 64;
-  private _screenHeight: number = 50;
+  private _screenHeight: number = 40;
   private _fontFamily: string = 'Fira Code';
-  private _fontStyle: string = 'bold';
+  private _fontStyle: string = 'normal';
   private _fontSize: number = 12;
   private _spacing: number = 1.0;
   private _squareRatio: boolean = true;

@@ -4,8 +4,10 @@
       <w>activatable</w>
       <w>ctors</w>
       <w>diggable</w>
+      <w>fira</w>
       <w>mixins</w>
       <w>moveable</w>
+      <w>shadowcasting</w>
     </words>
   </dictionary>
 </component>

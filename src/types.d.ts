@@ -1,4 +1,5 @@
 import * as ROT from 'rot-js';
+import { FOV } from 'rot-js';
 
 type Screen = {
   enter(): void;
@@ -13,6 +14,8 @@ interface IProperties {
   background ?: string,
   isWalkable ?: boolean,
   isDiggable ?: boolean,
+  blocksLight ?: boolean,
+  sightRadius ?: number,
   x ?: number,
   y ?: number,
   name ?: string,
@@ -23,5 +26,6 @@ interface IProperties {
 // https://mariusschulz.com/blog/mixin-classes-in-typescript
 type Constructor<T = {}> = new (...args: any[]) => T;
 
+type FOV = typeof FOV.PreciseShadowcasting;
 
-export { Constructor, Screen, IProperties };
+export { Constructor, Screen, IProperties, FOV };

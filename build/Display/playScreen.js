@@ -24,7 +24,7 @@ var ROT = __importStar(require("rot-js"));
 var _1 = require("./");
 var PlayScreen = /** @class */ (function () {
     function PlayScreen(game) {
-        this.map = null;
+        this.mapArray = null;
         this.mapWidth = 200;
         this.mapHeight = 200;
         this.game = game;
@@ -37,15 +37,15 @@ var PlayScreen = /** @class */ (function () {
     }
     PlayScreen.prototype.enter = function () {
         console.log('PlayScreen.enter:  Entered play screen.');
-        this.map = [];
+        this.mapArray = [];
         for (var x = 0; x < this.mapWidth; x++) {
-            this.map.push([]);
+            this.mapArray.push([]);
             for (var y = 0; y < this.mapHeight; y++) {
-                this.map[x].push(_1.Tile.nullTile());
+                this.mapArray[x].push(_1.Tile.nullTile());
             }
         }
-        this._map = _1.Map.generate(this.map, this.mapWidth, this.mapHeight);
-        var position = this._map.getRandomFloorPosition();
+        this.map = _1.Map.generate(this.mapArray, this.mapWidth, this.mapHeight, this._player);
+        var position = this.map.getRandomFloorPosition();
         this._player.x = position.x;
         this._player.y = position.y;
     };
@@ -57,18 +57,18 @@ var PlayScreen = /** @class */ (function () {
         var screenHeight = this.game.screenHeight;
         // Figure out the viewport dimensions
         var topLeftX = Math.max(0, this._player.x - (screenWidth / 2));
-        topLeftX = Math.min(topLeftX, this._map.width - screenWidth);
+        topLeftX = Math.min(topLeftX, this.map.width - screenWidth);
         var topLeftY = Math.max(0, this._player.y - (screenHeight / 2));
-        topLeftY = Math.min(topLeftY, this._map.height - screenHeight);
+        topLeftY = Math.min(topLeftY, this.map.height - screenHeight);
         // Put bounds on the viewport movement relative to the map edge
         for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
             for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
-                var tile = this._map.getTile(x, y);
+                var tile = this.map.getTile(x, y);
                 display.draw(x - topLeftX, y - topLeftY, tile.char, tile.fg, tile.bg);
             }
         }
         // Render the player
-        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this._map));
+        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this.map));
     };
     PlayScreen.prototype.handleInput = function (inputType, inputData) {
         if (inputType === 'keydown') {
@@ -92,7 +92,7 @@ var PlayScreen = /** @class */ (function () {
     PlayScreen.prototype.move = function (dX, dY) {
         var newX = this._player.x + dX;
         var newY = this._player.y + dY;
-        this._player.tryMove(newX, newY, this._map);
+        this._player.tryMove(newX, newY, this.map);
     };
     return PlayScreen;
 }());

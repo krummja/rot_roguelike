@@ -23,10 +23,11 @@ exports.Map = void 0;
 var ROT = __importStar(require("rot-js"));
 var _1 = require("./");
 var Map = /** @class */ (function () {
-    function Map(tiles) {
+    function Map(tiles, player) {
         this._tiles = tiles;
         this._width = tiles.length;
         this._height = tiles[0].length;
+        this.player = player;
     }
     Object.defineProperty(Map.prototype, "tiles", {
         get: function () { return this._tiles; },
@@ -52,7 +53,7 @@ var Map = /** @class */ (function () {
     });
     ;
     ;
-    Map.generate = function (map, width, height) {
+    Map.generate = function (map, width, height, player) {
         var generator = new ROT.Map.Cellular(width, height);
         generator.randomize(0.5);
         var totalIterations = 3;
@@ -67,7 +68,7 @@ var Map = /** @class */ (function () {
                 map[x][y] = _1.Tile.wallTile();
             }
         });
-        return new Map(map);
+        return new Map(map, player);
     };
     Map.prototype.dig = function (x, y) {
         if (this.getTile(x, y).diggable) {
@@ -81,7 +82,6 @@ var Map = /** @class */ (function () {
             x = Math.floor(Math.random() * this._width);
             y = Math.floor(Math.random() * this._height);
         }
-        console.log(this.getTile(x, y));
         return { x: x, y: y };
     };
     Map.prototype.getTile = function (x, y) {

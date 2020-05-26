@@ -1,6 +1,5 @@
 import * as ROT from 'rot-js';
-
-import { Glyph, Tile } from './';
+import { Player, Tile } from './';
 
 
 class Map
@@ -8,6 +7,8 @@ class Map
   private _tiles: Array<Array<Tile>>;
   private _width: number;
   private _height: number;
+
+  public player: Player;
 
   public get tiles(): Array<Array<Tile>> { return this._tiles };
   public set tiles(v: Array<Array<Tile>>) { this._tiles = v };
@@ -18,15 +19,15 @@ class Map
   public get height(): number { return this._height };
   public set height(v: number) { this._height = v };
 
-
-  constructor(tiles: Array<Array<Tile>>)
+  constructor(tiles: Array<Array<Tile>>, player: Player)
   {
     this._tiles = tiles;
     this._width = tiles.length;
     this._height = tiles[0].length;
+    this.player = player;
   }
 
-  public static generate(map: Array<Array<Tile>>, width: number, height: number)
+  public static generate(map: Array<Array<Tile>>, width: number, height: number, player: Player)
   {
     let generator = new ROT.Map.Cellular(width, height);
     generator.randomize(0.5);
@@ -43,7 +44,7 @@ class Map
         map[x][y] = Tile.wallTile();
       }
     })
-    return new Map(map);
+    return new Map(map, player);
   }
 
   public dig(x: number, y: number): void
@@ -53,7 +54,7 @@ class Map
     }
   }
 
-  getRandomFloorPosition(): { x: number, y: number }
+  public getRandomFloorPosition(): { x: number, y: number }
   {
     let x = 0;
     let y = 0;
@@ -62,8 +63,6 @@ class Map
       x = Math.floor(Math.random() * this._width);
       y = Math.floor(Math.random() * this._height);
     }
-
-    console.log(this.getTile(x, y))
     return { x: x, y: y }
   }
 

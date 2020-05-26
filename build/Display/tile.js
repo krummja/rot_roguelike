@@ -13,8 +13,55 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tile = void 0;
-var _1 = require("./");
+exports.Glyph = exports.Tile = void 0;
+var Glyph = /** @class */ (function () {
+    function Glyph(properties) {
+        this._char = properties['character'] || ' ';
+        this._fg = properties['foreground'] || 'white';
+        this._bg = properties['background'] || 'black';
+        this._walkable = properties['isWalkable'] || false;
+        this._diggable = properties['isDiggable'] || false;
+        this._blocksLight = (properties['blocksLight'] !== undefined) ? properties['blocksLight'] : true;
+    }
+    Object.defineProperty(Glyph.prototype, "char", {
+        get: function () { return this._char; },
+        set: function (v) { this._char = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Glyph.prototype, "fg", {
+        get: function () { return this._fg; },
+        set: function (v) { this._fg = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Glyph.prototype, "bg", {
+        get: function () { return this._bg; },
+        set: function (v) { this._bg = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Glyph.prototype, "walkable", {
+        get: function () { return this._walkable; },
+        set: function (v) { this._walkable = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Glyph.prototype, "diggable", {
+        get: function () { return this._diggable; },
+        set: function (v) { this._diggable = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Glyph.prototype, "blocksLight", {
+        get: function () { return this._blocksLight; },
+        set: function (value) { this._blocksLight = value; },
+        enumerable: false,
+        configurable: true
+    });
+    return Glyph;
+}());
+exports.Glyph = Glyph;
 var Tile = /** @class */ (function (_super) {
     __extends(Tile, _super);
     function Tile(properties) {
@@ -27,25 +74,27 @@ var Tile = /** @class */ (function (_super) {
         var colors = ['#29231c', '#332d25', '#25211d', '#292018'];
         return new Tile({
             character: ' ',
-            background: pickColor(colors),
-            isWalkable: true
+            background: this.pickColor(colors),
+            isWalkable: true,
+            blocksLight: false
         });
     };
     Tile.wallTile = function () {
         var colors = ['#9a7e61', '#a78a6d', '#a08467', '#ad9173'];
         return new Tile({
             character: ' ',
-            background: pickColor(colors),
-            isDiggable: true
+            background: this.pickColor(colors),
+            isDiggable: true,
+            blocksLight: true
         });
     };
+    Tile.pickColor = function (colors) {
+        var index = Math.floor(Tile.random(0, 4));
+        return colors[index];
+    };
+    Tile.random = function (mn, mx) {
+        return Math.random() * (mx - mn) + mn;
+    };
     return Tile;
-}(_1.Glyph));
+}(Glyph));
 exports.Tile = Tile;
-var pickColor = function (colors) {
-    var index = Math.floor(random(0, 4));
-    return colors[index];
-};
-var random = function (mn, mx) {
-    return Math.random() * (mx - mn) + mn;
-};

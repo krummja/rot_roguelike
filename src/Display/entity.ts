@@ -36,6 +36,7 @@ class Entity extends Glyph
   }
 }
 
+
 class HitCounter
 {
   private readonly _multiplier: number;
@@ -55,6 +56,7 @@ class HitCounter
 }
 
 class Combatant extends Mixin(Entity, HitCounter) {}
+
 
 class Moveable
 {
@@ -92,7 +94,29 @@ class Moveable
   }
 }
 
-class Player extends Mixin(Entity, Moveable) {}
+
+class Sight
+{
+  private _sightRadius: number;
+
+  public properties: IProperties;
+  public get sightRadius(): number { return this._sightRadius; }
+  public set sightRadius(value: number) { this._sightRadius = value; }
+
+  constructor(properties: IProperties)
+  {
+    this.properties = properties;
+    this._sightRadius = properties['sightRadius'];
+  }
+
+  protected init(properties: IProperties): void
+  {
+    this._sightRadius = properties['sightRadius'] || 5;
+  }
+}
+
+
+class Player extends Mixin(Entity, Moveable, Sight) {}
 
 
 export { Entity, Player };
