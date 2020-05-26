@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Player = exports.Entity = void 0;
+exports.Actor = exports.Mob = exports.Player = exports.Entity = void 0;
 var ts_mixer_1 = require("ts-mixer");
 var _1 = require("./");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
@@ -110,11 +110,30 @@ var Sight = /** @class */ (function () {
     };
     return Sight;
 }());
+var Actor = /** @class */ (function () {
+    function Actor(properties) {
+        this.properties = properties;
+    }
+    Actor.prototype.init = function (properties) {
+        this.act = function () {
+        };
+    };
+    return Actor;
+}());
+exports.Actor = Actor;
 var Player = /** @class */ (function (_super) {
     __extends(Player, _super);
     function Player() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Player;
-}(ts_mixer_1.Mixin(Entity, Moveable, Sight)));
+}(ts_mixer_1.Mixin(Entity, Moveable, Sight, Actor)));
 exports.Player = Player;
+var Mob = /** @class */ (function (_super) {
+    __extends(Mob, _super);
+    function Mob() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Mob;
+}(ts_mixer_1.Mixin(Entity, Moveable, Actor)));
+exports.Mob = Mob;

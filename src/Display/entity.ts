@@ -115,8 +115,26 @@ class Sight
   }
 }
 
+class Actor
+{
+  public act: Function;
+  public properties: IProperties;
 
-class Player extends Mixin(Entity, Moveable, Sight) {}
+  constructor(properties: IProperties)
+  {
+    this.properties = properties;
+  }
+
+  protected init(properties: IProperties)
+  {
+    this.act = (): void => {
+
+    }
+  }
+}
 
 
-export { Entity, Player };
+class Player extends Mixin(Entity, Moveable, Sight, Actor) {}
+class Mob extends Mixin(Entity, Moveable, Actor) {}
+
+export { Entity, Player, Mob, Actor };

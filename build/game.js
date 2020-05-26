@@ -75,27 +75,24 @@ var Game = /** @class */ (function () {
             window.addEventListener(event, function (e) {
                 if (game.currentScreen !== null) {
                     game.currentScreen.handleInput(event, e);
-                    game.display.clear();
-                    game.currentScreen.render(game.display);
                 }
             });
         };
         bindEventToScreen('keydown');
-        console.log('Game.init:         Game successfully initialized on port 8080.');
+    };
+    Game.prototype.refresh = function () {
+        this._display.clear();
+        this._currentScreen.render((this._display));
     };
     Game.prototype.switchScreen = function (screen) {
         if (this.currentScreen !== null) {
-            console.log('Game.switchScreen: A scene is running. Exiting first...');
             this.currentScreen.exit();
-            console.log('Game.switchScreen: OK, continuing.');
         }
         this.display.clear();
         this.currentScreen = screen;
         if (this.currentScreen) {
-            console.log('Game.switchScreen: Either no prior screen, or first init.');
             this.currentScreen.enter();
-            console.log('Game.switchScreen: Starting renderer.');
-            this.currentScreen.render(this.display);
+            this.refresh();
         }
     };
     return Game;

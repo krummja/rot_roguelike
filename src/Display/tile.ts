@@ -1,5 +1,5 @@
 import { IProperties } from '../types';
-
+import { Map } from './';
 
 class Glyph
 {
@@ -10,6 +10,7 @@ class Glyph
   private _walkable: boolean;
   private _diggable: boolean;
   private _blocksLight: boolean;
+  private _map: Map = null;
 
   public get char(): string { return this._char; }
   public set char(v: string) { this._char = v; }
@@ -28,6 +29,9 @@ class Glyph
 
   public get blocksLight(): boolean { return this._blocksLight; }
   public set blocksLight(value: boolean) { this._blocksLight = value; }
+
+  public get map(): Map { return this._map; }
+  public set map(value: Map) { this._map = value; }
 
   constructor(properties: IProperties)
   {

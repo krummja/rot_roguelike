@@ -39,10 +39,7 @@ class PlayScreen implements IScreen
     }
 
     this.map = Map.generate(this.mapArray, this.mapWidth, this.mapHeight, this._player);
-
-    let position = this.map.getRandomFloorPosition();
-    this._player.x = position.x;
-    this._player.y = position.y;
+    this.map.engine.start();
   }
 
   public exit(): void

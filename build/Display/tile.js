@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Glyph = exports.Tile = void 0;
 var Glyph = /** @class */ (function () {
     function Glyph(properties) {
+        this._map = null;
         this._char = properties['character'] || ' ';
         this._fg = properties['foreground'] || 'white';
         this._bg = properties['background'] || 'black';
@@ -56,6 +57,12 @@ var Glyph = /** @class */ (function () {
     Object.defineProperty(Glyph.prototype, "blocksLight", {
         get: function () { return this._blocksLight; },
         set: function (value) { this._blocksLight = value; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Glyph.prototype, "map", {
+        get: function () { return this._map; },
+        set: function (value) { this._map = value; },
         enumerable: false,
         configurable: true
     });

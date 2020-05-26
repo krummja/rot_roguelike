@@ -4,6 +4,6 @@ import { PlayScreen } from './playScreen';
 import { IScreen } from './screen';
 import { StartScreen } from './startScreen';
 import { Glyph, Tile } from './tile';
-import { Entity, Player } from './entity';
+import { Entity, Player, Actor } from './entity';
 
-export { Glyph, IProperties, Map, PlayScreen, IScreen, StartScreen, Tile, Entity, Player };
+export { Glyph, IProperties, Map, PlayScreen, IScreen, StartScreen, Tile, Entity, Player, Actor };

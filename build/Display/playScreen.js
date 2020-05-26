@@ -45,9 +45,7 @@ var PlayScreen = /** @class */ (function () {
             }
         }
         this.map = _1.Map.generate(this.mapArray, this.mapWidth, this.mapHeight, this._player);
-        var position = this.map.getRandomFloorPosition();
-        this._player.x = position.x;
-        this._player.y = position.y;
+        this.map.engine.start();
     };
     PlayScreen.prototype.exit = function () {
         console.log('PlayScreen.exit:   Exited play screen.');

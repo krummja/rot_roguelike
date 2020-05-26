@@ -27,7 +27,10 @@ var Map = /** @class */ (function () {
         this._tiles = tiles;
         this._width = tiles.length;
         this._height = tiles[0].length;
-        this.player = player;
+        this._entities = [];
+        this._scheduler = new ROT.Scheduler.Simple();
+        this._engine = new ROT.Engine(this._scheduler);
+        this.addEntityAtRandomLocation(player);
     }
     Object.defineProperty(Map.prototype, "tiles", {
         get: function () { return this._tiles; },
@@ -53,6 +56,24 @@ var Map = /** @class */ (function () {
     });
     ;
     ;
+    Object.defineProperty(Map.prototype, "entities", {
+        get: function () { return this._entities; },
+        set: function (value) { this._entities = value; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Map.prototype, "engine", {
+        get: function () { return this._engine; },
+        set: function (value) { this._engine = value; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Map.prototype, "scheduler", {
+        get: function () { return this._scheduler; },
+        set: function (value) { this._scheduler = value; },
+        enumerable: false,
+        configurable: true
+    });
     Map.generate = function (map, width, height, player) {
         var generator = new ROT.Map.Cellular(width, height);
         generator.randomize(0.5);
@@ -91,6 +112,30 @@ var Map = /** @class */ (function () {
         else {
             return this.tiles[x][y] || _1.Tile.nullTile();
         }
+    };
+    Map.prototype.getEntityAt = function (x, y) {
+        for (var i = 0; i < this._entities.length; i++) {
+            if (this._entities[i].x == x && this._entities[i].y == y) {
+                return this._entities[i];
+            }
+        }
+        return false;
+    };
+    Map.prototype.addEntity = function (entity) {
+        if (entity.x < 0 || entity.y >= this._width || entity.y < 0 || entity.y >= this._height) {
+            throw new Error('Adding entity out of bounds');
+        }
+        entity.map = this;
+        this._entities.push(entity);
+        if (entity.hasOwnProperty('act')) {
+            this._scheduler.add(entity, true);
+        }
+    };
+    Map.prototype.addEntityAtRandomLocation = function (entity) {
+        var position = this.getRandomFloorPosition();
+        entity.x = position.x;
+        entity.y = position.y;
+        this.addEntity(entity);
     };
     return Map;
 }());

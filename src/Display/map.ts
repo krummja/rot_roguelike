@@ -1,10 +1,15 @@
 import * as ROT from 'rot-js';
-import { Player, Tile } from './';
+import Engine from 'rot-js/lib/engine';
+import Scheduler from 'rot-js/lib/scheduler/scheduler';
+import { Player, Tile, Entity, Actor } from './';
 
 
 class Map
 {
   private _tiles: Array<Array<Tile>>;
+  private _entities: Array<Entity>;
+  private _scheduler: Scheduler;
+  private _engine: Engine;
   private _width: number;
   private _height: number;
 
@@ -19,12 +24,25 @@ class Map
   public get height(): number { return this._height };
   public set height(v: number) { this._height = v };
 
+  public get entities(): Array<Entity> { return this._entities; }
+  public set entities(value: Array<Entity>) { this._entities = value; }
+
+
+  public get engine(): Engine { return this._engine; }
+  public set engine(value: Engine) { this._engine = value; }
+
+  public get scheduler(): Scheduler { return this._scheduler; }
+  public set scheduler(value: Scheduler) { this._scheduler = value; }
+
   constructor(tiles: Array<Array<Tile>>, player: Player)
   {
     this._tiles = tiles;
     this._width = tiles.length;
     this._height = tiles[0].length;
-    this.player = player;
+    this._entities = [];
+    this._scheduler = new ROT.Scheduler.Simple();
+    this._engine = new ROT.Engine(this._scheduler);
+    this.addEntityAtRandomLocation(player);
   }
 
   public static generate(map: Array<Array<Tile>>, width: number, height: number, player: Player)
@@ -73,6 +91,37 @@ class Map
     } else {
       return this.tiles[x][y] || Tile.nullTile();
     }
+  }
+
+  public getEntityAt(x: number, y: number): Entity | boolean
+  {
+    for (let i = 0; i < this._entities.length; i++) {
+      if (this._entities[i].x == x && this._entities[i].y == y) {
+        return this._entities[i];
+      }
+    }
+    return false;
+  }
+
+  public addEntity(entity: Entity)
+  {
+    if (entity.x < 0 || entity.y >= this._width || entity.y < 0 || entity.y >= this._height) {
+      throw new Error('Adding entity out of bounds');
+    }
+
+    entity.map = this;
+    this._entities.push(entity);
+    if (entity.hasOwnProperty('act')) {
+      this._scheduler.add(entity, true);
+    }
+  }
+
+  public addEntityAtRandomLocation(entity: Entity): void
+  {
+    let position = this.getRandomFloorPosition();
+    entity.x = position.x;
+    entity.y = position.y;
+    this.addEntity(entity);
   }
 }
 
