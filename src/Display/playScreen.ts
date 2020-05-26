@@ -1,4 +1,5 @@
 import * as ROT from 'rot-js';
+import { Builder } from '../builder';
 import { Game } from '../game';
 import { Map, IScreen, Tile, Entity, Player } from './';
 
@@ -21,24 +22,18 @@ class PlayScreen implements IScreen
       name: 'Player',
       foreground: '#e44fa3',
       background: '' || 'black'
-    })
+    }, this.game, this.map)
+    // FIXME: Holy shit this is messy lol. If anyone sees this please no judge. :<
   }
 
 
   public enter()
   {
-    console.log('PlayScreen.enter:  Entered play screen.');
-
-    this.mapArray = [];
-
-    for (let x = 0; x < this.mapWidth; x++) {
-      this.mapArray.push([]);
-      for (let y = 0; y < this.mapHeight; y++) {
-        this.mapArray[x].push(Tile.nullTile());
-      }
-    }
-
-    this.map = Map.generate(this.mapArray, this.mapWidth, this.mapHeight, this._player);
+    let width = 128;
+    let height = 80;
+    let depth = 6;
+    let tiles = new Builder(width, height, depth).tiles;
+    this.map = new Map(tiles, this._player);
     this.map.engine.start();
   }
 
@@ -62,7 +57,7 @@ class PlayScreen implements IScreen
     // Put bounds on the viewport movement relative to the map edge
     for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
       for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
-        let tile = this.map.getTile(x, y);
+        let tile = this.map.getTile(x, y, this._player.z);
         display.draw(
             x - topLeftX,
             y - topLeftY,
@@ -78,7 +73,7 @@ class PlayScreen implements IScreen
         this._player.y - topLeftY,
         this._player.char,
         this._player.fg,
-        this._player.getBgTint(this._player.x, this._player.y, this.map)
+        this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map)
     );
   }
 
@@ -89,22 +84,37 @@ class PlayScreen implements IScreen
         console.log('Enter key pressed!');
       }
       if (inputData.keyCode === ROT.KEYS.VK_LEFT) {
-        this.move(-1, 0);
+        this.move(-1, 0, 0);
       } else if (inputData.keyCode === ROT.KEYS.VK_RIGHT) {
-        this.move(1, 0);
+        this.move(1, 0, 0);
       } else if (inputData.keyCode === ROT.KEYS.VK_UP) {
-        this.move(0, -1);
+        this.move(0, -1, 0);
       } else if (inputData.keyCode === ROT.KEYS.VK_DOWN) {
-        this.move(0, 1);
+        this.move(0, 1, 0);
       }
+      this.map.engine.unlock();
+      this.game.refresh();
+    } else if (inputType === 'keypress') {
+      let keyChar = String.fromCharCode(inputData.charCode);
+      if (keyChar === '>') {
+        this.move(0, 0, 1);
+      } else if (keyChar === '<') {
+        this.move(0, 0, -1);
+      } else {
+        return;
+      }
+      this.map.engine.unlock();
+      this.game.refresh();
     }
   }
 
-  public move(dX: number, dY: number): void
+  public move(dX: number, dY: number, dZ: number): void
   {
     let newX = this._player.x + dX;
     let newY = this._player.y + dY;
-    this._player.tryMove(newX, newY, this.map);
+    let newZ = this._player.z + dZ;
+    this._player.tryMove(newX, newY, newZ, this.map);
+    console.log(this._player);
   }
 }
 

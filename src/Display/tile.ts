@@ -1,5 +1,6 @@
 import { IProperties } from '../types';
 import { Map } from './';
+import { Game } from '../game';
 
 class Glyph
 {
@@ -9,6 +10,7 @@ class Glyph
   private _bg: string;
   private _walkable: boolean;
   private _diggable: boolean;
+  private _traverseable: boolean;
   private _blocksLight: boolean;
   private _map: Map = null;
 
@@ -27,6 +29,9 @@ class Glyph
   public get diggable(): boolean { return this._diggable; }
   public set diggable(v: boolean) { this._diggable = v; }
 
+  public get traverseable(): boolean { return this._traverseable; }
+  public set traverseable(v: boolean) { this._traverseable = v; }
+
   public get blocksLight(): boolean { return this._blocksLight; }
   public set blocksLight(value: boolean) { this._blocksLight = value; }
 
@@ -40,6 +45,7 @@ class Glyph
     this._bg = properties['background'] || 'black';
     this._walkable = properties['isWalkable'] || false;
     this._diggable = properties['isDiggable'] || false;
+    this._traverseable = properties['isTraverseable'] || false;
     this._blocksLight = (properties['blocksLight'] !== undefined) ? properties['blocksLight'] : true;
   }
 }
@@ -65,7 +71,8 @@ class Tile extends Glyph
       character: ' ',
       background: this.pickColor(colors),
       isWalkable: true,
-      blocksLight: false
+      isTraverseable: false,
+      blocksLight: false,
     });
   }
 
@@ -77,9 +84,31 @@ class Tile extends Glyph
       character: ' ',
       background: this.pickColor(colors),
       isDiggable: true,
+      isTraverseable: false,
       blocksLight: true
     });
   }
+
+  public static stairsUpTile(): Tile
+  {
+    return new Tile({
+      character: '<',
+      foreground: 'white',
+      isWalkable: true,
+      isTraverseable: true,
+    })
+  }
+
+  public static stairsDownTile(): Tile
+  {
+    return new Tile({
+      character: '>',
+      foreground: 'gray',
+      isWalkable: true,
+      isTraverseable: true,
+    })
+  }
+
 
   public static pickColor: Function = (colors: string[]): string => {
     let index = Math.floor(Tile.random(0, 4));
@@ -89,6 +118,7 @@ class Tile extends Glyph
   public static random: Function = (mn: number, mx: number): number => {
     return Math.random() * (mx - mn) + mn;
   }
+
 }
 
 

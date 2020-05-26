@@ -25,12 +25,13 @@ var _1 = require("./");
 var Map = /** @class */ (function () {
     function Map(tiles, player) {
         this._tiles = tiles;
-        this._width = tiles.length;
-        this._height = tiles[0].length;
+        this._depth = tiles.length;
+        this._width = tiles[0].length;
+        this._height = tiles[0][0].length;
         this._entities = [];
         this._scheduler = new ROT.Scheduler.Simple();
-        this._engine = new ROT.Engine(this._scheduler);
-        this.addEntityAtRandomLocation(player);
+        this.engine = new ROT.Engine(this._scheduler);
+        this.addEntityAtRandomPosition(player, 0);
     }
     Object.defineProperty(Map.prototype, "tiles", {
         get: function () { return this._tiles; },
@@ -62,12 +63,6 @@ var Map = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Map.prototype, "engine", {
-        get: function () { return this._engine; },
-        set: function (value) { this._engine = value; },
-        enumerable: false,
-        configurable: true
-    });
     Object.defineProperty(Map.prototype, "scheduler", {
         get: function () { return this._scheduler; },
         set: function (value) { this._scheduler = value; },
@@ -89,40 +84,45 @@ var Map = /** @class */ (function () {
                 map[x][y] = _1.Tile.wallTile();
             }
         });
-        return new Map(map, player);
     };
-    Map.prototype.dig = function (x, y) {
-        if (this.getTile(x, y).diggable) {
-            this.tiles[x][y] = _1.Tile.floorTile();
-        }
-    };
-    Map.prototype.getRandomFloorPosition = function () {
-        var x = 0;
-        var y = 0;
-        while (this.getTile(x, y).walkable === false) {
-            x = Math.floor(Math.random() * this._width);
-            y = Math.floor(Math.random() * this._height);
-        }
-        return { x: x, y: y };
-    };
-    Map.prototype.getTile = function (x, y) {
-        if (x < 0 || x >= this._width || y < 0 || y >= this._height) {
+    Map.prototype.getTile = function (x, y, z) {
+        if (x < 0 || x >= this._width ||
+            y < 0 || y >= this._height ||
+            z < 0 || z >= this._depth) {
             return _1.Tile.nullTile();
         }
         else {
-            return this.tiles[x][y] || _1.Tile.nullTile();
+            return this.tiles[z][x][y] || _1.Tile.nullTile();
         }
     };
-    Map.prototype.getEntityAt = function (x, y) {
+    Map.prototype.dig = function (x, y, z) {
+        if (this.getTile(x, y, z).diggable) {
+            this.tiles[z][x][y] = _1.Tile.floorTile();
+        }
+    };
+    Map.prototype.getRandomFloorPosition = function (z) {
+        var x = 0;
+        var y = 0;
+        while (this.getTile(x, y, z).walkable === false) {
+            x = Math.floor(Math.random() * this._width);
+            y = Math.floor(Math.random() * this._height);
+        }
+        return { x: x, y: y, z: z };
+    };
+    Map.prototype.getEntityAt = function (x, y, z) {
         for (var i = 0; i < this._entities.length; i++) {
-            if (this._entities[i].x == x && this._entities[i].y == y) {
+            if (this._entities[i].x == x &&
+                this._entities[i].y == y &&
+                this._entities[i].z == z) {
                 return this._entities[i];
             }
         }
         return false;
     };
     Map.prototype.addEntity = function (entity) {
-        if (entity.x < 0 || entity.y >= this._width || entity.y < 0 || entity.y >= this._height) {
+        if (entity.x < 0 || entity.x >= this._width ||
+            entity.y < 0 || entity.y >= this._height ||
+            entity.z < 0 || entity.z >= this._depth) {
             throw new Error('Adding entity out of bounds');
         }
         entity.map = this;
@@ -131,10 +131,11 @@ var Map = /** @class */ (function () {
             this._scheduler.add(entity, true);
         }
     };
-    Map.prototype.addEntityAtRandomLocation = function (entity) {
-        var position = this.getRandomFloorPosition();
+    Map.prototype.addEntityAtRandomPosition = function (entity, z) {
+        var position = this.getRandomFloorPosition(z);
         entity.x = position.x;
         entity.y = position.y;
+        entity.z = position.z;
         this.addEntity(entity);
     };
     return Map;

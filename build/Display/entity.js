@@ -22,13 +22,15 @@ var Entity = /** @class */ (function (_super) {
     __extends(Entity, _super);
     function Entity(properties) {
         var _this = _super.call(this, properties) || this;
-        // These are props not in Glyph that we're adding.
         _this._name = properties['name'] || ' ';
         _this._x = properties['x'] || 0;
         _this._y = properties['y'] || 0;
+        _this._z = properties['z'] || 0;
+        _this.map = null;
         return _this;
     }
     Object.defineProperty(Entity.prototype, "name", {
+        // I think the movement system is changing the Entity base class's x,y,z values...
         get: function () { return this._name; },
         set: function (v) { this._name = v; },
         enumerable: false,
@@ -46,6 +48,17 @@ var Entity = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Entity.prototype, "z", {
+        get: function () { return this._z; },
+        set: function (v) { this._z = v; },
+        enumerable: false,
+        configurable: true
+    });
+    Entity.prototype.setPosition = function (x, y, z) {
+        this._x = x;
+        this._y = y;
+        this._z = z;
+    };
     return Entity;
 }(_1.Glyph));
 exports.Entity = Entity;
@@ -71,24 +84,46 @@ var Moveable = /** @class */ (function () {
         this.properties = properties;
         this.x = this.properties['x'];
         this.y = this.properties['y'];
+        this.z = this.properties['z'];
     }
     Moveable.prototype.init = function (properties) {
         var _this = this;
-        this.tryMove = function (x, y, map) {
-            var tile = map.getTile(x, y);
+        this.tryMove = function (x, y, z, map) {
+            var tile = map.getTile(x, y, _this.z);
+            if (z < _this.z) {
+                if (tile.traverseable === false) {
+                    console.log("You can't ascend here!");
+                }
+                else {
+                    _this.x = x;
+                    _this.y = y;
+                    _this.z = z;
+                }
+            }
+            else if (z > _this.z) {
+                if (tile.traverseable === false) {
+                    console.log("You can't descend here!");
+                }
+                else {
+                    _this.x = x;
+                    _this.y = y;
+                    _this.z = z;
+                }
+            }
             if (tile.walkable) {
                 _this.x = x;
                 _this.y = y;
+                _this.z = z;
                 return true;
             }
             else if (tile.diggable) {
-                map.dig(x, y);
+                map.dig(x, y, z);
                 return true;
             }
             return false;
         };
-        this.getBgTint = function (x, y, map) {
-            var tile = map.getTile(x, y);
+        this.getBgTint = function (x, y, z, map) {
+            var tile = map.getTile(x, y, z);
             return tile.bg;
         };
     };
@@ -111,11 +146,16 @@ var Sight = /** @class */ (function () {
     return Sight;
 }());
 var Actor = /** @class */ (function () {
-    function Actor(properties) {
+    function Actor(properties, game, map) {
         this.properties = properties;
+        this.game = game;
+        this.map = map;
     }
     Actor.prototype.init = function (properties) {
+        var _this = this;
         this.act = function () {
+            _this.game.refresh();
+            _this.map.engine.lock();
         };
     };
     return Actor;

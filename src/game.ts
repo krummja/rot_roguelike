@@ -1,5 +1,6 @@
 import * as ROT from 'rot-js';
 import {Screen} from './types';
+import { shuffleCoordArray } from './utils';
 
 
 class Game
@@ -32,7 +33,6 @@ class Game
 
   public constructor()
   {
-    console.log('Game:              Setting up game instance. One sec...');
     this.display = new ROT.Display({
       width: this._screenWidth,
       height: this._screenHeight,
@@ -60,6 +60,7 @@ class Game
     };
 
     bindEventToScreen('keydown');
+    bindEventToScreen('keypress');
   }
 
   public refresh(): void
@@ -81,7 +82,22 @@ class Game
       this.refresh()
     }
   }
+
+  public static getNeighborPositions(x: number, y: number): Array<{x: number, y: number}>
+  {
+    let tiles: Array<{x: number, y: number}> = [];
+    for (let dX = -1; dX < 2; dX++) {
+      for (let dY = -1; dY < 2; dY++) {
+        if (dX == 0 && dY == 0) {
+          continue;
+        }
+        tiles.push({x: x + dX, y: y + dY});
+      }
+    }
+    return shuffleCoordArray(tiles);
+  }
 }
+
 
 
 export {Game};

@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayScreen = void 0;
 var ROT = __importStar(require("rot-js"));
+var builder_1 = require("../builder");
 var _1 = require("./");
 var PlayScreen = /** @class */ (function () {
     function PlayScreen(game) {
@@ -33,18 +34,15 @@ var PlayScreen = /** @class */ (function () {
             name: 'Player',
             foreground: '#e44fa3',
             background: '' || 'black'
-        });
+        }, this.game, this.map);
+        // FIXME: Holy shit this is messy lol. If anyone sees this please no judge. :<
     }
     PlayScreen.prototype.enter = function () {
-        console.log('PlayScreen.enter:  Entered play screen.');
-        this.mapArray = [];
-        for (var x = 0; x < this.mapWidth; x++) {
-            this.mapArray.push([]);
-            for (var y = 0; y < this.mapHeight; y++) {
-                this.mapArray[x].push(_1.Tile.nullTile());
-            }
-        }
-        this.map = _1.Map.generate(this.mapArray, this.mapWidth, this.mapHeight, this._player);
+        var width = 128;
+        var height = 80;
+        var depth = 6;
+        var tiles = new builder_1.Builder(width, height, depth).tiles;
+        this.map = new _1.Map(tiles, this._player);
         this.map.engine.start();
     };
     PlayScreen.prototype.exit = function () {
@@ -61,12 +59,12 @@ var PlayScreen = /** @class */ (function () {
         // Put bounds on the viewport movement relative to the map edge
         for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
             for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
-                var tile = this.map.getTile(x, y);
+                var tile = this.map.getTile(x, y, this._player.z);
                 display.draw(x - topLeftX, y - topLeftY, tile.char, tile.fg, tile.bg);
             }
         }
         // Render the player
-        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this.map));
+        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map));
     };
     PlayScreen.prototype.handleInput = function (inputType, inputData) {
         if (inputType === 'keydown') {
@@ -74,23 +72,41 @@ var PlayScreen = /** @class */ (function () {
                 console.log('Enter key pressed!');
             }
             if (inputData.keyCode === ROT.KEYS.VK_LEFT) {
-                this.move(-1, 0);
+                this.move(-1, 0, 0);
             }
             else if (inputData.keyCode === ROT.KEYS.VK_RIGHT) {
-                this.move(1, 0);
+                this.move(1, 0, 0);
             }
             else if (inputData.keyCode === ROT.KEYS.VK_UP) {
-                this.move(0, -1);
+                this.move(0, -1, 0);
             }
             else if (inputData.keyCode === ROT.KEYS.VK_DOWN) {
-                this.move(0, 1);
+                this.move(0, 1, 0);
             }
+            this.map.engine.unlock();
+            this.game.refresh();
+        }
+        else if (inputType === 'keypress') {
+            var keyChar = String.fromCharCode(inputData.charCode);
+            if (keyChar === '>') {
+                this.move(0, 0, 1);
+            }
+            else if (keyChar === '<') {
+                this.move(0, 0, -1);
+            }
+            else {
+                return;
+            }
+            this.map.engine.unlock();
+            this.game.refresh();
         }
     };
-    PlayScreen.prototype.move = function (dX, dY) {
+    PlayScreen.prototype.move = function (dX, dY, dZ) {
         var newX = this._player.x + dX;
         var newY = this._player.y + dY;
-        this._player.tryMove(newX, newY, this.map);
+        var newZ = this._player.z + dZ;
+        this._player.tryMove(newX, newY, newZ, this.map);
+        console.log(this._player);
     };
     return PlayScreen;
 }());

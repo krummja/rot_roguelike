@@ -22,6 +22,7 @@ var Glyph = /** @class */ (function () {
         this._bg = properties['background'] || 'black';
         this._walkable = properties['isWalkable'] || false;
         this._diggable = properties['isDiggable'] || false;
+        this._traverseable = properties['isTraverseable'] || false;
         this._blocksLight = (properties['blocksLight'] !== undefined) ? properties['blocksLight'] : true;
     }
     Object.defineProperty(Glyph.prototype, "char", {
@@ -54,6 +55,12 @@ var Glyph = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Glyph.prototype, "traverseable", {
+        get: function () { return this._traverseable; },
+        set: function (v) { this._traverseable = v; },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(Glyph.prototype, "blocksLight", {
         get: function () { return this._blocksLight; },
         set: function (value) { this._blocksLight = value; },
@@ -83,7 +90,8 @@ var Tile = /** @class */ (function (_super) {
             character: ' ',
             background: this.pickColor(colors),
             isWalkable: true,
-            blocksLight: false
+            isTraverseable: false,
+            blocksLight: false,
         });
     };
     Tile.wallTile = function () {
@@ -92,7 +100,24 @@ var Tile = /** @class */ (function (_super) {
             character: ' ',
             background: this.pickColor(colors),
             isDiggable: true,
+            isTraverseable: false,
             blocksLight: true
+        });
+    };
+    Tile.stairsUpTile = function () {
+        return new Tile({
+            character: '<',
+            foreground: 'white',
+            isWalkable: true,
+            isTraverseable: true,
+        });
+    };
+    Tile.stairsDownTile = function () {
+        return new Tile({
+            character: '>',
+            foreground: 'gray',
+            isWalkable: true,
+            isTraverseable: true,
         });
     };
     Tile.pickColor = function (colors) {

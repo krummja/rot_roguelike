@@ -1,5 +1,6 @@
 import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
+import { Game } from './game';
 
 type Screen = {
   enter(): void;
@@ -14,13 +15,15 @@ interface IProperties {
   background ?: string,
   isWalkable ?: boolean,
   isDiggable ?: boolean,
+  isTraverseable ?: boolean,
   blocksLight ?: boolean,
   sightRadius ?: number,
   x ?: number,
   y ?: number,
+  z ?: number,
   name ?: string,
   mixins ?: any[],
-  multiplier ?: number
+  multiplier ?: number,
 }
 
 // https://mariusschulz.com/blog/mixin-classes-in-typescript

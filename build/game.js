@@ -21,6 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
 var ROT = __importStar(require("rot-js"));
+var utils_1 = require("./utils");
 var Game = /** @class */ (function () {
     function Game() {
         var _a;
@@ -33,7 +34,6 @@ var Game = /** @class */ (function () {
         this._fontSize = 12;
         this._spacing = 1.0;
         this._squareRatio = true;
-        console.log('Game:              Setting up game instance. One sec...');
         this.display = new ROT.Display({
             width: this._screenWidth,
             height: this._screenHeight,
@@ -79,6 +79,7 @@ var Game = /** @class */ (function () {
             });
         };
         bindEventToScreen('keydown');
+        bindEventToScreen('keypress');
     };
     Game.prototype.refresh = function () {
         this._display.clear();
@@ -94,6 +95,18 @@ var Game = /** @class */ (function () {
             this.currentScreen.enter();
             this.refresh();
         }
+    };
+    Game.getNeighborPositions = function (x, y) {
+        var tiles = [];
+        for (var dX = -1; dX < 2; dX++) {
+            for (var dY = -1; dY < 2; dY++) {
+                if (dX == 0 && dY == 0) {
+                    continue;
+                }
+                tiles.push({ x: x + dX, y: y + dY });
+            }
+        }
+        return utils_1.shuffleCoordArray(tiles);
     };
     return Game;
 }());
