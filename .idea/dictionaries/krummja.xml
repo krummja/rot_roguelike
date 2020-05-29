@@ -4,10 +4,13 @@
       <w>activatable</w>
       <w>ctors</w>
       <w>diggable</w>
+      <w>downleft</w>
       <w>fira</w>
       <w>mixins</w>
       <w>moveable</w>
       <w>shadowcasting</w>
+      <w>traverseable</w>
+      <w>upleft</w>
     </words>
   </dictionary>
 </component>
