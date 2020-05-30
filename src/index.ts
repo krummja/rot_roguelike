@@ -1,12 +1,7 @@
-import * as ROT from 'rot-js';
+import { Game } from './Game';
 
-import { Game } from './game';
-import { StartScreen } from './Display';
 
-window.onload = () => {
+window.onload = (): void => {
   let game = new Game();
-  let startScreen: any = new StartScreen(game);
-
-  game.init();
-  game.switchScreen(startScreen);
+  game.initialize();
 }
