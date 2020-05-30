@@ -29,6 +29,11 @@ class Entity
     this._id = value;
   }
 
+  constructor()
+  {
+    this._id = (+new Date()).toString(16) + '-' + (Math.random() * 1e17).toString(16);
+  }
+
   public isNew(): boolean
   {
     return this._id === null;
@@ -125,7 +130,7 @@ class Entity
     }
   }
 
-  // Checks if the component is and instance of the class.
+  // Checks if the component is an instance of the class.
   public cast<T extends Component>(
       component: Component | undefined | null,
       componentClass: ComponentClass<T>): component is T
