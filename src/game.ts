@@ -1,10 +1,11 @@
 import * as ROT from 'rot-js';
 import {Screen} from './types';
+import { Console } from './console';
 
 
 class Game
 {
-  private _display: ROT.Display = null;
+  private _console: Console = null;
   private _currentScreen: Screen = null;
   private _screenWidth: number = 64;
   private _screenHeight: number = 40;
@@ -17,8 +18,8 @@ class Game
   public container: HTMLElement | null;
 
 
-  public get display(): ROT.Display { return this._display; }
-  public set display(v: ROT.Display) { this._display = v; }
+  public get console(): Console { return this._console; }
+  public set console(v: Console) { this._console = v; }
 
   public get currentScreen(): Screen { return this._currentScreen; }
   public set currentScreen(v: Screen) { this._currentScreen = v; }
@@ -33,16 +34,9 @@ class Game
   public constructor()
   {
     console.log('Game:              Setting up game instance. One sec...');
-    this.display = new ROT.Display({
-      width: this._screenWidth,
-      height: this._screenHeight,
-      fontFamily: this._fontFamily,
-      fontStyle: this._fontStyle,
-      spacing: this._spacing,
-      forceSquareRatio: this._squareRatio
-    });
-    this.container = this.display.getContainer();
-    document.getElementById('game')?.appendChild(this.container);
+
+    this.console = new Console();
+    document.getElementById('game')?.appendChild(this.console.container);
   }
 
 
@@ -64,22 +58,24 @@ class Game
 
   public refresh(): void
   {
-    this._display.clear();
-    this._currentScreen.render((this._display));
+    // this._console.clear();
+    // this._currentScreen.render((this._console));
   }
 
   public switchScreen(screen: Screen): void
   {
-    if (this.currentScreen !== null) {
-      this.currentScreen.exit();
-    }
+    // TODO: Refactor this into the render system.
 
-    this.display.clear();
-    this.currentScreen = screen;
-    if (this.currentScreen) {
-      this.currentScreen.enter();
-      this.refresh()
-    }
+    // if (this.currentScreen !== null) {
+    //   this.currentScreen.exit();
+    // }
+
+    // this.console.clear();
+    // this.currentScreen = screen;
+    // if (this.currentScreen) {
+    //   this.currentScreen.enter();
+    //   this.refresh()
+    // }
   }
 }
 
