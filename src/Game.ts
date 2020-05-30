@@ -1,34 +1,25 @@
-import { Renderer } from './Renderer';
-import { Scene } from './Scene';
-import { SceneManager } from './SceneManager';
-import { StartScene } from './Scenes';
+import * as ROT from 'rot-js';
 
-const START = new StartScene();
+import { Display } from './Interface/Display';
+import { Input } from './Interface/Input';
+
 
 class Game
 {
-  private _currentScene: Scene;
-  private _renderer: Renderer;
-  private _sceneManager: SceneManager;
-
-  public get currentScene(): Scene { return this._currentScene; }
-  public set currentScene(value: Scene) { this._currentScene = value; }
-
-  public get renderer(): Renderer { return this._renderer; }
-
-  public get sceneManager(): SceneManager { return this._sceneManager; }
-  public set sceneManager(value: SceneManager) { this._sceneManager = value; }
+  public display: Display;
+  public input: Input;
 
   constructor()
   {
-    this._renderer = new Renderer(this);
-    this._sceneManager = new SceneManager(this);
+    this.display = new Display();
+    document.getElementById('game')?.appendChild(this.display.container);
+
+    this.input = new Input();
   }
 
-
-  public init(): void
+  public initialize()
   {
-    this._sceneManager.switch(START);
+
   }
 }
 

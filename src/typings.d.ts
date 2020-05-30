@@ -1,6 +1,8 @@
 
 
-interface IProperties {
+
+
+interface Properties {
   // Glyph Properties
   character   ?: string,
   foreground  ?: string,
@@ -21,16 +23,5 @@ interface IProperties {
   multiplier  ?: number,
 }
 
-interface IPropertyFormula {
 
-}
-
-type KeyProp = [string, any];
-
-interface IPosition {
-  x: number,
-  y: number,
-  z: number
-}
-
-export { IProperties, IPropertyFormula, KeyProp, IPosition };
+export { Properties };

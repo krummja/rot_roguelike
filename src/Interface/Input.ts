@@ -1,11 +1,24 @@
-import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
-class Input extends EventEmitter
+import { Observer, Subject } from '../util';
+
+
+class Input extends Subject
 {
+  public observers: Observer[] = [];
+  public state: number;
+
   constructor()
   {
     super();
+
+    let bindEventToScreen = (event: string): void => {
+      window.addEventListener(event, (e: any): void => {
+        this.handleInput(event, e);
+      })
+    }
+
+    bindEventToScreen('keydown');
   }
 
   public handleInput(inputType: string, inputData: any): void
@@ -21,25 +34,26 @@ class Input extends EventEmitter
       downleft: ROT.KEYS.VK_NUMPAD1,
       downright: ROT.KEYS.VK_NUMPAD3
     }
+
     if (inputType === 'keydown') {
       if (inputData.keyCode === keyCommands.return) {
-        this.emit('input', 'return');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.up) {
-        this.emit('move', 'up');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.down) {
-        this.emit('move', 'down');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.left) {
-        this.emit('move', 'left');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.right) {
-        this.emit('move', 'right');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.upleft) {
-        this.emit('move', 'upleft');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.upright) {
-        this.emit('move', 'upright');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.downleft) {
-        this.emit('move', 'downleft');
+        this.notify();
       } else if (inputData.keyCode === keyCommands.downright) {
-        this.emit('move', 'downright');
+        this.notify();
       }
     }
   }

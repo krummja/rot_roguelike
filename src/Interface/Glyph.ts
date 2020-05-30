@@ -1,5 +1,5 @@
 import * as ROT from 'rot-js';
-import { IProperties } from './typings';
+import { IProperties } from '../typings';
 
 
 class Glyph

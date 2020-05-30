@@ -1,6 +1,6 @@
 import * as ROT from 'rot-js';
 import { Glyph } from './Glyph';
-import { IProperties } from './typings';
+import { IProperties } from '../typings';
 
 
 class Tile extends Glyph
