@@ -9,6 +9,8 @@ import Scheduler from 'rot-js/lib/scheduler/scheduler';
  * Its primary function is to set up and track ENTITY positions.
  * It also handles the checking of TILE data like flags for digging or FOV calculation.
  */
+
+ // FIXME: Is this the way I want to do this? WORLD should track global position, MAP should be a local AREA of the game.
 class Map
 {
   private _tiles: Array<Array<Tile>>;

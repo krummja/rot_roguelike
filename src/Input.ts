@@ -1,7 +1,7 @@
 import * as ROT from 'rot-js';
-import * as ECS from '../ECS';
+import * as ECS from './ECS';
 
-import { EVENTS } from '../index';
+import { Game } from './Game';
 
 
 class Input
@@ -56,7 +56,7 @@ class Input
         this.state = keyCommands.downright;
       }
 
-      EVENTS.emit('input', this.state);
+      Game.EVENTS.emit('input', this.state);
     }
   }
 }

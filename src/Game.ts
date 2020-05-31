@@ -25,13 +25,13 @@ class Game
 
   constructor()
   {
-    this.INPUT        = new System.Input();
-    this.CONSOLE      = new Display.Console();
-    this.ECS_ENGINE   = new ECS.Engine();
+    this.INPUT = new System.Input();
+    this.CONSOLE = new Display.Console();
+    this.ECS_ENGINE = new ECS.Engine();
     
-    this._SCENE_MGR   = new Display.SceneManager();
+    this._SCENE_MGR = new Display.SceneManager();
     this._PHYSICS_SYS = new ECS.PhysicsSystem();
-    this._RENDER_SYS  = new ECS.RenderSystem();
+    this._RENDER_SYS = new ECS.RenderSystem();
   }
 
 
@@ -41,11 +41,6 @@ class Game
     this.ECS_ENGINE.addSystem(this._RENDER_SYS);
 
     this._SCENE_MGR.switch('PLAY');
-  }
-
-  public update()
-  {
-    this.ECS_ENGINE.update();
   }
 }
 
