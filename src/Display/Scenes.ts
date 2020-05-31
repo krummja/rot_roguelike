@@ -29,7 +29,7 @@ class PlayScene implements Scene
 
   public enter(): void
   {
-    console.log("Play Scene started!");
+    
   }
 
   public exit(): void

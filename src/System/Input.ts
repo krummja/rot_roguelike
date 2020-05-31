@@ -1,10 +1,12 @@
 import * as ROT from 'rot-js';
-import { Subject, Observer } from './Util';
+import * as ECS from '../ECS';
+
+import { EVENTS } from '../index';
 
 
 class Input
 {
-  public subject: Subject = new Subject();
+  public state: number;
 
   constructor()
   {
@@ -19,7 +21,7 @@ class Input
 
   public handleInput(inputType: string, inputData: any): void
   {
-    let inputState: number = null;
+    this.state = null;
 
     let keyCommands = {
       return: ROT.KEYS.VK_RETURN,
@@ -35,25 +37,26 @@ class Input
 
     if (inputType === 'keydown') {
       if (inputData.keyCode === keyCommands.return) {
-        inputState = keyCommands.return;
+        this.state = keyCommands.return;
       } else if (inputData.keyCode === keyCommands.up) {
-        inputState = keyCommands.up;
+        this.state = keyCommands.up;
       } else if (inputData.keyCode === keyCommands.down) {
-        inputState = keyCommands.down;
+        this.state = keyCommands.down;
       } else if (inputData.keyCode === keyCommands.left) {
-        inputState = keyCommands.left;
+        this.state = keyCommands.left;
       } else if (inputData.keyCode === keyCommands.right) {
-        inputState = keyCommands.right;
+        this.state = keyCommands.right;
       } else if (inputData.keyCode === keyCommands.upleft) {
-        inputState = keyCommands.upleft;
+        this.state = keyCommands.upleft;
       } else if (inputData.keyCode === keyCommands.upright) {
-        inputState = keyCommands.upright;
+        this.state = keyCommands.upright;
       } else if (inputData.keyCode === keyCommands.downleft) {
-        inputState = keyCommands.downleft;
+        this.state = keyCommands.downleft;
       } else if (inputData.keyCode === keyCommands.downright) {
-        inputState = keyCommands.downright;
+        this.state = keyCommands.downright;
       }
-      this.subject.notify();
+
+      EVENTS.emit('input', this.state);
     }
   }
 }

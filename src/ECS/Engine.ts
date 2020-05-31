@@ -12,20 +12,15 @@ interface EngineEntityListener {
  * you want.
  */
 class Engine {
-  /** Private array containing the current list of added entities. */
   private _entities: Entity[] = [];
-  /** Private list of entity listeners */
   private readonly _entityListeners: EngineEntityListener[] = [];
-  /** Private list of added systems. */
   private readonly _systems: System[] = [];
-  /** Checks if the system needs sorting of some sort */
   private _systemsNeedSorting: boolean = false;
-  /**
-   * Computes an immutable list of entities added to the engine.
-   */
+
   get entities() {
     return Object.freeze(this._entities.slice(0));
   }
+
   /**
    * Alerts the engine to sort systems by priority.
    * @param system The system than changed priority
@@ -162,13 +157,13 @@ class Engine {
    * Updates all systems added to the engine.
    * @param delta Time elapsed (in milliseconds) since the last update.
    */
-  update(delta: number) {
+  update() {
     if (this._systemsNeedSorting) {
       this._systemsNeedSorting = false;
       this._systems.sort((a, b) => a.priority - b.priority);
     }
     for (let system of this._systems) {
-      system.update(this, delta);
+      system.update(this);
     }
   }
 }

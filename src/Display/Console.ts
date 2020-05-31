@@ -1,5 +1,5 @@
 import * as ROT from 'rot-js';
-import { Glyph, Renderer, Scene, Tile } from './';
+import { Glyph, Tile } from './';
 
 
 class Console
@@ -9,32 +9,43 @@ class Console
   public get display(): ROT.Display { return this._display; }
   private _display: ROT.Display = null;
 
-  public get renderer(): Renderer { return this._renderer; }
-  private _renderer: Renderer = null;
+  private _consoleConfig = {
+    width: 64,
+    height: 40,
+    fontFamily: 'Fira Code',
+    fontStyle: 'normal',
+    spacing: 1.0,
+    forceSquareRatio: true
+  }
+
 
   constructor()
   {
     this._display = new ROT.Display({
-      width: 64,
-      height: 40,
-      fontFamily: 'Fira Code',
-      fontStyle: 'normal',
-      spacing: 1.0,
-      forceSquareRatio: true
+      width: this._consoleConfig['width'],
+      height: this._consoleConfig['height'],
+      fontFamily: this._consoleConfig['fontFamily'],
+      fontStyle: this._consoleConfig['fontStyle'],
+      spacing: this._consoleConfig['spacing'],
+      forceSquareRatio: this._consoleConfig['forceSquareRatio']
     });
 
     this.container = this._display.getContainer();
     document.getElementById('game')?.appendChild(this.container);
-    this._renderer = new Renderer();
+  }
 
-    // Renderer Test
-    var foreground, background, colors;
-    for (let i = 0; i < 15; i++) {
-      foreground = ROT.Color.toRGB([255 - (i*20), 255 - (i*20), 255 - (i*20)]);
-      background = ROT.Color.toRGB([i*20, i*20, i*20]);
-      colors = "%c{" + foreground + "}%b{" + background + "}";
-      this._display.drawText(2, i, colors + "Hello World!");
-    }
+
+  public clear(): void
+  {
+
+  }
+
+  public render(): void
+  {
+    let screenWidth = this._consoleConfig['width'];
+    let screenHeight = this._consoleConfig['height'];
+
+    this._display.drawText(20, 20, 'Hello world!');
   }
 }
 

@@ -20,32 +20,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
-const Display = __importStar(require("./Display/"));
-const ECS = __importStar(require("./ECS/"));
-const Input_1 = require("./Input");
-const Display_1 = require("./Display/");
-/**
- * The 'Game' class is the root class that brings together the various modules that
- * make up the game itself.
- *
- * Each module is self-contained and coordinate information largely through an Observer.
- */
+const System = __importStar(require("./System"));
+const Display = __importStar(require("./Display"));
+const ECS = __importStar(require("./ECS"));
 class Game {
     constructor() {
-        this._currentScene = null;
-        // Display
+        this.input = new System.Input();
         this.console = new Display.Console();
-        this.sceneManager = new Display.SceneManager(this);
-        // ECS Library
+        this.sceneManager = new Display.SceneManager();
         this.engine = new ECS.Engine();
-        // System
-        this.input = new Input_1.Input();
+        this.InputObserver = new System.Observer();
+        this._physicsSystem = new ECS.PhysicsSystem();
+        this._renderSystem = new ECS.RenderSystem();
     }
-    get currentScene() { return this._currentScene; }
-    set currentScene(value) { this._currentScene = value; }
     initialize() {
-        let playScene = new Display_1.PlayScene();
-        this.sceneManager.switch(playScene);
+        this.input.observable.attach(this.InputObserver);
+        this.engine.addSystem(this._physicsSystem);
+        this.engine.addSystem(this._renderSystem);
+        this.sceneManager.switch('PLAY');
+    }
+    update() {
+        let inputState = this.InputObserver.subjectState;
+        console.log("Game.update(): " + inputState);
+        this.engine.update();
     }
 }
 exports.Game = Game;

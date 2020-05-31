@@ -3,11 +3,13 @@ interface ISubject
 {
   attach(observer: Observer): void;
   detach(observer: Observer): void;
-  notify(): void;
+  notify(state: any): void;
 }
 
 class Subject implements ISubject
 {
+  public state: any;
+
   // Internal array of Systems observing this Subject
   private _observers: Observer[];
   
@@ -41,11 +43,11 @@ class Subject implements ISubject
   }
 
   // Notify the Observers that Subject's State has changed
-  public notify(): void
+  public notify(state: any): void
   {
+    this.state = state;
     if (this._observers.length >= 1) {
       console.log('Subject: Notifying observers...');
-      console.log(this._observers);
       for (const observer of this._observers) {
         observer.update(this);
       }
@@ -63,9 +65,10 @@ interface IObserver
 
 class Observer implements IObserver
 {
+  public subjectState: any;
   public update(subject: Subject): void
   {
-    // Do some stuff in reaction to state change in Subject
+    this.subjectState = subject.state;
   }
 }
 

@@ -2,14 +2,14 @@ import { Engine, System } from './';
 
 
 /**
- * PhysicsSystem handles movement and interaction among Physical entities.
+ * RenderSystem handles the processing of all renderables on game Entities.
  * 
  * From System, inherits:
  *   onAttach(engine)
  *   onDetach(engine)
  *   update(engine, delta?)
  */
-class PhysicsSystem extends System
+class RenderSystem extends System
 {
 
   constructor()
@@ -19,9 +19,9 @@ class PhysicsSystem extends System
 
   public update(engine: Engine): void
   {
-    console.log("Update fired from within the Physics system!");
+    console.log("Update fired from within the Render system!");
   }
 }
 
 
-export { PhysicsSystem };
+export { RenderSystem };

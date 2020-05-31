@@ -1,32 +1,33 @@
-import * as ROT from 'rot-js';
-import { Game } from '../Game';
-
 import { Scene, StartScene, PlayScene } from './';
 
 
 class SceneManager
 {
-  public get game(): Game { return this._game; }
-  private _game: Game;
+  public scenes: { [key: string]: Scene };
+  
+  public get currentScene(): Scene { return this._currentScene; }
+  public set currentScene(value: Scene) { this._currentScene = value; }
+  private _currentScene: Scene = null;
 
-  constructor(game: Game)
+  
+  constructor()
   {
-    this._game = game;
+    this.scenes = {
+      START: new StartScene(),
+      PLAY: new PlayScene()
+    }
   }
 
-  public switch(scene: Scene): void
+
+  public switch(sceneKey: string): void
   {
-    if (this._game.currentScene !== null) {
-      this._game.currentScene.exit();
+    if (this._currentScene !== null) {
+      this._currentScene.exit();
     }
 
-    this._game.console.renderer.clear();
-    this._game.currentScene = scene;
+    this._currentScene = this.scenes[sceneKey];
+    this._currentScene.enter();
 
-    if (this._game.currentScene) {
-      this._game.currentScene.enter();
-      this._game.console.renderer.refresh();
-    }
   }
 }
 

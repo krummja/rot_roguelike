@@ -1,21 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SceneManager = void 0;
+const _1 = require("./");
 class SceneManager {
-    constructor(game) {
-        this._game = game;
+    constructor() {
+        this._currentScene = null;
+        this.scenes = {
+            START: new _1.StartScene(),
+            PLAY: new _1.PlayScene()
+        };
     }
-    get game() { return this._game; }
-    switch(scene) {
-        if (this._game.currentScene !== null) {
-            this._game.currentScene.exit();
+    get currentScene() { return this._currentScene; }
+    set currentScene(value) { this._currentScene = value; }
+    switch(sceneKey) {
+        if (this._currentScene !== null) {
+            this._currentScene.exit();
         }
-        this._game.console.renderer.clear();
-        this._game.currentScene = scene;
-        if (this._game.currentScene) {
-            this._game.currentScene.enter();
-            this._game.console.renderer.refresh();
-        }
+        this._currentScene = this.scenes[sceneKey];
+        this._currentScene.enter();
     }
 }
 exports.SceneManager = SceneManager;

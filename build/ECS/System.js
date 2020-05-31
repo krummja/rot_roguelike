@@ -10,8 +10,6 @@ class System {
     set priority(value) { this._priority = value; }
     get engines() { return this._engines; }
     set engines(value) { this._engines = value; }
-    get observer() { return this._observer; }
-    set observer(value) { this._observer = value; }
     onAttach(engine) {
         const index = this._engines.indexOf(engine);
         if (index === -1) {

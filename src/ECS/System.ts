@@ -1,5 +1,4 @@
 import { Engine } from './';
-import { Observer } from '../Util';
 
 
 class System
@@ -11,10 +10,6 @@ class System
   public get engines(): Engine[] { return this._engines; }
   public set engines(value: Engine[]) { this._engines = value; }
   private _engines: Engine[];
-
-  public get observer(): Observer { return this._observer; }
-  public set observer(value: Observer) { this._observer = value; }
-  private _observer: Observer;
 
 
   constructor()

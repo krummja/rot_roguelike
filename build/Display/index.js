@@ -12,7 +12,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./Console"), exports);
 __exportStar(require("./Glyph"), exports);
-__exportStar(require("./Renderer"), exports);
 __exportStar(require("./Scene"), exports);
 __exportStar(require("./Scenes"), exports);
 __exportStar(require("./SceneManager"), exports);

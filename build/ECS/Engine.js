@@ -8,18 +8,11 @@ exports.Engine = void 0;
  */
 class Engine {
     constructor() {
-        /** Private array containing the current list of added entities. */
         this._entities = [];
-        /** Private list of entity listeners */
         this._entityListeners = [];
-        /** Private list of added systems. */
         this._systems = [];
-        /** Checks if the system needs sorting of some sort */
         this._systemsNeedSorting = false;
     }
-    /**
-     * Computes an immutable list of entities added to the engine.
-     */
     get entities() {
         return Object.freeze(this._entities.slice(0));
     }
@@ -148,13 +141,13 @@ class Engine {
      * Updates all systems added to the engine.
      * @param delta Time elapsed (in milliseconds) since the last update.
      */
-    update(delta) {
+    update() {
         if (this._systemsNeedSorting) {
             this._systemsNeedSorting = false;
             this._systems.sort((a, b) => a.priority - b.priority);
         }
         for (let system of this._systems) {
-            system.update(this, delta);
+            system.update(this);
         }
     }
 }
