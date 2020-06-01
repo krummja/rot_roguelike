@@ -39,6 +39,9 @@ export class Core
 
   
   public initialize() {
+    // Set up entities and initialize systems.
+    
+    // *Mario Voice* Here we go!
     this._SCENE_MANAGER.switch('START');
   }
 }

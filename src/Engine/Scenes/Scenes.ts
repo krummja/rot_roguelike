@@ -9,10 +9,12 @@ export class StartScene implements IScene
 
   private _manager: SceneManager
 
+
   constructor(manager: SceneManager)
   {
     this._manager = manager;
   }
+
 
   public enter(): void
   {
@@ -37,11 +39,13 @@ export class PlayScene implements IScene
 {
   private _manager: SceneManager
 
+
   constructor(manager: SceneManager)
   {
     this._manager = manager;
   }
 
+  
   public enter(): void
   {
     
