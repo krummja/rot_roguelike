@@ -86,6 +86,30 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./build/Controller/Input.js":
+/*!***********************************!*\
+  !*** ./build/Controller/Input.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Input = void 0;\nconst ROT = __importStar(__webpack_require__(/*! rot-js */ \"./node_modules/rot-js/lib/index.js\"));\nclass Input {\n    constructor(core) {\n        this._core = core;\n        let bindEventToScreen = (event) => {\n            window.addEventListener(event, (e) => {\n                this.handleInput(event, e);\n            });\n        };\n        bindEventToScreen('keydown');\n    }\n    handleInput(inputType, inputData) {\n        this.state = null;\n        let keyCommands = {\n            return: ROT.KEYS.VK_RETURN,\n            up: ROT.KEYS.VK_NUMPAD8,\n            down: ROT.KEYS.VK_NUMPAD2,\n            left: ROT.KEYS.VK_NUMPAD4,\n            right: ROT.KEYS.VK_NUMPAD6,\n            upleft: ROT.KEYS.VK_NUMPAD7,\n            upright: ROT.KEYS.VK_NUMPAD9,\n            downleft: ROT.KEYS.VK_NUMPAD1,\n            downright: ROT.KEYS.VK_NUMPAD3\n        };\n        if (inputType === 'keydown') {\n            if (inputData.keyCode === keyCommands.return) {\n                this.state = keyCommands.return;\n            }\n            else if (inputData.keyCode === keyCommands.up) {\n                this.state = keyCommands.up;\n            }\n            else if (inputData.keyCode === keyCommands.down) {\n                this.state = keyCommands.down;\n            }\n            else if (inputData.keyCode === keyCommands.left) {\n                this.state = keyCommands.left;\n            }\n            else if (inputData.keyCode === keyCommands.right) {\n                this.state = keyCommands.right;\n            }\n            else if (inputData.keyCode === keyCommands.upleft) {\n                this.state = keyCommands.upleft;\n            }\n            else if (inputData.keyCode === keyCommands.upright) {\n                this.state = keyCommands.upright;\n            }\n            else if (inputData.keyCode === keyCommands.downleft) {\n                this.state = keyCommands.downleft;\n            }\n            else if (inputData.keyCode === keyCommands.downright) {\n                this.state = keyCommands.downright;\n            }\n        }\n    }\n}\nexports.Input = Input;\n\n\n//# sourceURL=webpack:///./build/Controller/Input.js?");
+
+/***/ }),
+
+/***/ "./build/Controller/index.js":
+/*!***********************************!*\
+  !*** ./build/Controller/index.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Input */ \"./build/Controller/Input.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/Controller/index.js?");
+
+/***/ }),
+
 /***/ "./build/Display/Console.js":
 /*!**********************************!*\
   !*** ./build/Display/Console.js ***!
@@ -94,7 +118,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Console = void 0;\nconst ROT = __importStar(__webpack_require__(/*! rot-js */ \"./node_modules/rot-js/lib/index.js\"));\nclass Console {\n    constructor() {\n        var _a;\n        this._display = null;\n        this._consoleConfig = {\n            width: 64,\n            height: 40,\n            fontFamily: 'Fira Code',\n            fontStyle: 'normal',\n            spacing: 1.0,\n            forceSquareRatio: true\n        };\n        this._display = new ROT.Display({\n            width: this._consoleConfig['width'],\n            height: this._consoleConfig['height'],\n            fontFamily: this._consoleConfig['fontFamily'],\n            fontStyle: this._consoleConfig['fontStyle'],\n            spacing: this._consoleConfig['spacing'],\n            forceSquareRatio: this._consoleConfig['forceSquareRatio']\n        });\n        this.container = this._display.getContainer();\n        (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);\n    }\n    get display() { return this._display; }\n    clear() {\n    }\n    render() {\n        let screenWidth = this._consoleConfig['width'];\n        let screenHeight = this._consoleConfig['height'];\n        this._display.drawText(20, 20, 'Hello world!');\n    }\n}\nexports.Console = Console;\n\n\n//# sourceURL=webpack:///./build/Display/Console.js?");
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Console = void 0;\nconst ROT = __importStar(__webpack_require__(/*! rot-js */ \"./node_modules/rot-js/lib/index.js\"));\nclass Console {\n    constructor(core) {\n        var _a;\n        this._display = null;\n        this._consoleConfig = {\n            width: 64,\n            height: 40,\n            fontFamily: 'Fira Code',\n            fontStyle: 'normal',\n            spacing: 1.0,\n            forceSquareRatio: true\n        };\n        this._core = core;\n        this._display = new ROT.Display({\n            width: this._consoleConfig['width'],\n            height: this._consoleConfig['height'],\n            fontFamily: this._consoleConfig['fontFamily'],\n            fontStyle: this._consoleConfig['fontStyle'],\n            spacing: this._consoleConfig['spacing'],\n            forceSquareRatio: this._consoleConfig['forceSquareRatio']\n        });\n        this.container = this._display.getContainer();\n        (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);\n    }\n    get display() { return this._display; }\n}\nexports.Console = Console;\n\n\n//# sourceURL=webpack:///./build/Display/Console.js?");
 
 /***/ }),
 
@@ -110,39 +134,15 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 
 /***/ }),
 
-/***/ "./build/Display/Scene.js":
-/*!********************************!*\
-  !*** ./build/Display/Scene.js ***!
-  \********************************/
+/***/ "./build/Display/Renderer.js":
+/*!***********************************!*\
+  !*** ./build/Display/Renderer.js ***!
+  \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Scene = void 0;\nclass Scene {\n    constructor() {\n    }\n    enter() {\n    }\n    exit() {\n    }\n}\nexports.Scene = Scene;\n\n\n//# sourceURL=webpack:///./build/Display/Scene.js?");
-
-/***/ }),
-
-/***/ "./build/Display/SceneManager.js":
-/*!***************************************!*\
-  !*** ./build/Display/SceneManager.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.SceneManager = void 0;\nconst _1 = __webpack_require__(/*! ./ */ \"./build/Display/index.js\");\nclass SceneManager {\n    constructor() {\n        this._currentScene = null;\n        this.scenes = {\n            START: new _1.StartScene(),\n            PLAY: new _1.PlayScene()\n        };\n    }\n    get currentScene() { return this._currentScene; }\n    set currentScene(value) { this._currentScene = value; }\n    switch(sceneKey) {\n        if (this._currentScene !== null) {\n            this._currentScene.exit();\n        }\n        this._currentScene = this.scenes[sceneKey];\n        this._currentScene.enter();\n    }\n}\nexports.SceneManager = SceneManager;\n\n\n//# sourceURL=webpack:///./build/Display/SceneManager.js?");
-
-/***/ }),
-
-/***/ "./build/Display/Scenes.js":
-/*!*********************************!*\
-  !*** ./build/Display/Scenes.js ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.PlayScene = exports.StartScene = void 0;\nclass StartScene {\n    constructor() {\n    }\n    enter() {\n    }\n    exit() {\n    }\n}\nexports.StartScene = StartScene;\nclass PlayScene {\n    constructor() {\n    }\n    enter() {\n        console.log(\"Play Scene started!\");\n    }\n    exit() {\n    }\n}\nexports.PlayScene = PlayScene;\n\n\n//# sourceURL=webpack:///./build/Display/Scenes.js?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Renderer = void 0;\nclass Renderer {\n}\nexports.Renderer = Renderer;\n\n\n//# sourceURL=webpack:///./build/Display/Renderer.js?");
 
 /***/ }),
 
@@ -154,7 +154,7 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Tile = void 0;\nconst Glyph_1 = __webpack_require__(/*! ./Glyph */ \"./build/Display/Glyph.js\");\nclass Tile {\n    constructor(properties, glyphProps) {\n        // Mutables: Physics and Position\n        this._walkable = properties['walkable'];\n        this._diggable = properties['diggable'];\n        this._opaque = properties['opaque'];\n        this._x = properties['x'];\n        this._y = properties['y'];\n        // Immutables: Renderables\n        this._glyphProps = glyphProps;\n        this._glyph = new Glyph_1.Glyph(this._glyphProps);\n    }\n}\nexports.Tile = Tile;\n\n\n//# sourceURL=webpack:///./build/Display/Tile.js?");
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Tile = void 0;\nconst Glyph_1 = __webpack_require__(/*! ./Glyph */ \"./build/Display/Glyph.js\");\nlet Tile = /** @class */ (() => {\n    class Tile {\n        constructor(properties, glyphProps) {\n            // Mutables: Physics and Position\n            this._walkable = properties['walkable'];\n            this._diggable = properties['diggable'];\n            this._opaque = properties['opaque'];\n            this._x = properties['x'];\n            this._y = properties['y'];\n            // Immutables: Renderables\n            this._glyphProps = glyphProps;\n            this._glyph = new Glyph_1.Glyph(this._glyphProps);\n        }\n        static nullTile() {\n            return new Tile({}, {});\n        }\n        static floorTile() {\n            let colors = ['#29231c', '#332d25', '#25211d', '#292018'];\n            return new Tile({\n                walkable: true,\n                opaque: false\n            }, {\n                character: ' ',\n                background: this.pickColor(colors)\n            });\n        }\n        static wallTile() {\n            let colors = ['#9a7e61', '#a78a6d', '#a08467', '#ad9173'];\n            return new Tile({\n                walkable: false,\n                opaque: true\n            }, {\n                character: ' ',\n                background: this.pickColor(colors)\n            });\n        }\n    }\n    Tile.pickColor = (colors) => {\n        let index = Math.floor(Tile.random(0, 4));\n        return colors[index];\n    };\n    Tile.random = (mn, mx) => {\n        return Math.random() * (mx - mn) + mn;\n    };\n    return Tile;\n})();\nexports.Tile = Tile;\n\n\n//# sourceURL=webpack:///./build/Display/Tile.js?");
 
 /***/ }),
 
@@ -166,151 +166,79 @@ eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexport
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Console */ \"./build/Display/Console.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Glyph */ \"./build/Display/Glyph.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Scene */ \"./build/Display/Scene.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Scenes */ \"./build/Display/Scenes.js\"), exports);\n__exportStar(__webpack_require__(/*! ./SceneManager */ \"./build/Display/SceneManager.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Tile */ \"./build/Display/Tile.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/Display/index.js?");
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Console */ \"./build/Display/Console.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Glyph */ \"./build/Display/Glyph.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Tile */ \"./build/Display/Tile.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Renderer */ \"./build/Display/Renderer.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/Display/index.js?");
 
 /***/ }),
 
-/***/ "./build/ECS/Component.js":
-/*!********************************!*\
-  !*** ./build/ECS/Component.js ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\n\n\n//# sourceURL=webpack:///./build/ECS/Component.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/Engine.js":
-/*!*****************************!*\
-  !*** ./build/ECS/Engine.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Engine = void 0;\n/**\n * An engine is the class than combines systems and entities.\n * You may have one Engine in your application, but you can make as many as\n * you want.\n */\nclass Engine {\n    constructor() {\n        this._entities = [];\n        this._entityListeners = [];\n        this._systems = [];\n        this._systemsNeedSorting = false;\n    }\n    get entities() {\n        return Object.freeze(this._entities.slice(0));\n    }\n    /**\n     * Alerts the engine to sort systems by priority.\n     * @param system The system than changed priority\n     */\n    notifyPriorityChange(system) {\n        this._systemsNeedSorting = true;\n    }\n    /**\n     * Adds a listener for when entities are added or removed.\n     * @param listener The listener waiting to add\n     */\n    addEntityListener(listener) {\n        if (this._entityListeners.indexOf(listener) === -1) {\n            this._entityListeners.push(listener);\n        }\n        return this;\n    }\n    /**\n     * Removes a listener from the entity listener list.\n     * @param listener The listener to remove\n     */\n    removeEntityListener(listener) {\n        const index = this._entityListeners.indexOf(listener);\n        if (index !== -1) {\n            this._entityListeners.splice(index, 1);\n        }\n        return this;\n    }\n    /**\n     * Add an entity to the engine.\n     * The listeners will be notified.\n     * @param entity The entity to add\n     */\n    addEntity(entity) {\n        if (this._entities.indexOf(entity) === -1) {\n            this._entities.push(entity);\n            for (let listener of this._entityListeners) {\n                listener.onEntityAdded(entity);\n            }\n        }\n        return this;\n    }\n    /**\n     * Add a list of entities to the engine.\n     * The listeners will be notified once per entity.\n     * @param entities The list of entities to add\n     */\n    addEntities(...entities) {\n        for (let entity of entities) {\n            this.addEntity(entity);\n        }\n        return this;\n    }\n    /**\n     * Removes an entity to the engine.\n     * The listeners will be notified.\n     * @param entity The entity to remove\n     */\n    removeEntity(entity) {\n        const index = this._entities.indexOf(entity);\n        if (index !== -1) {\n            this._entities.splice(index, 1);\n            for (let listener of this._entityListeners) {\n                listener.onEntityRemoved(entity);\n            }\n        }\n    }\n    /**\n     * Removes a list of entities to the engine.\n     * The listeners will be notified once per entity.\n     * @param entities The list of entities to remove\n     */\n    removeEntities(...entities) {\n        for (let entity of entities) {\n            this.removeEntity(entity);\n        }\n        return this;\n    }\n    /**\n     * Adds a system to the engine.\n     * @param system The system to add.\n     */\n    addSystem(system) {\n        const index = this._systems.indexOf(system);\n        if (index === -1) {\n            this._systems.push(system);\n            system.onAttach(this);\n            this._systemsNeedSorting = true;\n        }\n        return this;\n    }\n    /**\n     * Adds a list of systems to the engine.\n     * @param systems The list of systems to add.\n     */\n    addSystems(...systems) {\n        for (let system of systems) {\n            this.addSystem(system);\n        }\n    }\n    /**\n     * Removes a system to the engine.\n     * @param system The system to remove.\n     */\n    removeSystem(system) {\n        const index = this._systems.indexOf(system);\n        if (index !== -1) {\n            this._systems.splice(index, 1);\n            system.onDetach(this);\n        }\n        return this;\n    }\n    /**\n     * Removes a list of systems to the engine.\n     * @param systems The list of systems to remove.\n     */\n    removeSystems(...systems) {\n        for (let system of systems) {\n            this.removeSystem(system);\n        }\n    }\n    /**\n     * Updates all systems added to the engine.\n     * @param delta Time elapsed (in milliseconds) since the last update.\n     */\n    update() {\n        if (this._systemsNeedSorting) {\n            this._systemsNeedSorting = false;\n            this._systems.sort((a, b) => a.priority - b.priority);\n        }\n        for (let system of this._systems) {\n            system.update(this);\n        }\n    }\n}\nexports.Engine = Engine;\n\n\n//# sourceURL=webpack:///./build/ECS/Engine.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/Entity.js":
-/*!*****************************!*\
-  !*** ./build/ECS/Entity.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Entity = void 0;\nclass Entity {\n    constructor() {\n        this._id = null;\n        this._components = {};\n        this._listeners = [];\n        this._componentClasses = {};\n    }\n    get id() {\n        if (this._id === null) {\n            throw new Error(\"Cannot retrieve a null ID.\");\n        }\n        return this._id;\n    }\n    set id(value) {\n        if (value === null || value === undefined) {\n            throw new Error(\"Must set a non-null value when setting an entity ID.\");\n        }\n        if (this._id !== null) {\n            throw new Error(`Entity already has ID: ${this._id}`);\n        }\n        this._id = value;\n    }\n    isNew() {\n        return this._id === null;\n    }\n    listComponents() {\n        return Object.keys(this._components).map(i => this._components[i]);\n    }\n    listComponentsWithTypes() {\n        return Object.keys(this._components).map(i => ({\n            component: this._components[i],\n            type: this._componentClasses[i]\n        }));\n    }\n    listComponentsWithTags() {\n        return Object.keys(this._components).map(tag => Object.freeze({\n            tag, component: this._components[tag]\n        }));\n    }\n    hasComponent(componentClass) {\n        const tag = componentClass.tag || componentClass.name;\n        const component = this._components[tag];\n        if (!component)\n            return false;\n        if (!this.cast(component, componentClass)) {\n            throw Error(`There are multiple classes with the same tag or name \"${tag}\".\\nAdd a different property \"tag\" to one of them.`);\n        }\n        return true;\n    }\n    getComponent(componentClass) {\n        const tag = componentClass.tag || componentClass.name;\n        const component = this._components[tag];\n        if (!component) {\n            throw new Error(`Cannot get component \"${tag}\" from entity.`);\n        }\n        if (!this.cast(component, componentClass)) {\n            throw new Error(`There are multiple classes with the same tag or name \"${tag}\".\\nAdd a different property \"tag\" to one of them.`);\n        }\n        return component;\n    }\n    // Creates a component of the specified class and adds it to the entity.\n    putComponent(componentClass) {\n        const tag = componentClass.tag || componentClass.name;\n        const component = this._components[tag];\n        if (component) {\n            if (!this.cast(component, componentClass)) {\n                throw new Error(`There are multiple classes with the same tag or name \"${tag}\".\\nAdd a different property \"tag\" to one of them.`);\n            }\n            delete this._components[tag];\n            delete this._componentClasses[tag];\n        }\n        const newComponent = new componentClass();\n        this._components[tag] = newComponent;\n        this._componentClasses[tag] = componentClass;\n        for (let listener of this._listeners) {\n            listener(this);\n        }\n        return newComponent;\n    }\n    removeComponent(componentClass) {\n        const tag = componentClass.tag || componentClass.name;\n        const component = this._components[tag];\n        if (!component) {\n            throw new Error(`Component of tag \"${tag}\" does not exist.`);\n        }\n        if (!this.cast(component, componentClass)) {\n            throw new Error(`There are multiple classes with the same tag or name \"${tag}\".\\nAdd a different property \"tag\" to one of them.`);\n        }\n        delete this._components[tag];\n        for (let listener of this._listeners) {\n            listener(this);\n        }\n    }\n    // Checks if the component is and instance of the class.\n    cast(component, componentClass) {\n        return !!(component && component instanceof componentClass);\n    }\n    addListener(listener) {\n        const index = this._listeners.indexOf(listener);\n        if (index === -1) {\n            this._listeners.push(listener);\n        }\n        return this;\n    }\n    removeListener(listener) {\n        const index = this._listeners.indexOf(listener);\n        if (index !== -1) {\n            this._listeners.splice(index, 1);\n        }\n        return this;\n    }\n}\nexports.Entity = Entity;\n\n\n//# sourceURL=webpack:///./build/ECS/Entity.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/Family.js":
-/*!*****************************!*\
-  !*** ./build/ECS/Family.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.FamilyBuilder = void 0;\n/**\n * An abstract family is the base implementation of a family interface.\n * This class is private to this module.\n * @private\n */\nclass AbstractFamily {\n    constructor(engine, include, exclude) {\n        this.includesEntity = (entity) => {\n            for (let include of this._include) {\n                if (!entity.hasComponent(include)) {\n                    return false;\n                }\n            }\n            for (let exclude of this._exclude) {\n                if (entity.hasComponent(exclude)) {\n                    return false;\n                }\n            }\n            return true;\n        };\n        this._engine = engine;\n        this._include = Object.freeze(include.slice(0));\n        this._exclude = Object.freeze(exclude.slice(0));\n    }\n    get engine() {\n        return this._engine;\n    }\n}\n/**\n * A CachedFamily is a family than caches it's results and alters it only\n * when an entity changes.\n *\n */\nclass CachedFamily extends AbstractFamily {\n    constructor(engine, include, exclude) {\n        super(engine, include, exclude);\n        this.onEntityChanged = (entity) => {\n            const index = this._entities.indexOf(entity);\n            if (index === -1) {\n                this._entities.push(entity);\n                entity.addListener(this.onEntityChanged);\n            }\n            this._needEntityRefresh = true;\n        };\n        const allEntities = this.engine.entities;\n        this._entities = allEntities.filter(this.includesEntity);\n        this.engine.addEntityListener(this);\n        for (let entity of allEntities) {\n            entity.addListener(this.onEntityAdded);\n        }\n        this._needEntityRefresh = false;\n    }\n    get entities() {\n        if (this._needEntityRefresh) {\n            this._needEntityRefresh = false;\n            this._entities = this._entities.filter(this.includesEntity);\n        }\n        return Object.freeze(this._entities.slice(0));\n    }\n    onEntityAdded(entity) {\n        const index = this._entities.indexOf(entity);\n        if (index === -1) {\n            this._entities.push(entity);\n            this._needEntityRefresh = true;\n            entity.addListener(this.onEntityChanged);\n        }\n    }\n    onEntityRemoved(entity) {\n        const index = this._entities.indexOf(entity);\n        if (index !== -1) {\n            const entity = this._entities[index];\n            this._entities.splice(index, 1);\n            entity.removeListener(this.onEntityChanged);\n        }\n    }\n}\n/**\n * A NonCacheFamily always computes the members of it.\n * If you find than the performance from cached families is not decent.\n * You can use this instead.\n * @private\n */\nclass NonCachedFamily extends AbstractFamily {\n    get entities() {\n        return this.engine.entities.filter(this.includesEntity);\n    }\n}\n/**\n * Utility class to build Families.\n * It's the only way to create the implementations of CachedFamily and NonCachedFamily.\n */\nclass FamilyBuilder {\n    constructor(engine) {\n        this._engine = engine || null;\n        this._include = [];\n        this._exclude = [];\n        this._cached = true;\n    }\n    /**\n     * Indicates than entities than are members of this class MUST\n     * HAVE this components.\n     * @param classes A list of component classes.\n     */\n    include(...classes) {\n        this._include.push(...classes);\n        return this;\n    }\n    /**\n     * Indicates than entities than are members of this class MUST NOT\n     * HAVE this components.\n     * @param classes A list of component classes.\n     */\n    exclude(...classes) {\n        this._exclude.push(...classes);\n        return this;\n    }\n    /**\n     * Changes the engine of the builder.\n     * Useful to create multiple instances of the same family for different\n     * engines.\n     * @param engine\n     */\n    changeEngine(engine) {\n        this._engine = engine;\n        return this;\n    }\n    /**\n     * Changes if the family should use cached values or not.\n     * @param cached If the family must use or not a cache.\n     */\n    setCached(cached) {\n        this._cached = cached;\n    }\n    /**\n     * Builds the family, using the information provided.\n     * @returns a new family to retrieve the entities.\n     */\n    build() {\n        if (!this._engine) {\n            throw new Error(\"Family should always belong to an engine.\");\n        }\n        if (!this._cached) {\n            return new NonCachedFamily(this._engine, this._include, this._exclude);\n        }\n        return new CachedFamily(this._engine, this._include, this._exclude);\n    }\n}\nexports.FamilyBuilder = FamilyBuilder;\n\n\n//# sourceURL=webpack:///./build/ECS/Family.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/PhysicsSystem.js":
-/*!************************************!*\
-  !*** ./build/ECS/PhysicsSystem.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.PhysicsSystem = void 0;\nconst _1 = __webpack_require__(/*! ./ */ \"./build/ECS/index.js\");\n/**\n * PhysicsSystem handles movement and interaction among Physical entities.\n *\n * From System, inherits:\n *   onAttach(engine)\n *   onDetach(engine)\n *   update(engine, delta?)\n */\nclass PhysicsSystem extends _1.System {\n    constructor() {\n        super();\n    }\n    update(engine) {\n        console.log(\"Update fired from within the Physics system!\");\n    }\n}\nexports.PhysicsSystem = PhysicsSystem;\n\n\n//# sourceURL=webpack:///./build/ECS/PhysicsSystem.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/RenderSystem.js":
-/*!***********************************!*\
-  !*** ./build/ECS/RenderSystem.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.RenderSystem = void 0;\nconst _1 = __webpack_require__(/*! ./ */ \"./build/ECS/index.js\");\n/**\n * RenderSystem handles the processing of all renderables on game Entities.\n *\n * From System, inherits:\n *   onAttach(engine)\n *   onDetach(engine)\n *   update(engine, delta?)\n */\nclass RenderSystem extends _1.System {\n    constructor() {\n        super();\n    }\n    update(engine) {\n        console.log(\"Update fired from within the Render system!\");\n    }\n}\nexports.RenderSystem = RenderSystem;\n\n\n//# sourceURL=webpack:///./build/ECS/RenderSystem.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/System.js":
-/*!*****************************!*\
-  !*** ./build/ECS/System.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.System = void 0;\nclass System {\n    constructor() {\n        this._priority = 0;\n        this._engines = [];\n    }\n    get priority() { return this._priority; }\n    set priority(value) { this._priority = value; }\n    get engines() { return this._engines; }\n    set engines(value) { this._engines = value; }\n    onAttach(engine) {\n        const index = this._engines.indexOf(engine);\n        if (index === -1) {\n            this._engines.push(engine);\n        }\n    }\n    onDetach(engine) {\n        const index = this._engines.indexOf(engine);\n        if (index !== -1) {\n            this._engines.splice(index, 1);\n        }\n    }\n    update(engine, delta) {\n    }\n}\nexports.System = System;\n\n\n//# sourceURL=webpack:///./build/ECS/System.js?");
-
-/***/ }),
-
-/***/ "./build/ECS/index.js":
-/*!****************************!*\
-  !*** ./build/ECS/index.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Component */ \"./build/ECS/Component.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Engine */ \"./build/ECS/Engine.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Entity */ \"./build/ECS/Entity.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Family */ \"./build/ECS/Family.js\"), exports);\n__exportStar(__webpack_require__(/*! ./System */ \"./build/ECS/System.js\"), exports);\n__exportStar(__webpack_require__(/*! ./PhysicsSystem */ \"./build/ECS/PhysicsSystem.js\"), exports);\n__exportStar(__webpack_require__(/*! ./RenderSystem */ \"./build/ECS/RenderSystem.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/ECS/index.js?");
-
-/***/ }),
-
-/***/ "./build/Game.js":
-/*!***********************!*\
-  !*** ./build/Game.js ***!
-  \***********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Game = void 0;\nconst System = __importStar(__webpack_require__(/*! ./System */ \"./build/System/index.js\"));\nconst Display = __importStar(__webpack_require__(/*! ./Display */ \"./build/Display/index.js\"));\nconst ECS = __importStar(__webpack_require__(/*! ./ECS */ \"./build/ECS/index.js\"));\nclass Game {\n    constructor() {\n        this.input = new System.Input();\n        this.console = new Display.Console();\n        this.sceneManager = new Display.SceneManager();\n        this.engine = new ECS.Engine();\n        this.InputObserver = new System.Observer();\n        this._physicsSystem = new ECS.PhysicsSystem();\n        this._renderSystem = new ECS.RenderSystem();\n    }\n    initialize() {\n        this.input.observable.attach(this.InputObserver);\n        this.engine.addSystem(this._physicsSystem);\n        this.engine.addSystem(this._renderSystem);\n        this.sceneManager.switch('PLAY');\n    }\n    update() {\n        let inputState = this.InputObserver.subjectState;\n        console.log(\"Game.update(): \" + inputState);\n        this.engine.update();\n    }\n}\nexports.Game = Game;\n\n\n//# sourceURL=webpack:///./build/Game.js?");
-
-/***/ }),
-
-/***/ "./build/System/Input.js":
-/*!*******************************!*\
-  !*** ./build/System/Input.js ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Input = void 0;\nconst ROT = __importStar(__webpack_require__(/*! rot-js */ \"./node_modules/rot-js/lib/index.js\"));\nconst Util_1 = __webpack_require__(/*! ./Util */ \"./build/System/Util.js\");\nclass Input {\n    constructor() {\n        this.observable = new Util_1.Subject();\n        let bindEventToScreen = (event) => {\n            window.addEventListener(event, (e) => {\n                this.handleInput(event, e);\n            });\n        };\n        bindEventToScreen('keydown');\n    }\n    handleInput(inputType, inputData) {\n        this.state = null;\n        let keyCommands = {\n            return: ROT.KEYS.VK_RETURN,\n            up: ROT.KEYS.VK_NUMPAD8,\n            down: ROT.KEYS.VK_NUMPAD2,\n            left: ROT.KEYS.VK_NUMPAD4,\n            right: ROT.KEYS.VK_NUMPAD6,\n            upleft: ROT.KEYS.VK_NUMPAD7,\n            upright: ROT.KEYS.VK_NUMPAD9,\n            downleft: ROT.KEYS.VK_NUMPAD1,\n            downright: ROT.KEYS.VK_NUMPAD3\n        };\n        if (inputType === 'keydown') {\n            if (inputData.keyCode === keyCommands.return) {\n                this.state = keyCommands.return;\n            }\n            else if (inputData.keyCode === keyCommands.up) {\n                this.state = keyCommands.up;\n            }\n            else if (inputData.keyCode === keyCommands.down) {\n                this.state = keyCommands.down;\n            }\n            else if (inputData.keyCode === keyCommands.left) {\n                this.state = keyCommands.left;\n            }\n            else if (inputData.keyCode === keyCommands.right) {\n                this.state = keyCommands.right;\n            }\n            else if (inputData.keyCode === keyCommands.upleft) {\n                this.state = keyCommands.upleft;\n            }\n            else if (inputData.keyCode === keyCommands.upright) {\n                this.state = keyCommands.upright;\n            }\n            else if (inputData.keyCode === keyCommands.downleft) {\n                this.state = keyCommands.downleft;\n            }\n            else if (inputData.keyCode === keyCommands.downright) {\n                this.state = keyCommands.downright;\n            }\n            console.log(\"Input State: \" + this.state);\n            this.observable.notify(this.state);\n        }\n    }\n}\nexports.Input = Input;\n\n\n//# sourceURL=webpack:///./build/System/Input.js?");
-
-/***/ }),
-
-/***/ "./build/System/Util.js":
+/***/ "./build/Engine/Core.js":
 /*!******************************!*\
-  !*** ./build/System/Util.js ***!
+  !*** ./build/Engine/Core.js ***!
   \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Observer = exports.Subject = void 0;\nclass Subject {\n    constructor() {\n        this._observers = [];\n    }\n    // Attach a new System\n    attach(observer) {\n        const exists = this._observers.includes(observer);\n        if (exists) {\n            return console.log('Subject: Observer has already been attached.');\n        }\n        console.log('Subject: Attached an observer.');\n        this._observers.push(observer);\n    }\n    // Detach a system in the array of Observers\n    detach(observer) {\n        const observerIndex = this._observers.indexOf(observer);\n        if (observerIndex === -1) {\n            return console.log('Subject: Nonexistent observer.');\n        }\n        this._observers.splice(observerIndex, 1);\n        console.log('Subject: Detached an observer.');\n    }\n    // Notify the Observers that Subject's State has changed\n    notify(state) {\n        this.state = state;\n        if (this._observers.length >= 1) {\n            console.log('Subject: Notifying observers...');\n            for (const observer of this._observers) {\n                observer.update(this);\n            }\n        }\n        else {\n            throw new Error(\"No observers registered. Nothing notified!\");\n        }\n    }\n}\nexports.Subject = Subject;\nclass Observer {\n    update(subject) {\n        this.subjectState = subject.state;\n    }\n}\nexports.Observer = Observer;\n\n\n//# sourceURL=webpack:///./build/System/Util.js?");
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Core = void 0;\n// External Libraries\nconst ROT = __importStar(__webpack_require__(/*! rot-js */ \"./node_modules/rot-js/lib/index.js\"));\n// Engine-External Modules\nconst Controller = __importStar(__webpack_require__(/*! ../Controller */ \"./build/Controller/index.js\"));\nconst Display = __importStar(__webpack_require__(/*! ../Display */ \"./build/Display/index.js\"));\n// Engine Components\nconst SceneManager_1 = __webpack_require__(/*! ./SceneManager */ \"./build/Engine/SceneManager.js\");\nclass Core {\n    constructor() {\n        this._CONSOLE = new Display.Console(this);\n        this._INPUT = new Controller.Input(this);\n        this._SCENE_MANAGER = new SceneManager_1.SceneManager(this._CONSOLE);\n        // ECS Engine will be called somewhere in here.\n        this._SCHEDULER = new ROT.Scheduler.Simple();\n        this._ROT_ENGINE = new ROT.Engine(this._SCHEDULER);\n    }\n    get Console() { return this._CONSOLE; }\n    initialize() {\n        this._SCENE_MANAGER.switch('START');\n    }\n}\nexports.Core = Core;\n\n\n//# sourceURL=webpack:///./build/Engine/Core.js?");
 
 /***/ }),
 
-/***/ "./build/System/index.js":
+/***/ "./build/Engine/SceneManager.js":
+/*!**************************************!*\
+  !*** ./build/Engine/SceneManager.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.SceneManager = void 0;\nconst Scenes = __importStar(__webpack_require__(/*! ./Scenes */ \"./build/Engine/Scenes/index.js\"));\nclass SceneManager {\n    constructor(console) {\n        this._currentScene = null;\n        this._CONSOLE = console;\n        this.scenes = {\n            START: new Scenes.StartScene(this),\n            PLAY: new Scenes.PlayScene(this)\n        };\n    }\n    get console() { return this._CONSOLE; }\n    get currentScene() { return this._currentScene; }\n    set currentScene(value) { this._currentScene = value; }\n    refresh() {\n        this.console.display.clear();\n        this._currentScene.render();\n    }\n    switch(sceneKey) {\n        if (this._currentScene !== null) {\n            this._currentScene.exit();\n        }\n        this._currentScene = this.scenes[sceneKey];\n        this._currentScene.enter();\n        this.refresh();\n    }\n}\nexports.SceneManager = SceneManager;\n\n\n//# sourceURL=webpack:///./build/Engine/SceneManager.js?");
+
+/***/ }),
+
+/***/ "./build/Engine/Scenes/Scene.js":
+/*!**************************************!*\
+  !*** ./build/Engine/Scenes/Scene.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Scene = void 0;\nclass Scene {\n    enter() { }\n    exit() { }\n    render() { }\n}\nexports.Scene = Scene;\n\n\n//# sourceURL=webpack:///./build/Engine/Scenes/Scene.js?");
+
+/***/ }),
+
+/***/ "./build/Engine/Scenes/Scenes.js":
+/*!***************************************!*\
+  !*** ./build/Engine/Scenes/Scenes.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.PlayScene = exports.StartScene = void 0;\nclass StartScene {\n    constructor(manager) {\n        this.mapWidth = 200;\n        this.mapHeight = 200;\n        this._manager = manager;\n    }\n    enter() {\n        console.log(\"Start Scene entered.\");\n    }\n    exit() {\n        console.log(\" Exiting Start Scene.\");\n    }\n    render() {\n        let console = this._manager.console;\n        console.display.drawText(1, 1, \"%c{yellow}TypeScript Roguelike\");\n        console.display.drawText(1, 2, \"Press [Enter] to start!\");\n    }\n}\nexports.StartScene = StartScene;\nclass PlayScene {\n    constructor(manager) {\n        this._manager = manager;\n    }\n    enter() {\n    }\n    exit() {\n    }\n    render() {\n        let console = this._manager.console;\n    }\n}\nexports.PlayScene = PlayScene;\n\n\n//# sourceURL=webpack:///./build/Engine/Scenes/Scenes.js?");
+
+/***/ }),
+
+/***/ "./build/Engine/Scenes/index.js":
+/*!**************************************!*\
+  !*** ./build/Engine/Scenes/index.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Scene */ \"./build/Engine/Scenes/Scene.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Scenes */ \"./build/Engine/Scenes/Scenes.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/Engine/Scenes/index.js?");
+
+/***/ }),
+
+/***/ "./build/Engine/index.js":
 /*!*******************************!*\
-  !*** ./build/System/index.js ***!
+  !*** ./build/Engine/index.js ***!
   \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Input */ \"./build/System/Input.js\"), exports);\n__exportStar(__webpack_require__(/*! ./Util */ \"./build/System/Util.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/System/index.js?");
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __exportStar = (this && this.__exportStar) || function(m, exports) {\n    for (var p in m) if (p !== \"default\" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__exportStar(__webpack_require__(/*! ./Core */ \"./build/Engine/Core.js\"), exports);\n__exportStar(__webpack_require__(/*! ./SceneManager */ \"./build/Engine/SceneManager.js\"), exports);\n\n\n//# sourceURL=webpack:///./build/Engine/index.js?");
 
 /***/ }),
 
@@ -322,7 +250,7 @@ eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ?
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst Game_1 = __webpack_require__(/*! ./Game */ \"./build/Game.js\");\nwindow.onload = () => {\n    let game = new Game_1.Game();\n    game.initialize();\n};\n\n\n//# sourceURL=webpack:///./build/index.js?");
+eval("\nvar __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });\n}) : (function(o, m, k, k2) {\n    if (k2 === undefined) k2 = k;\n    o[k2] = m[k];\n}));\nvar __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {\n    Object.defineProperty(o, \"default\", { enumerable: true, value: v });\n}) : function(o, v) {\n    o[\"default\"] = v;\n});\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);\n    __setModuleDefault(result, mod);\n    return result;\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst Engine = __importStar(__webpack_require__(/*! ./Engine */ \"./build/Engine/index.js\"));\nwindow.onload = () => {\n    let game = new Engine.Core();\n    game.initialize();\n};\n\n\n//# sourceURL=webpack:///./build/index.js?");
 
 /***/ }),
 

@@ -1,13 +1,16 @@
 import * as ROT from 'rot-js';
+import * as Engine from '../Engine';
 import { Glyph, Tile } from './';
 
 
-class Console
+export class Console
 {
   public container: HTMLElement | null;
 
   public get display(): ROT.Display { return this._display; }
   private _display: ROT.Display = null;
+
+  private _core: Engine.Core;
 
   private _consoleConfig = {
     width: 64,
@@ -19,8 +22,10 @@ class Console
   }
 
 
-  constructor()
+  constructor(core: Engine.Core)
   {
+    this._core = core;
+
     this._display = new ROT.Display({
       width: this._consoleConfig['width'],
       height: this._consoleConfig['height'],
@@ -33,21 +38,4 @@ class Console
     this.container = this._display.getContainer();
     document.getElementById('game')?.appendChild(this.container);
   }
-
-
-  public clear(): void
-  {
-
-  }
-
-  public render(): void
-  {
-    let screenWidth = this._consoleConfig['width'];
-    let screenHeight = this._consoleConfig['height'];
-
-    this._display.drawText(20, 20, 'Hello world!');
-  }
 }
-
-
-export { Console };

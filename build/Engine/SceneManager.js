@@ -19,8 +19,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Engine = __importStar(require("./Engine"));
-window.onload = () => {
-    let game = new Engine.Core();
-    game.initialize();
-};
+exports.SceneManager = void 0;
+const Scenes = __importStar(require("./Scenes"));
+class SceneManager {
+    constructor(console) {
+        this._currentScene = null;
+        this._CONSOLE = console;
+        this.scenes = {
+            START: new Scenes.StartScene(this),
+            PLAY: new Scenes.PlayScene(this)
+        };
+    }
+    get console() { return this._CONSOLE; }
+    get currentScene() { return this._currentScene; }
+    set currentScene(value) { this._currentScene = value; }
+    refresh() {
+        this.console.display.clear();
+        this._currentScene.render();
+    }
+    switch(sceneKey) {
+        if (this._currentScene !== null) {
+            this._currentScene.exit();
+        }
+        this._currentScene = this.scenes[sceneKey];
+        this._currentScene.enter();
+        this.refresh();
+    }
+}
+exports.SceneManager = SceneManager;

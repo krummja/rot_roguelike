@@ -1,6 +1,7 @@
-import { Game } from './Game';
+import * as Engine from './Engine';
+
 
 window.onload = (): void => {
-  let game = new Game();
+  let game = new Engine.Core();
   game.initialize();
 }

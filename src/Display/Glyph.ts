@@ -1,5 +1,4 @@
-
-interface IGlyph
+export interface IGlyph
 {
   character  ?: string;
   font       ?: string;
@@ -7,7 +6,7 @@ interface IGlyph
   background ?: string;
 }
 
-class Glyph
+export class Glyph
 {
   private _font: string;
   
@@ -32,6 +31,3 @@ class Glyph
     this._background  = properties['background'];
   }
 }
-
-
-export { Glyph, IGlyph };

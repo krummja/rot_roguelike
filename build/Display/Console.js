@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Console = void 0;
 const ROT = __importStar(require("rot-js"));
 class Console {
-    constructor() {
+    constructor(core) {
         var _a;
         this._display = null;
         this._consoleConfig = {
@@ -33,6 +33,7 @@ class Console {
             spacing: 1.0,
             forceSquareRatio: true
         };
+        this._core = core;
         this._display = new ROT.Display({
             width: this._consoleConfig['width'],
             height: this._consoleConfig['height'],
@@ -45,12 +46,5 @@ class Console {
         (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);
     }
     get display() { return this._display; }
-    clear() {
-    }
-    render() {
-        let screenWidth = this._consoleConfig['width'];
-        let screenHeight = this._consoleConfig['height'];
-        this._display.drawText(20, 20, 'Hello world!');
-    }
 }
 exports.Console = Console;

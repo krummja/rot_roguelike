@@ -10,7 +10,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./Console"), exports);
-__exportStar(require("./Glyph"), exports);
-__exportStar(require("./Tile"), exports);
-__exportStar(require("./Renderer"), exports);
+__exportStar(require("./Scene"), exports);
+__exportStar(require("./Scenes"), exports);

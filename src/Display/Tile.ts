@@ -1,7 +1,7 @@
 import { Glyph, IGlyph } from './Glyph';
 
 // Base properties relevant to the Tile class properties.
-interface ITile
+export interface ITile
 {
   // Mutables: Physics and Position
   walkable   ?: boolean;
@@ -15,7 +15,7 @@ interface ITile
 }
 
 
-class Tile
+export class Tile
 {
   private _walkable : boolean;
   private _diggable : boolean;
@@ -78,6 +78,3 @@ class Tile
     return Math.random() * (mx - mn) + mn;
   }
 }
-
-
-export { Tile };
