@@ -1,4 +1,5 @@
 import * as Display from '../../Display';
+import * as Generators from '../Generators';
 import { Component, ComponentClass } from './';
 import { Renderable } from '../../typings';
 
@@ -24,15 +25,13 @@ export class PositionComponent implements Component
 // family of components and draws on a set of values based on that tag.
 export class RenderComponent implements Component
 {
-  public renderable: Renderable = {
-    char: '@',
-    fg: '',
-    bg: ''
-  }
+  public renderable: Renderable;
 
   public render(console: Display.Console)
   {
 
   }
+
+
 }
 

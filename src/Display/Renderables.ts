@@ -5,3 +5,9 @@ export const PlayerRenderables: Renderable = {
   fg: 'goldenrod',
   bg: ''
 }
+
+export const TestRenderables: Renderable = {
+  char: 'T',
+  fg: 'red',
+  bg: 'black'
+}

@@ -49,13 +49,15 @@ export class StartScene implements IScene
 export class PlayScene implements IScene
 {
   public sceneKey: string;
+  
+  public get builder(): Generators.Builder { return this._builder; }
+  private _builder: Generators.Builder;
 
   private _manager: SceneManager;
   private _events: EventEmitter;
   private _console: Console;
   private _currentMap: Array<Array<Display.Tile>>;
 
-  private _builder: Generators.Builder;
   private _height: number = 200;
   private _width: number = 200;
 
