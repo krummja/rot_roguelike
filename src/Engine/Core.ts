@@ -31,14 +31,20 @@ export class Core
   public get ECS_ENGINE(): ECS.Engine { return this._ECS_ENGINE; }
   private _ECS_ENGINE: ECS.Engine;
 
+  public get ACTOR_SYSTEM(): ECS.ActorSystem { return this._ACTOR_SYSTEM; }
+  private _ACTOR_SYSTEM: ECS.ActorSystem;
+
   public get POSITION_SYSTEM(): ECS.PositionSystem { return this._POSITION_SYSTEM; }
   private _POSITION_SYSTEM: ECS.PositionSystem;
 
   public get RENDER_SYSTEM(): ECS.RenderSystem { return this._RENDER_SYSTEM; }
   private _RENDER_SYSTEM: ECS.RenderSystem;
 
-  private _SCENE_MANAGER: SceneManager;
+  public get SCHEDULER(): Scheduler { return this._SCHEDULER; }
   private _SCHEDULER: Scheduler;
+
+  private _SCENE_MANAGER: SceneManager;
+  
 
 
   constructor()
@@ -53,6 +59,7 @@ export class Core
     this._ROT_ENGINE = new ROT.Engine(this._SCHEDULER);
 
     this._ECS_ENGINE = new ECS.Engine(this);
+    this._ACTOR_SYSTEM = new ECS.ActorSystem();
     this._POSITION_SYSTEM = new ECS.PositionSystem();
     this._RENDER_SYSTEM = new ECS.RenderSystem();
   }
@@ -66,6 +73,7 @@ export class Core
     this._INPUT.initialize();
     
     // Start up ECS Engine and Systems
+    this._ECS_ENGINE.addSystem(this._ACTOR_SYSTEM);
     this._ECS_ENGINE.addSystem(this._POSITION_SYSTEM);
     this._ECS_ENGINE.addSystem(this._RENDER_SYSTEM);
 

@@ -22,20 +22,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Builder = void 0;
 const ROT = __importStar(require("rot-js"));
 const Display = __importStar(require("../../Display"));
+// TODO: Refactor much of this - make a MapManager.
 class Builder {
     constructor(width, height) {
-        this._tileArray = [];
+        this.tileArray = [];
         this._mapWidth = width;
         this._mapHeight = height;
     }
+    width() { return this._mapWidth; }
+    height() { return this._mapHeight; }
     generateTileArray() {
         for (let x = 0; x < this._mapWidth; x++) {
-            this._tileArray.push([]);
+            this.tileArray.push([]);
             for (let y = 0; y < this._mapHeight; y++) {
-                this._tileArray[x].push(Display.Tile.nullTile());
+                this.tileArray[x].push(Display.Tile.nullTile());
             }
         }
-        return this._tileArray;
+        return this.tileArray;
     }
     generateArea(tileArray) {
         let generator = new ROT.Map.Cellular(this._mapWidth, this._mapHeight);
@@ -53,6 +56,14 @@ class Builder {
             }
         });
         return tileArray;
+    }
+    getTile(x, y) {
+        if (x < 0 || x >= this._mapWidth || y < 0 || y >= this._mapHeight) {
+            return Display.Tile.nullTile();
+        }
+        else {
+            return this.tileArray[x][y] || Display.Tile.nullTile();
+        }
     }
 }
 exports.Builder = Builder;

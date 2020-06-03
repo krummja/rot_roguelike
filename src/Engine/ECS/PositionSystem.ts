@@ -44,6 +44,6 @@ export class PositionSystem extends System
   {
     let newX = x + dX;
     let newY = y + dY;
-
+    
   }
  }

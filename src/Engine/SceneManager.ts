@@ -1,6 +1,7 @@
 import { Scene } from '../typings';
 import * as Engine from '../Engine';
 import * as Scenes from './Scenes';
+import * as Generators from './Generators';
 
 
 export class SceneManager
@@ -24,9 +25,6 @@ export class SceneManager
   }
 
 
-  /**
-   * Handles input based on currently active scene.
-   */
   public handleInput()
   {
     let manager = this;
@@ -45,19 +43,14 @@ export class SceneManager
     // Other
   }
 
-  /**
-   * Refresh the console and trigger a console update.
-   */
+  // Clear the console and then render the current scene.
   public refresh(): void
   {
     this.CORE.CONSOLE.display.clear();
     this._currentScene.render()
   }
 
-  /**
-   * Handles switching of scenes.
-   * @param sceneKey 
-   */
+  // Change scenes.
   public switch(sceneKey: string): void
   {
     if (this.currentScene !== null) {

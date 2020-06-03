@@ -1,7 +1,7 @@
 import * as Display from './Display';
 import * as Scenes from './Engine/Scenes';
 
-declare type Positionable = {
+declare interface Positionable {
   walkable   ?: boolean;
   diggable   ?: boolean;
   opaque     ?: boolean;
@@ -9,7 +9,7 @@ declare type Positionable = {
   y          ?: number;
 }
 
-declare type Renderable = {
+declare interface Renderable {
   char  ?: string,
   font  ?: string,
   fg    ?: string,

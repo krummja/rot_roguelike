@@ -1,5 +1,6 @@
 import * as Display from '../../Display';
 import { Component, ComponentClass } from './';
+import { Renderable } from '../../typings';
 
 
 export class ActorComponent implements Component
@@ -23,6 +24,12 @@ export class PositionComponent implements Component
 // family of components and draws on a set of values based on that tag.
 export class RenderComponent implements Component
 {
+  public renderable: Renderable = {
+    char: '@',
+    fg: '',
+    bg: ''
+  }
+
   public render(console: Display.Console)
   {
 

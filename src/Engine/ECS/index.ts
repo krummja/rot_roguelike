@@ -5,5 +5,6 @@ export * from './Entity';
 export * from './Family';
 export * from './System';
 
+export * from './ActorSystem';
 export * from './PositionSystem';
 export * from './RenderSystem';

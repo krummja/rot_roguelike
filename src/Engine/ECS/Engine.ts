@@ -46,11 +46,13 @@ class Engine {
     this._systemsNeedSorting = true;
   }
 
-  newEntity(name: string): void {
+  newEntity(name: string, type: string): void {
     let entity = new Entity();
     entity.name = name;
+    entity.type = type;
     entity.id = (+new Date()).toString(16) + '-' + Math.floor((Math.random() * 1e17)).toString(16)
     this.addEntity(entity);
+    this._CORE.SCHEDULER.add(entity, true);
   }
 
   /**

@@ -29,6 +29,12 @@ export class RenderSystem extends System
 
   public update(engine: Engine, delta?: number)
   {
-
+    for (let entity of this.family.entities) {
+      if (entity.hasComponent(RenderComponent)) {
+        const renderable = entity.getComponent(RenderComponent);
+      } else {
+        const renderable = entity.putComponent(RenderComponent);
+      }
+    }
   }
 }

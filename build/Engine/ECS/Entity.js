@@ -7,6 +7,7 @@ class Entity {
         this._components = {};
         this._listeners = [];
         this._componentClasses = {};
+        this.type = 'PLAYER' || 'ACTOR' || 'STATIC';
     }
     get id() {
         if (this._id === null) {

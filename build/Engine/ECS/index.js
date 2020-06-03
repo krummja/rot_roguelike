@@ -16,5 +16,6 @@ __exportStar(require("./Engine"), exports);
 __exportStar(require("./Entity"), exports);
 __exportStar(require("./Family"), exports);
 __exportStar(require("./System"), exports);
+__exportStar(require("./ActorSystem"), exports);
 __exportStar(require("./PositionSystem"), exports);
 __exportStar(require("./RenderSystem"), exports);

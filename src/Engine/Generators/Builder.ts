@@ -1,16 +1,20 @@
 import * as ROT from 'rot-js';
 import * as Display from '../../Display';
 
-
+// TODO: Refactor much of this - make a MapManager.
 export class Builder
 {
-  private _tileArray: Array<Array<Display.Tile>>;
+  public tileArray: Array<Array<Display.Tile>>;
+
+  public width(): number { return this._mapWidth; }
   private _mapWidth: number;
+
+  public height(): number { return this._mapHeight; }
   private _mapHeight: number;
 
   constructor(width: number, height: number)
   {
-    this._tileArray = [];
+    this.tileArray = [];
     this._mapWidth = width;
     this._mapHeight = height;
   }
@@ -19,12 +23,12 @@ export class Builder
   public generateTileArray(): Array<Array<Display.Tile>>
   {
     for (let x = 0; x < this._mapWidth; x++) {
-      this._tileArray.push([]);
+      this.tileArray.push([]);
       for (let y = 0; y < this._mapHeight; y++) {
-        this._tileArray[x].push(Display.Tile.nullTile());
+        this.tileArray[x].push(Display.Tile.nullTile());
       }
     }
-    return this._tileArray;
+    return this.tileArray;
   }
 
   public generateArea(tileArray: Array<Array<Display.Tile>>)
@@ -45,5 +49,14 @@ export class Builder
       }
     })
     return tileArray;
+  }
+
+  public getTile(x: number, y: number): Display.Tile
+  {
+    if (x < 0 || x >= this._mapWidth || y < 0 || y >= this._mapHeight) {
+      return Display.Tile.nullTile();
+    } else {
+      return this.tileArray[x][y] || Display.Tile.nullTile();
+    }
   }
 }

@@ -12,6 +12,8 @@ class Entity
   private readonly _listeners: EntityChangeListener[] = [];
   private readonly _componentClasses: { [tag: string]: ComponentClass<Component>; } = {};
 
+  public type: string = 'PLAYER' || 'ACTOR' || 'STATIC'
+
   public get id(): string | number
   {
     if (this._id === null) {

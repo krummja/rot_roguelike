@@ -8,7 +8,7 @@ const Entity_1 = require("./Entity");
  * you want.
  */
 class Engine {
-    constructor() {
+    constructor(core) {
         /** Private array containing the current list of added entities. */
         this._entities = [];
         /** Private list of entity listeners */
@@ -17,7 +17,9 @@ class Engine {
         this._systems = [];
         /** Checks if the system needs sorting of some sort */
         this._systemsNeedSorting = false;
+        this._CORE = core;
     }
+    get CORE() { return this._CORE; }
     /**
      * Computes an immutable list of entities added to the engine.
      */
@@ -31,11 +33,13 @@ class Engine {
     notifyPriorityChange(system) {
         this._systemsNeedSorting = true;
     }
-    newEntity(name) {
+    newEntity(name, type) {
         let entity = new Entity_1.Entity();
         entity.name = name;
+        entity.type = type;
         entity.id = (+new Date()).toString(16) + '-' + Math.floor((Math.random() * 1e17)).toString(16);
         this.addEntity(entity);
+        this._CORE.SCHEDULER.add(entity, true);
     }
     /**
      * Adds a listener for when entities are added or removed.

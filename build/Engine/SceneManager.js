@@ -32,9 +32,6 @@ class SceneManager {
     }
     get currentScene() { return this._currentScene; }
     set currentScene(value) { this._currentScene = value; }
-    /**
-     * Handles input based on currently active scene.
-     */
     handleInput() {
         let manager = this;
         // Return
@@ -49,17 +46,12 @@ class SceneManager {
         // Numpad Directions
         // Other
     }
-    /**
-     * Refresh the console and trigger a console update.
-     */
+    // Clear the console and then render the current scene.
     refresh() {
         this.CORE.CONSOLE.display.clear();
         this._currentScene.render();
     }
-    /**
-     * Handles switching of scenes.
-     * @param sceneKey
-     */
+    // Change scenes.
     switch(sceneKey) {
         if (this.currentScene !== null) {
             this.currentScene.exit();

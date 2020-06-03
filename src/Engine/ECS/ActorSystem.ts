@@ -20,6 +20,12 @@ export class ActorSystem extends System
     super.onAttach(engine);
     this._EVENTS = engine.CORE.EVENTS;
     this.family = new FamilyBuilder(engine).include(ActorComponent).build();
+
+    for (let entity of this.family.entities) {
+      if (entity.hasComponent(ActorComponent)) {
+        engine.CORE.SCHEDULER.add(entity, true);
+      }
+    }
   }
 
   public onDetach() 
@@ -30,7 +36,7 @@ export class ActorSystem extends System
   public update(engine: Engine, delta?: number)
   {
     for (let entity of this.family.entities) {
-      if (entity.hasComponent(ActorComponent)) { 
+      if (entity.hasComponent(ActorComponent)) {
         const position = entity.getComponent(ActorComponent);
         // Do some position work here.
         // position.x = ...

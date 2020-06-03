@@ -38,7 +38,8 @@ class Core {
         // ECS Engine will be called somewhere in here.
         this._SCHEDULER = new ROT.Scheduler.Simple();
         this._ROT_ENGINE = new ROT.Engine(this._SCHEDULER);
-        this._ECS_ENGINE = new ECS.Engine();
+        this._ECS_ENGINE = new ECS.Engine(this);
+        this._ACTOR_SYSTEM = new ECS.ActorSystem();
         this._POSITION_SYSTEM = new ECS.PositionSystem();
         this._RENDER_SYSTEM = new ECS.RenderSystem();
     }
@@ -46,8 +47,10 @@ class Core {
     get INPUT() { return this._INPUT; }
     get ROT_ENGINE() { return this._ROT_ENGINE; }
     get ECS_ENGINE() { return this._ECS_ENGINE; }
+    get ACTOR_SYSTEM() { return this._ACTOR_SYSTEM; }
     get POSITION_SYSTEM() { return this._POSITION_SYSTEM; }
     get RENDER_SYSTEM() { return this._RENDER_SYSTEM; }
+    get SCHEDULER() { return this._SCHEDULER; }
     /**
      * Get the business end pointed the right way
      */
@@ -55,6 +58,7 @@ class Core {
         // Set up entities and initialize systems.
         this._INPUT.initialize();
         // Start up ECS Engine and Systems
+        this._ECS_ENGINE.addSystem(this._ACTOR_SYSTEM);
         this._ECS_ENGINE.addSystem(this._POSITION_SYSTEM);
         this._ECS_ENGINE.addSystem(this._RENDER_SYSTEM);
         // Bootstrap the scene switcher.
