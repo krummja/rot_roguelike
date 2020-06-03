@@ -10,6 +10,9 @@ export class Console
   public get display(): ROT.Display { return this._display; }
   private _display: ROT.Display = null;
 
+  public get width(): number { return this._consoleConfig.width; }
+  public get height(): number { return this._consoleConfig.height; }
+
   private _core: Engine.Core;
 
   private _consoleConfig = {

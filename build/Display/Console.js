@@ -46,5 +46,7 @@ class Console {
         (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);
     }
     get display() { return this._display; }
+    get width() { return this._consoleConfig.width; }
+    get height() { return this._consoleConfig.height; }
 }
 exports.Console = Console;

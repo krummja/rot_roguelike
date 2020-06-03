@@ -4,17 +4,18 @@ exports.Tile = void 0;
 const Glyph_1 = require("./Glyph");
 let Tile = /** @class */ (() => {
     class Tile {
-        constructor(properties, glyphProps) {
+        constructor(physicsProps, glyphProps) {
             // Mutables: Physics and Position
-            this._walkable = properties['walkable'];
-            this._diggable = properties['diggable'];
-            this._opaque = properties['opaque'];
-            this._x = properties['x'];
-            this._y = properties['y'];
+            this._walkable = physicsProps['walkable'];
+            this._diggable = physicsProps['diggable'];
+            this._opaque = physicsProps['opaque'];
+            this._x = physicsProps['x'];
+            this._y = physicsProps['y'];
             // Immutables: Renderables
             this._glyphProps = glyphProps;
             this._glyph = new Glyph_1.Glyph(this._glyphProps);
         }
+        get glyph() { return this._glyph; }
         static nullTile() {
             return new Tile({}, {});
         }

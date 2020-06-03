@@ -21,24 +21,46 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Core = void 0;
 // External Libraries
+const events_1 = require("events");
 const ROT = __importStar(require("rot-js"));
-// Engine-External Modules
 const Controller = __importStar(require("../Controller"));
 const Display = __importStar(require("../Display"));
+// Engine-Internal Modules
+const ECS = __importStar(require("./ECS"));
 // Engine Components
 const SceneManager_1 = require("./SceneManager");
 class Core {
     constructor() {
+        this.EVENTS = new events_1.EventEmitter();
         this._CONSOLE = new Display.Console(this);
         this._INPUT = new Controller.Input(this);
-        this._SCENE_MANAGER = new SceneManager_1.SceneManager(this._CONSOLE);
+        this._SCENE_MANAGER = new SceneManager_1.SceneManager(this);
         // ECS Engine will be called somewhere in here.
         this._SCHEDULER = new ROT.Scheduler.Simple();
         this._ROT_ENGINE = new ROT.Engine(this._SCHEDULER);
+        this._ECS_ENGINE = new ECS.Engine();
+        this._POSITION_SYSTEM = new ECS.PositionSystem();
+        this._RENDER_SYSTEM = new ECS.RenderSystem();
     }
-    get Console() { return this._CONSOLE; }
+    get CONSOLE() { return this._CONSOLE; }
+    get INPUT() { return this._INPUT; }
+    get ROT_ENGINE() { return this._ROT_ENGINE; }
+    get ECS_ENGINE() { return this._ECS_ENGINE; }
+    get POSITION_SYSTEM() { return this._POSITION_SYSTEM; }
+    get RENDER_SYSTEM() { return this._RENDER_SYSTEM; }
+    /**
+     * Get the business end pointed the right way
+     */
     initialize() {
+        // Set up entities and initialize systems.
+        this._INPUT.initialize();
+        // Start up ECS Engine and Systems
+        this._ECS_ENGINE.addSystem(this._POSITION_SYSTEM);
+        this._ECS_ENGINE.addSystem(this._RENDER_SYSTEM);
+        // Bootstrap the scene switcher.
         this._SCENE_MANAGER.switch('START');
+        // Pass control to the manager.
+        this._SCENE_MANAGER.handleInput();
     }
 }
 exports.Core = Core;

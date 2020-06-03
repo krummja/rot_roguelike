@@ -1,5 +1,6 @@
 import { Glyph, IGlyph } from './Glyph';
 
+
 // Base properties relevant to the Tile class properties.
 export interface ITile
 {
@@ -17,23 +18,25 @@ export interface ITile
 
 export class Tile
 {
+  public get glyph(): Glyph { return this._glyph; }
+  private readonly _glyph: Glyph;
+
   private _walkable : boolean;
   private _diggable : boolean;
   private _opaque   : boolean;
   private _x        : number;
   private _y        : number;
 
-  private readonly _glyph: Glyph;
   private readonly _glyphProps: IGlyph;
 
-  constructor(properties: ITile, glyphProps: IGlyph)
+  constructor(physicsProps: ITile, glyphProps: IGlyph)
   {
     // Mutables: Physics and Position
-    this._walkable = properties['walkable'];
-    this._diggable = properties['diggable'];
-    this._opaque   = properties['opaque'];
-    this._x        = properties['x'];
-    this._y        = properties['y'];
+    this._walkable = physicsProps['walkable'];
+    this._diggable = physicsProps['diggable'];
+    this._opaque   = physicsProps['opaque'];
+    this._x        = physicsProps['x'];
+    this._y        = physicsProps['y'];
 
     // Immutables: Renderables
     this._glyphProps = glyphProps;

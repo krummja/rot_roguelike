@@ -13,4 +13,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./Console"), exports);
 __exportStar(require("./Glyph"), exports);
 __exportStar(require("./Tile"), exports);
-__exportStar(require("./Renderer"), exports);

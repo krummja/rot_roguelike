@@ -1,23 +1,21 @@
-import { Console } from '../Display/Console';
+import { Scene } from '../typings';
+import * as Engine from '../Engine';
 import * as Scenes from './Scenes';
-
 
 
 export class SceneManager
 {
-  public scenes: { [key: string]: Scenes.Scene };
+  public CORE: Engine.Core;
+  public scenes: { [key: string]: Scene };
   
-  public get console(): Console { return this._CONSOLE; }
-  private _CONSOLE: Console;
-
-  public get currentScene(): Scenes.Scene { return this._currentScene; }
-  public set currentScene(value: Scenes.Scene) { this._currentScene = value; }
-  private _currentScene: Scenes.Scene = null;
+  public get currentScene(): Scene { return this._currentScene; }
+  public set currentScene(value: Scene) { this._currentScene = value; }
+  private _currentScene: Scene = null;
 
 
-  constructor(console: Console)
+  constructor(core: Engine.Core)
   {
-    this._CONSOLE = console;
+    this.CORE = core;
 
     this.scenes = {
       START: new Scenes.StartScene(this),
@@ -26,20 +24,52 @@ export class SceneManager
   }
 
 
+  /**
+   * Handles input based on currently active scene.
+   */
+  public handleInput()
+  {
+    let manager = this;
+
+    // Return
+    this.CORE.EVENTS.on('return', () => {
+      if (manager.currentScene.sceneKey === 'START') {
+        manager.switch('PLAY');
+      } else {
+        console.log("This key has no function!");
+      }
+    })
+
+    // Numpad Directions
+
+    // Other
+  }
+
+  /**
+   * Refresh the console and trigger a console update.
+   */
   public refresh(): void
   {
-    this.console.display.clear();
+    this.CORE.CONSOLE.display.clear();
     this._currentScene.render()
   }
 
+  /**
+   * Handles switching of scenes.
+   * @param sceneKey 
+   */
   public switch(sceneKey: string): void
   {
-    if (this._currentScene !== null) {
-      this._currentScene.exit();
+    if (this.currentScene !== null) {
+      this.currentScene.exit();
     }
 
-    this._currentScene = this.scenes[sceneKey];
-    this._currentScene.enter();
-    this.refresh();
+    this.CORE.CONSOLE.display.clear();
+    this.currentScene = this.scenes[sceneKey];
+
+    if (this.currentScene) {
+      this.currentScene.enter();
+      this.refresh();
+    }
   }
 }
