@@ -36,17 +36,7 @@ class PlayScreen {
         this.world = world;
     }
     enter() {
-<<<<<<< Updated upstream
-        let width = this.mapWidth;
-        let height = this.mapHeight;
-        let depth = 3;
-        let ratio = 0.70;
-        let iterations = 100;
-        let tilesFilled = 50;
-        let tiles = new builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
-=======
         let tiles = this.world;
->>>>>>> Stashed changes
         this.map = new _1.Map(tiles, this._player);
         this.map.engine.start();
     }

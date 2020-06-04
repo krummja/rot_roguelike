@@ -1,7 +1,7 @@
 import * as ROT from 'rot-js';
 
 import { Game } from '../game';
-import { PlayScreen, LoadingScreen, IScreen } from '.';
+import { PlayScreen, IScreen } from '.';
 
 
 class StartScreen implements IScreen
@@ -37,9 +37,8 @@ class StartScreen implements IScreen
     {
       if (inputData.keyCode === ROT.KEYS.VK_RETURN)
       {
-        let loading: any = new LoadingScreen(this.game);
-
-        this.game.switchScreen(loading);
+        let play = new PlayScreen(this.game);
+        this.game.switchScreen(play);
       }
     }
   }

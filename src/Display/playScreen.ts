@@ -14,7 +14,7 @@ class PlayScreen implements IScreen
 
   public done: boolean;
 
-  constructor(game: Game, world: any)
+  constructor(game: Game)
   {
     this.game = game;
     this._player = new Player({
@@ -24,14 +24,12 @@ class PlayScreen implements IScreen
       background: [0, 0, 0] || null,
       sightRadius: 20
     }, this.game, this.map);
-
-    this.world = world;
   }
 
 
   public enter()
   {
-    let tiles = this.world;
+    let tiles = new Builder()
     
     this.map = new Map(tiles, this._player);
     this.map.engine.start();
