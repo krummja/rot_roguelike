@@ -16,7 +16,10 @@ interface IProperties {
   darkBackground ?: [number, number, number],
   walkable ?: boolean,
   diggable ?: boolean,
-  traversable ?: boolean,
+  traversable ?: {
+    open ?: boolean,
+    direction ?: string | undefined
+  },
   opaque ?: boolean,
   sightRadius ?: number,
   x ?: number,

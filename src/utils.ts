@@ -1,3 +1,5 @@
+import { EventEmitter } from 'events';
+
 function shuffleCoordArray(array: Array<{x: number, y: number}>): Array<{x: number, y: number}> {
   let shuffled: Array<{x: number, y: number}>
   for (let i = array.length - 1; i > 0; i--) {
@@ -7,4 +9,6 @@ function shuffleCoordArray(array: Array<{x: number, y: number}>): Array<{x: numb
   return shuffled;
 }
 
-export { shuffleCoordArray };
+const EVENTS = new EventEmitter();
+
+export { shuffleCoordArray, EVENTS };

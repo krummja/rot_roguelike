@@ -2,13 +2,15 @@ import * as ROT from 'rot-js';
 import { Game} from './game';
 import { Tile } from './Display';
 import { shuffleCoordArray } from './utils';
+import { EVENTS } from './utils';
 
 type Map = Array<Array<Tile>>;
 type Connection = { [key: string]: boolean };
 
 class Builder
 {
-  
+  public done: boolean = false;
+
   public get width(): number { return this._width; }
   public get height(): number { return this._height; }
   
@@ -18,13 +20,12 @@ class Builder
   public get tiles(): Map[] { return this._tiles; }
   public set tiles(value: Map[]) { this._tiles = value; }
   
-  private  _width: number;
-  private  _height: number;
-  private  _regions: Array<Array<Array<number>>>;
-  private  _ratio: number;
+  private _width: number;
+  private _height: number;
+  private _regions: Array<Array<Array<number>>>;
+  private _ratio: number;
   private _iterations: number;
-  private _tilesFilled: number;
-  
+  private _tilesFilled: number;  
 
   private _depth: number;
   private _tiles: Map[];
@@ -204,6 +205,8 @@ class Builder
         }
       }
     }
+
+    EVENTS.emit('done')
   }
 
 }

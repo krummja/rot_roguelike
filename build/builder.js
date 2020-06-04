@@ -23,8 +23,10 @@ exports.Builder = void 0;
 const ROT = __importStar(require("rot-js"));
 const game_1 = require("./game");
 const Display_1 = require("./Display");
+const utils_1 = require("./utils");
 class Builder {
     constructor(width, height, depth, ratio, iterations, tilesFilled) {
+        this.done = false;
         this._width = width;
         this._height = height;
         this._depth = depth;
@@ -169,6 +171,7 @@ class Builder {
                 }
             }
         }
+        utils_1.EVENTS.emit('done');
     }
 }
 exports.Builder = Builder;

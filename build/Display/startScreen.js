@@ -39,8 +39,8 @@ class StartScreen {
     handleInput(inputType, inputData) {
         if (inputType === 'keydown') {
             if (inputData.keyCode === ROT.KEYS.VK_RETURN) {
-                let screen = new _1.PlayScreen(this.game);
-                this.game.switchScreen(screen);
+                let loading = new _1.LoadingScreen(this.game);
+                this.game.switchScreen(loading);
             }
         }
     }

@@ -12,7 +12,10 @@ class Glyph
   private _darkBackground: [number, number, number];
   private _walkable: boolean;
   private _diggable: boolean;
-  private _traversable: boolean;
+  private _traversable: {
+    open?: boolean,
+    direction?: string | undefined
+  };
   private _opaque: boolean;
   private _map: Map = null;
 
@@ -34,8 +37,8 @@ class Glyph
   public get diggable(): boolean { return this._diggable; }
   public set diggable(v: boolean) { this._diggable = v; }
 
-  public get traversable(): boolean { return this._traversable; }
-  public set traversable(v: boolean) { this._traversable = v; }
+  public get traversable(): { [key: string]: boolean | string } { return this._traversable; }
+  public set traversable(v: { [key: string]: boolean | string }) { this._traversable = v; }
 
   public get opaque(): boolean { return this._opaque; }
   public set opaque(value: boolean) { this._opaque = value; }
@@ -52,7 +55,7 @@ class Glyph
     this._darkBackground = properties['darkBackground'] || [255, 255, 255];
     this._walkable = properties['walkable'] || false;
     this._diggable = properties['diggable'] || false;
-    this._traversable = properties['traversable'] || false;
+    this._traversable = properties['traversable'] || { open: false, direction: undefined };
     this._opaque = (properties['opaque'] !== undefined) ? properties['opaque'] : true;
   }
 }
@@ -79,7 +82,10 @@ class Tile extends Glyph
       character: ' ',
       background: this.pickColor(colors),
       walkable: true,
-      traversable: false,
+      traversable: {
+        open: false,
+        direction: undefined
+      },
       opaque: false,
     });
   }
@@ -93,35 +99,44 @@ class Tile extends Glyph
       character: ' ',
       background: this.pickColor(colors),
       diggable: true,
-      traversable: false,
+      traversable: {
+        open: false,
+        direction: undefined
+      },
       opaque: true
     });
   }
 
   public static stairsUpTile(): Tile
   {
-    let colors = [[173, 145, 115], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
+    let colors = [[41, 35, 28], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
 
     return new Tile({
-      character: '<',
+      character: '▲',
       foreground: [255, 255, 255],
       background: this.pickColor(colors),
       walkable: true,
-      traversable: true,
+      traversable: {
+        open: true,
+        direction: 'up'
+      },
       opaque: false
     })
   }
 
   public static stairsDownTile(): Tile
   {
-    let colors = [[173, 145, 115], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
+    let colors = [[41, 35, 28], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
 
     return new Tile({
-      character: '>',
+      character: '▼',
       foreground: [200, 200, 200],
       background: this.pickColor(colors),
       walkable: true,
-      traversable: true,
+      traversable: {
+        open: true,
+        direction: 'down'
+      },
       opaque: false
     })
   }

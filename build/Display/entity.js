@@ -51,23 +51,23 @@ class Moveable {
         this.tryMove = (x, y, z, map) => {
             let tile = map.getTile(x, y, this.z);
             if (z < this.z) {
-                if (!tile.traversable) {
-                    console.log("You can't ascend here!");
-                }
-                else {
+                if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
                     this.x = x;
                     this.y = y;
                     this.z = z;
+                }
+                else {
+                    console.log("You can't ascend here!");
                 }
             }
             else if (z > this.z) {
-                if (!tile.traversable) {
-                    console.log("You can't descend here!");
-                }
-                else {
+                if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
                     this.x = x;
                     this.y = y;
                     this.z = z;
+                }
+                else {
+                    console.log("You can't descend here!");
                 }
             }
             else if (tile.walkable) {

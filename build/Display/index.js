@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Actor = exports.Player = exports.Entity = exports.Tile = exports.StartScreen = exports.PlayScreen = exports.Map = exports.Glyph = void 0;
+exports.Actor = exports.Player = exports.Entity = exports.Tile = exports.StartScreen = exports.LoadingScreen = exports.PlayScreen = exports.Map = exports.Glyph = void 0;
 const map_1 = require("./map");
 Object.defineProperty(exports, "Map", { enumerable: true, get: function () { return map_1.Map; } });
 const playScreen_1 = require("./playScreen");
 Object.defineProperty(exports, "PlayScreen", { enumerable: true, get: function () { return playScreen_1.PlayScreen; } });
+const loadingScreen_1 = require("./loadingScreen");
+Object.defineProperty(exports, "LoadingScreen", { enumerable: true, get: function () { return loadingScreen_1.LoadingScreen; } });
 const startScreen_1 = require("./startScreen");
 Object.defineProperty(exports, "StartScreen", { enumerable: true, get: function () { return startScreen_1.StartScreen; } });
 const tile_1 = require("./tile");

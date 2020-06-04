@@ -10,11 +10,11 @@ class PlayScreen implements IScreen
 
   public map: Map;
   public mapArray: Array<Array<Tile>> = null;
-  public mapWidth: number = 200;
-  public mapHeight: number = 100;
+  public world: any;
 
+  public done: boolean;
 
-  constructor(game: Game)
+  constructor(game: Game, world: any)
   {
     this.game = game;
     this._player = new Player({
@@ -24,27 +24,16 @@ class PlayScreen implements IScreen
       background: [0, 0, 0] || null,
       sightRadius: 20
     }, this.game, this.map);
+
+    this.world = world;
   }
 
 
   public enter()
   {
-    let width = this.mapWidth;
-    let height = this.mapHeight;
-    let depth = 3;
-    let ratio = 0.70;
-    let iterations = 100;
-    let tilesFilled = 50;
-
-    console.log("SCENE >> PLAY >> Generating TILES...");
-    let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
-    console.log("SCENE >> PLAY >> TILES Generated! OK.");
+    let tiles = this.world;
     
-    console.log("SCENE >> PLAY >> Generating MAP...");
     this.map = new Map(tiles, this._player);
-    console.log("SCENE >> PLAY >> MAP Generated! OK.");
-
-    console.log("Starting ROT Engine! Here we go!");
     this.map.engine.start();
   }
 
@@ -127,23 +116,18 @@ class PlayScreen implements IScreen
       if (inputData.keyCode === ROT.KEYS.VK_RETURN) {
         console.log('Enter key pressed!');
       }
-      if (inputData.keyCode === ROT.KEYS.VK_LEFT) {
+      if (inputData.keyCode === ROT.KEYS.VK_NUMPAD4) {
         this.move(-1, 0, 0);
-      } else if (inputData.keyCode === ROT.KEYS.VK_RIGHT) {
+      } else if (inputData.keyCode === ROT.KEYS.VK_NUMPAD6) {
         this.move(1, 0, 0);
-      } else if (inputData.keyCode === ROT.KEYS.VK_UP) {
+      } else if (inputData.keyCode === ROT.KEYS.VK_NUMPAD8) {
         this.move(0, -1, 0);
-      } else if (inputData.keyCode === ROT.KEYS.VK_DOWN) {
+      } else if (inputData.keyCode === ROT.KEYS.VK_NUMPAD2) {
         this.move(0, 1, 0);
-      }
-      this.map.engine.unlock();
-      this.game.refresh();
-    } else if (inputType === 'keypress') {
-      let keyChar = String.fromCharCode(inputData.charCode);
-      if (keyChar === '>') {
-        this.move(0, 0, 1);
-      } else if (keyChar === '<') {
-        this.move(0, 0, -1);
+      } else if (inputData.keyCode === ROT.KEYS.VK_NUMPAD1) {
+        this.move(0, 0, 1);   // Move down
+      } else if (inputData.keyCode === ROT.KEYS.VK_NUMPAD7) {
+        this.move(0, 0, -1);  // Move up
       } else {
         return;
       }
