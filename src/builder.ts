@@ -8,38 +8,46 @@ type Connection = { [key: string]: boolean };
 
 class Builder
 {
-  private readonly _width: number;
-  private readonly _height: number;
-  private _depth: number;
-  private _tiles: Map[];
-  private readonly _regions: Array<Array<Array<number>>>;
-
-
+  
   public get width(): number { return this._width; }
   public get height(): number { return this._height; }
-
+  
   public get depth(): number { return this._depth; }
   public set depth(value: number) { this._depth = value; }
-
+  
   public get tiles(): Map[] { return this._tiles; }
   public set tiles(value: Map[]) { this._tiles = value; }
+  
+  private  _width: number;
+  private  _height: number;
+  private  _regions: Array<Array<Array<number>>>;
+  private  _ratio: number;
+  private _iterations: number;
+  private _tilesFilled: number;
+  
+
+  private _depth: number;
+  private _tiles: Map[];
 
 
-
-  constructor(width: number, height: number, depth: number)
+  constructor(width: number, height: number, depth: number, ratio: number, iterations: number, tilesFilled: number)
   {
     this._width = width;
     this._height = height;
     this._depth = depth;
-
+    this._ratio = ratio;
+    this._iterations = iterations;
+    this._tilesFilled = tilesFilled;
     this._tiles = new Array(depth);
     this._regions = new Array(depth);
 
     for (let z = 0; z < depth; z++) {
       this._tiles[z] = this._generateLevel();
       this._regions[z] = new Array(width);
+
       for (let x = 0; x < width; x++) {
         this._regions[z][x] = new Array(height);
+
         for (let y = 0; y < height; y++) {
           this._regions[z][x][y] = 0;
         }
@@ -49,24 +57,26 @@ class Builder
     for (let z = 0; z < this._depth; z++) {
       this._setupRegions(z);
     }
+
     this._connectAllRegions();
   }
 
   private _generateLevel(): Map
   {
-    // Generate a 2D Array to represent all of the tiles on a map;
     let map = new Array(this._width);
+    let generator = new ROT.Map.Cellular(this._width, this._height);
+    let totalIterations = this._iterations;
+    
     for (let w = 0; w < this._width; w++) {
       map[w] = new Array(this._height);
     }
+    
+    generator.randomize(this._ratio);
 
-    let generator = new ROT.Map.Cellular(this._width, this._height);
-    generator.randomize(5);
-    let totalIterations = 3;
     for (let i = 0; i < totalIterations - 1; i++) {
       generator.create();
     }
-
+    
     generator.create((x: number, y: number, v: number): void => {
       if (v === 1) {
         map[x][y] = Tile.floorTile();
@@ -80,15 +90,14 @@ class Builder
 
   private _canFillRegion(x: number, y: number, z: number): boolean
   {
-    // Check if the tile is within the world boundaries.
     if (x < 0 || y < 0 || z < 0 || x >= this._width || y >= this._height || z >= this._depth) {
       return false;
     }
-    // Check if the tile already has a region assigned to it.
+    
     if (this._regions[z][x][y] != 0) {
       return false;
     }
-    // Flag the tile as walkable.
+
     return this._tiles[z][x][y].walkable;
   }
 
@@ -100,9 +109,11 @@ class Builder
     let neighbors: Array<{x: number, y: number}>;
 
     this._regions[z][x][y] = region;
+
     while (tiles.length > 0) {
       tile = tiles.pop();
       neighbors = Game.getNeighborPositions(tile.x, tile.y);
+
       while (neighbors.length > 0) {
         tile = neighbors.pop();
         if (this._canFillRegion(tile.x, tile.y, z)) {
@@ -112,13 +123,14 @@ class Builder
         }
       }
     }
+    
     return tilesFilled;
   }
 
   private _removeRegion(region: number, z: number)
   {
     for (let x = 0; x < this._width; x++) {
-      for (let y = 0; y < this._height; y++) {
+      for (let y = 0; y < this._height; y++) {        
         if (this._regions[z][x][y] == region) {
           this._regions[z][x][y] = 0;
           this._tiles[z][x][y] = Tile.wallTile();
@@ -136,7 +148,7 @@ class Builder
       for (let y = 0; y < this._height; y++) {
         if (this._canFillRegion(x, y, z)) {
           tilesFilled = this._fillRegion(region, x, y, z);
-          if (tilesFilled <= 20) {
+          if (tilesFilled <= this._tilesFilled) {
             this._removeRegion(region, z);
           } else {
             region++;
@@ -184,6 +196,7 @@ class Builder
       for (let x = 0; x < this._width; x++) {
         for (let y = 0; y < this._height; y++) {
           key = this._regions[z][x][y] + ',' + this._regions[z+1][x][y];
+    
           if (this._tiles[z][x][y].walkable && this._tiles[z+1][x][y].walkable && !connected[key]) {
             this._connectRegions(z, this._regions[z][x][y], this._regions[z+1][x][y]);
             connected[key] = true;

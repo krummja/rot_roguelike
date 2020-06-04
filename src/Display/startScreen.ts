@@ -1,7 +1,7 @@
 import * as ROT from 'rot-js';
 
 import { Game } from '../game';
-import { PlayScreen, IScreen } from './';
+import { PlayScreen, IScreen } from '.';
 
 
 class StartScreen implements IScreen

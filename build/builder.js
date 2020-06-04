@@ -20,66 +20,52 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Builder = void 0;
-var ROT = __importStar(require("rot-js"));
-var game_1 = require("./game");
-var Display_1 = require("./Display");
-var Builder = /** @class */ (function () {
-    function Builder(width, height, depth) {
+const ROT = __importStar(require("rot-js"));
+const game_1 = require("./game");
+const Display_1 = require("./Display");
+class Builder {
+    constructor(width, height, depth, ratio, iterations, tilesFilled) {
         this._width = width;
         this._height = height;
         this._depth = depth;
+        this._ratio = ratio;
+        this._iterations = iterations;
+        this._tilesFilled = tilesFilled;
         this._tiles = new Array(depth);
         this._regions = new Array(depth);
-        for (var z = 0; z < depth; z++) {
+        for (let z = 0; z < depth; z++) {
             this._tiles[z] = this._generateLevel();
             this._regions[z] = new Array(width);
-            for (var x = 0; x < width; x++) {
+            for (let x = 0; x < width; x++) {
                 this._regions[z][x] = new Array(height);
-                for (var y = 0; y < height; y++) {
+                for (let y = 0; y < height; y++) {
                     this._regions[z][x][y] = 0;
                 }
             }
         }
-        for (var z = 0; z < this._depth; z++) {
+        for (let z = 0; z < this._depth; z++) {
             this._setupRegions(z);
         }
         this._connectAllRegions();
     }
-    Object.defineProperty(Builder.prototype, "width", {
-        get: function () { return this._width; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Builder.prototype, "height", {
-        get: function () { return this._height; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Builder.prototype, "depth", {
-        get: function () { return this._depth; },
-        set: function (value) { this._depth = value; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Builder.prototype, "tiles", {
-        get: function () { return this._tiles; },
-        set: function (value) { this._tiles = value; },
-        enumerable: false,
-        configurable: true
-    });
-    Builder.prototype._generateLevel = function () {
-        // Generate a 2D Array to represent all of the tiles on a map;
-        var map = new Array(this._width);
-        for (var w = 0; w < this._width; w++) {
+    get width() { return this._width; }
+    get height() { return this._height; }
+    get depth() { return this._depth; }
+    set depth(value) { this._depth = value; }
+    get tiles() { return this._tiles; }
+    set tiles(value) { this._tiles = value; }
+    _generateLevel() {
+        let map = new Array(this._width);
+        let generator = new ROT.Map.Cellular(this._width, this._height);
+        let totalIterations = this._iterations;
+        for (let w = 0; w < this._width; w++) {
             map[w] = new Array(this._height);
         }
-        var generator = new ROT.Map.Cellular(this._width, this._height);
-        generator.randomize(5);
-        var totalIterations = 3;
-        for (var i = 0; i < totalIterations - 1; i++) {
+        generator.randomize(this._ratio);
+        for (let i = 0; i < totalIterations - 1; i++) {
             generator.create();
         }
-        generator.create(function (x, y, v) {
+        generator.create((x, y, v) => {
             if (v === 1) {
                 map[x][y] = Display_1.Tile.floorTile();
             }
@@ -88,24 +74,21 @@ var Builder = /** @class */ (function () {
             }
         });
         return map;
-    };
-    Builder.prototype._canFillRegion = function (x, y, z) {
-        // Check if the tile is within the world boundaries.
+    }
+    _canFillRegion(x, y, z) {
         if (x < 0 || y < 0 || z < 0 || x >= this._width || y >= this._height || z >= this._depth) {
             return false;
         }
-        // Check if the tile already has a region assigned to it.
         if (this._regions[z][x][y] != 0) {
             return false;
         }
-        // Flag the tile as walkable.
         return this._tiles[z][x][y].walkable;
-    };
-    Builder.prototype._fillRegion = function (region, x, y, z) {
-        var tilesFilled = 1;
-        var tiles = [{ x: x, y: y }];
-        var tile;
-        var neighbors;
+    }
+    _fillRegion(region, x, y, z) {
+        let tilesFilled = 1;
+        let tiles = [{ x: x, y: y }];
+        let tile;
+        let neighbors;
         this._regions[z][x][y] = region;
         while (tiles.length > 0) {
             tile = tiles.pop();
@@ -120,25 +103,25 @@ var Builder = /** @class */ (function () {
             }
         }
         return tilesFilled;
-    };
-    Builder.prototype._removeRegion = function (region, z) {
-        for (var x = 0; x < this._width; x++) {
-            for (var y = 0; y < this._height; y++) {
+    }
+    _removeRegion(region, z) {
+        for (let x = 0; x < this._width; x++) {
+            for (let y = 0; y < this._height; y++) {
                 if (this._regions[z][x][y] == region) {
                     this._regions[z][x][y] = 0;
                     this._tiles[z][x][y] = Display_1.Tile.wallTile();
                 }
             }
         }
-    };
-    Builder.prototype._setupRegions = function (z) {
-        var region = 1;
-        var tilesFilled;
-        for (var x = 0; x < this._width; x++) {
-            for (var y = 0; y < this._height; y++) {
+    }
+    _setupRegions(z) {
+        let region = 1;
+        let tilesFilled;
+        for (let x = 0; x < this._width; x++) {
+            for (let y = 0; y < this._height; y++) {
                 if (this._canFillRegion(x, y, z)) {
                     tilesFilled = this._fillRegion(region, x, y, z);
-                    if (tilesFilled <= 20) {
+                    if (tilesFilled <= this._tilesFilled) {
                         this._removeRegion(region, z);
                     }
                     else {
@@ -147,11 +130,11 @@ var Builder = /** @class */ (function () {
                 }
             }
         }
-    };
-    Builder.prototype._findRegionOverlaps = function (z, r1, r2) {
-        var matches = [];
-        for (var x = 0; x < this._width; x++) {
-            for (var y = 0; y < this._height; y++) {
+    }
+    _findRegionOverlaps(z, r1, r2) {
+        let matches = [];
+        for (let x = 0; x < this._width; x++) {
+            for (let y = 0; y < this._height; y++) {
                 if (this._tiles[z][x][y].walkable &&
                     this._tiles[z + 1][x][y].walkable &&
                     this._regions[z][x][y] == r1 &&
@@ -161,23 +144,23 @@ var Builder = /** @class */ (function () {
             }
         }
         return matches;
-    };
-    Builder.prototype._connectRegions = function (z, r1, r2) {
-        var overlap = this._findRegionOverlaps(z, r1, r2);
+    }
+    _connectRegions(z, r1, r2) {
+        let overlap = this._findRegionOverlaps(z, r1, r2);
         if (overlap.length == 0) {
             return false;
         }
-        var point = overlap[0];
+        let point = overlap[0];
         this._tiles[z][point.x][point.y] = Display_1.Tile.stairsDownTile();
         this._tiles[z + 1][point.x][point.y] = Display_1.Tile.stairsUpTile();
         return true;
-    };
-    Builder.prototype._connectAllRegions = function () {
-        for (var z = 0; z < this._depth - 1; z++) {
-            var connected = {};
-            var key = void 0;
-            for (var x = 0; x < this._width; x++) {
-                for (var y = 0; y < this._height; y++) {
+    }
+    _connectAllRegions() {
+        for (let z = 0; z < this._depth - 1; z++) {
+            let connected = {};
+            let key;
+            for (let x = 0; x < this._width; x++) {
+                for (let y = 0; y < this._height; y++) {
                     key = this._regions[z][x][y] + ',' + this._regions[z + 1][x][y];
                     if (this._tiles[z][x][y].walkable && this._tiles[z + 1][x][y].walkable && !connected[key]) {
                         this._connectRegions(z, this._regions[z][x][y], this._regions[z + 1][x][y]);
@@ -186,7 +169,6 @@ var Builder = /** @class */ (function () {
                 }
             }
         }
-    };
-    return Builder;
-}());
+    }
+}
 exports.Builder = Builder;

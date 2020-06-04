@@ -97,7 +97,7 @@ class Moveable
       let tile = map.getTile(x, y, this.z);
 
       if (z < this.z) {
-        if (tile.traverseable === false) {
+        if (!tile.traversable) {
           console.log("You can't ascend here!");
         } else {
           this.x = x;
@@ -105,16 +105,14 @@ class Moveable
           this.z = z;
         }
       } else if (z > this.z) {
-        if (tile.traverseable === false) {
+        if (!tile.traversable) {
           console.log("You can't descend here!");
         } else {
           this.x = x;
           this.y = y;
           this.z = z;
         }
-      }
-
-      if (tile.walkable) {
+      } else if (tile.walkable) {
         this.x = x;
         this.y = y;
         this.z = z;

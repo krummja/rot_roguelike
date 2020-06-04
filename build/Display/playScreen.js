@@ -20,14 +20,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayScreen = void 0;
-var ROT = __importStar(require("rot-js"));
-var builder_1 = require("../builder");
-var _1 = require("./");
-var PlayScreen = /** @class */ (function () {
-    function PlayScreen(game) {
+const ROT = __importStar(require("rot-js"));
+const builder_1 = require("../builder");
+const _1 = require("./");
+class PlayScreen {
+    constructor(game) {
         this.mapArray = null;
         this.mapWidth = 200;
-        this.mapHeight = 200;
+        this.mapHeight = 100;
         this.game = game;
         this._player = new _1.Player({
             character: '@',
@@ -35,38 +35,75 @@ var PlayScreen = /** @class */ (function () {
             foreground: '#e44fa3',
             background: '' || 'black'
         }, this.game, this.map);
-        // FIXME: Holy shit this is messy lol. If anyone sees this please no judge. :<
     }
-    PlayScreen.prototype.enter = function () {
-        var width = 128;
-        var height = 80;
-        var depth = 6;
-        var tiles = new builder_1.Builder(width, height, depth).tiles;
+    enter() {
+        let width = this.mapWidth;
+        let height = this.mapHeight;
+        let depth = 3;
+        let ratio = 0.70;
+        let iterations = 100;
+        let tilesFilled = 50;
+        console.log("SCENE >> PLAY >> Generating TILES...");
+        let tiles = new builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
+        console.log("SCENE >> PLAY >> TILES Generated! OK.");
+        console.log("SCENE >> PLAY >> Generating MAP...");
         this.map = new _1.Map(tiles, this._player);
+        console.log("SCENE >> PLAY >> MAP Generated! OK.");
+        console.log("Starting ROT Engine! Here we go!");
         this.map.engine.start();
-    };
-    PlayScreen.prototype.exit = function () {
+    }
+    exit() {
         console.log('PlayScreen.exit:   Exited play screen.');
-    };
-    PlayScreen.prototype.render = function (display) {
-        var screenWidth = this.game.screenWidth;
-        var screenHeight = this.game.screenHeight;
+    }
+    render(display) {
+        let screenWidth = this.game.screenWidth;
+        let screenHeight = this.game.screenHeight;
         // Figure out the viewport dimensions
-        var topLeftX = Math.max(0, this._player.x - (screenWidth / 2));
+        let topLeftX = Math.max(0, this._player.x - (screenWidth / 2));
         topLeftX = Math.min(topLeftX, this.map.width - screenWidth);
-        var topLeftY = Math.max(0, this._player.y - (screenHeight / 2));
+        let topLeftY = Math.max(0, this._player.y - (screenHeight / 2));
         topLeftY = Math.min(topLeftY, this.map.height - screenHeight);
+        let visibleCells = {};
+        let map = this.map;
+        let currentDepth = this._player.z;
+        map.getFov(this._player.z).compute(this._player.x, this._player.y, this._player.sightRadius, (x, y, r, vis) => {
+            visibleCells[x + "," + y] = true;
+            map.setExplored(x, y, currentDepth, true);
+        });
         // Put bounds on the viewport movement relative to the map edge
-        for (var x = topLeftX; x < topLeftX + screenWidth; x++) {
-            for (var y = topLeftY; y < topLeftY + screenHeight; y++) {
-                var tile = this.map.getTile(x, y, this._player.z);
-                display.draw(x - topLeftX, y - topLeftY, tile.char, tile.fg, tile.bg);
+        for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
+            for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
+                // Check if the cell is within FOV
+                // if (visibleCells[x+','+y]) {
+                //   let tile = this.map.getTile(x, y, this._player.z);
+                //   display.draw(
+                //       x - topLeftX,
+                //       y - topLeftY,
+                //       tile.char,
+                //       tile.fg,
+                //       tile.bg,
+                //   );
+                // }
+                // Check if the cell has been explored
+                if (map.isExplored(x, y, currentDepth)) {
+                    let tile = this.map.getTile(x, y, currentDepth);
+                    let foreground;
+                    if (visibleCells[x + ',' + y]) {
+                        foreground = tile.fg;
+                    }
+                    else {
+                        foreground = 'darkGray';
+                    }
+                    display.draw(x - topLeftX, y - topLeftY, tile.char, foreground, tile.bg);
+                }
             }
         }
         // Render the player
-        display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map));
-    };
-    PlayScreen.prototype.handleInput = function (inputType, inputData) {
+        if (visibleCells[this._player.x + ',' + this._player.y]) {
+            display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map));
+        }
+    }
+    handleInput(inputType, inputData) {
         if (inputType === 'keydown') {
             if (inputData.keyCode === ROT.KEYS.VK_RETURN) {
                 console.log('Enter key pressed!');
@@ -87,7 +124,7 @@ var PlayScreen = /** @class */ (function () {
             this.game.refresh();
         }
         else if (inputType === 'keypress') {
-            var keyChar = String.fromCharCode(inputData.charCode);
+            let keyChar = String.fromCharCode(inputData.charCode);
             if (keyChar === '>') {
                 this.move(0, 0, 1);
             }
@@ -100,14 +137,13 @@ var PlayScreen = /** @class */ (function () {
             this.map.engine.unlock();
             this.game.refresh();
         }
-    };
-    PlayScreen.prototype.move = function (dX, dY, dZ) {
-        var newX = this._player.x + dX;
-        var newY = this._player.y + dY;
-        var newZ = this._player.z + dZ;
+    }
+    move(dX, dY, dZ) {
+        let newX = this._player.x + dX;
+        let newY = this._player.y + dY;
+        let newZ = this._player.z + dZ;
         this._player.tryMove(newX, newY, newZ, this.map);
-        console.log(this._player);
-    };
-    return PlayScreen;
-}());
+        console.log(this.map.explored);
+    }
+}
 exports.PlayScreen = PlayScreen;

@@ -20,30 +20,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartScreen = void 0;
-var ROT = __importStar(require("rot-js"));
-var _1 = require("./");
-var StartScreen = /** @class */ (function () {
-    function StartScreen(game) {
+const ROT = __importStar(require("rot-js"));
+const _1 = require(".");
+class StartScreen {
+    constructor(game) {
         this.game = game;
     }
-    StartScreen.prototype.enter = function () {
+    enter() {
         console.log("StartScreen.enter: Entered start screen.");
-    };
-    StartScreen.prototype.exit = function () {
+    }
+    exit() {
         console.log("StartScreen.exit:  Exited start screen.");
-    };
-    StartScreen.prototype.render = function (display) {
+    }
+    render(display) {
         display.drawText(1, 1, "%c{yellow}TypeScript Roguelike");
         display.drawText(1, 2, "Press [Enter] to start!");
-    };
-    StartScreen.prototype.handleInput = function (inputType, inputData) {
+    }
+    handleInput(inputType, inputData) {
         if (inputType === 'keydown') {
             if (inputData.keyCode === ROT.KEYS.VK_RETURN) {
-                var screen_1 = new _1.PlayScreen(this.game);
-                this.game.switchScreen(screen_1);
+                let screen = new _1.PlayScreen(this.game);
+                this.game.switchScreen(screen);
             }
         }
-    };
-    return StartScreen;
-}());
+    }
+}
 exports.StartScreen = StartScreen;

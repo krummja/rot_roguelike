@@ -20,10 +20,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Map = void 0;
-var ROT = __importStar(require("rot-js"));
-var _1 = require("./");
-var Map = /** @class */ (function () {
-    function Map(tiles, player) {
+const ROT = __importStar(require("rot-js"));
+const _1 = require(".");
+class Map {
+    constructor(tiles, player) {
         this._tiles = tiles;
         this._depth = tiles.length;
         this._width = tiles[0].length;
@@ -32,60 +32,29 @@ var Map = /** @class */ (function () {
         this._scheduler = new ROT.Scheduler.Simple();
         this.engine = new ROT.Engine(this._scheduler);
         this.addEntityAtRandomPosition(player, 0);
+        this._fov = [];
+        this.setupFov();
+        this._explored = new Array(this._depth);
+        this.setupExploredArray();
     }
-    Object.defineProperty(Map.prototype, "tiles", {
-        get: function () { return this._tiles; },
-        set: function (v) { this._tiles = v; },
-        enumerable: false,
-        configurable: true
-    });
+    get tiles() { return this._tiles; }
     ;
+    set tiles(v) { this._tiles = v; }
     ;
-    Object.defineProperty(Map.prototype, "width", {
-        get: function () { return this._width; },
-        set: function (v) { this._width = v; },
-        enumerable: false,
-        configurable: true
-    });
+    get width() { return this._width; }
     ;
+    set width(v) { this._width = v; }
     ;
-    Object.defineProperty(Map.prototype, "height", {
-        get: function () { return this._height; },
-        set: function (v) { this._height = v; },
-        enumerable: false,
-        configurable: true
-    });
+    get height() { return this._height; }
     ;
+    set height(v) { this._height = v; }
     ;
-    Object.defineProperty(Map.prototype, "entities", {
-        get: function () { return this._entities; },
-        set: function (value) { this._entities = value; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Map.prototype, "scheduler", {
-        get: function () { return this._scheduler; },
-        set: function (value) { this._scheduler = value; },
-        enumerable: false,
-        configurable: true
-    });
-    Map.generate = function (map, width, height, player) {
-        var generator = new ROT.Map.Cellular(width, height);
-        generator.randomize(0.5);
-        var totalIterations = 3;
-        for (var i = 0; i < totalIterations - 1; i++) {
-            generator.create();
-        }
-        generator.create(function (x, y, v) {
-            if (v === 1) {
-                map[x][y] = _1.Tile.floorTile();
-            }
-            else {
-                map[x][y] = _1.Tile.wallTile();
-            }
-        });
-    };
-    Map.prototype.getTile = function (x, y, z) {
+    get entities() { return this._entities; }
+    set entities(value) { this._entities = value; }
+    get scheduler() { return this._scheduler; }
+    set scheduler(value) { this._scheduler = value; }
+    get explored() { return this._explored; }
+    getTile(x, y, z) {
         if (x < 0 || x >= this._width ||
             y < 0 || y >= this._height ||
             z < 0 || z >= this._depth) {
@@ -94,23 +63,62 @@ var Map = /** @class */ (function () {
         else {
             return this.tiles[z][x][y] || _1.Tile.nullTile();
         }
-    };
-    Map.prototype.dig = function (x, y, z) {
+    }
+    setupFov() {
+        let map = this;
+        for (let z = 0; z < this._depth; z++) {
+            (function () {
+                let depth = z;
+                map._fov.push(new ROT.FOV.PreciseShadowcasting((x, y) => {
+                    return !map.getTile(x, y, depth).opaque;
+                }, { topology: 4 }));
+            })();
+        }
+    }
+    getFov(depth) {
+        return this._fov[depth];
+    }
+    setupExploredArray() {
+        for (let z = 0; z < this._depth; z++) {
+            this._explored[z] = new Array(this._width);
+            for (let x = 0; x < this._width; x++) {
+                this._explored[z][x] = new Array(this._height);
+                for (let y = 0; y < this._height; y++) {
+                    this._explored[z][x][y] = false;
+                }
+            }
+        }
+    }
+    setExplored(x, y, z, state) {
+        let tile = this.getTile(x, y, z);
+        if (tile.walkable || tile.diggable || tile.traversable) {
+            this._explored[z][x][y] = state;
+        }
+    }
+    isExplored(x, y, z) {
+        if (this.getTile(x, y, z) !== _1.Tile.nullTile()) {
+            return this._explored[z][x][y];
+        }
+        else {
+            return false;
+        }
+    }
+    dig(x, y, z) {
         if (this.getTile(x, y, z).diggable) {
             this.tiles[z][x][y] = _1.Tile.floorTile();
         }
-    };
-    Map.prototype.getRandomFloorPosition = function (z) {
-        var x = 0;
-        var y = 0;
+    }
+    getRandomFloorPosition(z) {
+        let x = 0;
+        let y = 0;
         while (this.getTile(x, y, z).walkable === false) {
             x = Math.floor(Math.random() * this._width);
             y = Math.floor(Math.random() * this._height);
         }
         return { x: x, y: y, z: z };
-    };
-    Map.prototype.getEntityAt = function (x, y, z) {
-        for (var i = 0; i < this._entities.length; i++) {
+    }
+    getEntityAt(x, y, z) {
+        for (let i = 0; i < this._entities.length; i++) {
             if (this._entities[i].x == x &&
                 this._entities[i].y == y &&
                 this._entities[i].z == z) {
@@ -118,8 +126,8 @@ var Map = /** @class */ (function () {
             }
         }
         return false;
-    };
-    Map.prototype.addEntity = function (entity) {
+    }
+    addEntity(entity) {
         if (entity.x < 0 || entity.x >= this._width ||
             entity.y < 0 || entity.y >= this._height ||
             entity.z < 0 || entity.z >= this._depth) {
@@ -130,14 +138,13 @@ var Map = /** @class */ (function () {
         if (entity.hasOwnProperty('act')) {
             this._scheduler.add(entity, true);
         }
-    };
-    Map.prototype.addEntityAtRandomPosition = function (entity, z) {
-        var position = this.getRandomFloorPosition(z);
+    }
+    addEntityAtRandomPosition(entity, z) {
+        let position = this.getRandomFloorPosition(z);
         entity.x = position.x;
         entity.y = position.y;
         entity.z = position.z;
         this.addEntity(entity);
-    };
-    return Map;
-}());
+    }
+}
 exports.Map = Map;

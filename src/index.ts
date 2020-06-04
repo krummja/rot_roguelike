@@ -1,13 +1,12 @@
-import * as ECS from './Engine';
+import * as ROT from 'rot-js';
 
-let Engine = new ECS.Engine();
+import { Game } from './game';
+import { StartScreen } from './Display';
 
-let e1 = new ECS.Entity();
-let e2 = new ECS.Entity();
-let e3 = new ECS.Entity();
-let position = new ECS.POSITION();
+window.onload = () => {
+  let game = new Game();
+  let startScreen: any = new StartScreen(game);
 
-
-
-Engine.addEntities(e1, e2, e3);
-console.log(Engine);
+  game.init();
+  game.switchScreen(startScreen);
+}

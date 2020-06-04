@@ -11,7 +11,7 @@ class PlayScreen implements IScreen
   public map: Map;
   public mapArray: Array<Array<Tile>> = null;
   public mapWidth: number = 200;
-  public mapHeight: number = 200;
+  public mapHeight: number = 100;
 
 
   constructor(game: Game)
@@ -22,17 +22,28 @@ class PlayScreen implements IScreen
       name: 'Player',
       foreground: '#e44fa3',
       background: '' || 'black'
-    }, this.game, this.map)
+    }, this.game, this.map);
   }
 
 
   public enter()
   {
-    let width = 128;
-    let height = 80;
-    let depth = 6;
-    let tiles = new Builder(width, height, depth).tiles;
+    let width = this.mapWidth;
+    let height = this.mapHeight;
+    let depth = 3;
+    let ratio = 0.70;
+    let iterations = 100;
+    let tilesFilled = 50;
+
+    console.log("SCENE >> PLAY >> Generating TILES...");
+    let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
+    console.log("SCENE >> PLAY >> TILES Generated! OK.");
+    
+    console.log("SCENE >> PLAY >> Generating MAP...");
     this.map = new Map(tiles, this._player);
+    console.log("SCENE >> PLAY >> MAP Generated! OK.");
+
+    console.log("Starting ROT Engine! Here we go!");
     this.map.engine.start();
   }
 
@@ -52,28 +63,65 @@ class PlayScreen implements IScreen
     let topLeftY = Math.max(0, this._player.y - (screenHeight / 2));
     topLeftY = Math.min(topLeftY, this.map.height - screenHeight);
 
+    let visibleCells: { [key: string]: boolean } = {};
+    let map = this.map;
+    let currentDepth = this._player.z;
+    map.getFov(this._player.z).compute(
+      this._player.x, this._player.y, this._player.sightRadius, (x: number, y: number, r: number, vis: number) => {
+        visibleCells[x+","+y] = true;
+        map.setExplored(x, y, currentDepth, true);
+      }
+    );
 
     // Put bounds on the viewport movement relative to the map edge
     for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
       for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
-        let tile = this.map.getTile(x, y, this._player.z);
-        display.draw(
+        
+        // Check if the cell is within FOV
+        // if (visibleCells[x+','+y]) {
+        //   let tile = this.map.getTile(x, y, this._player.z);
+        //   display.draw(
+        //       x - topLeftX,
+        //       y - topLeftY,
+        //       tile.char,
+        //       tile.fg,
+        //       tile.bg,
+        //   );
+        // }
+
+        // Check if the cell has been explored
+        if (map.isExplored(x, y, currentDepth)) {
+          let tile = this.map.getTile(x, y, currentDepth);
+          let foreground: string;
+
+          // FIXME: This doesn't seem to be working...?
+          if (visibleCells[x+','+y]) {
+            foreground = tile.fg;
+          } else {
+            foreground = 'darkGray';
+          }
+
+          display.draw(
             x - topLeftX,
             y - topLeftY,
             tile.char,
-            tile.fg,
-            tile.bg,
-        );
+            foreground,
+            tile.bg
+          );
+        }
       }
     }
+
     // Render the player
-    display.draw(
+    if (visibleCells[this._player.x + ',' + this._player.y]) {
+      display.draw(
         this._player.x - topLeftX,
         this._player.y - topLeftY,
         this._player.char,
         this._player.fg,
         this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map)
-    );
+        );
+    }
   }
 
   public handleInput(inputType: string, inputData: any): void
@@ -113,7 +161,7 @@ class PlayScreen implements IScreen
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
     this._player.tryMove(newX, newY, newZ, this.map);
-    console.log(this._player);
+    // console.log(this.map.explored);
   }
 }
 

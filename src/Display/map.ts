@@ -1,36 +1,41 @@
 import * as ROT from 'rot-js';
 import Engine from 'rot-js/lib/engine';
 import Scheduler from 'rot-js/lib/scheduler/scheduler';
-import { Player, Tile, Entity, Actor } from './';
+import { Player, Tile, Entity, Actor } from '.';
+import DiscreteShadowcasting from 'rot-js/lib/fov/discrete-shadowcasting';
+import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
 
 
 class Map
 {
-  private _tiles: Array<Array<Array<Tile>>>;
-  private _entities: Array<Entity>;
-  private _scheduler: Scheduler;
-  private _width: number;
-  private _height: number;
-  private _depth: number;
-
   public engine: Engine;
-
   public player: Player;
-
+  
   public get tiles(): Array<Array<Array<Tile>>> { return this._tiles };
   public set tiles(v: Array<Array<Array<Tile>>>) { this._tiles = v };
-
+  private _tiles: Array<Array<Array<Tile>>>;
+  
   public get width(): number { return this._width };
   public set width(v: number) { this._width = v };
-
+  private _width: number;
+  
   public get height(): number { return this._height };
   public set height(v: number) { this._height = v };
-
+  private _height: number;
+  
   public get entities(): Array<Entity> { return this._entities; }
   public set entities(value: Array<Entity>) { this._entities = value; }
-
+  private _entities: Array<Entity>;
+  
   public get scheduler(): Scheduler { return this._scheduler; }
   public set scheduler(value: Scheduler) { this._scheduler = value; }
+  private _scheduler: Scheduler;
+  
+  public get explored(): Array<Array<Array<boolean>>> { return this._explored; }
+  private _explored: Array<Array<Array<boolean>>>;
+
+  private _fov: PreciseShadowcasting[];
+  private _depth: number;
 
   constructor(tiles: Array<Array<Array<Tile>>>, player: Player)
   {
@@ -42,35 +47,71 @@ class Map
     this._scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this._scheduler);
     this.addEntityAtRandomPosition(player, 0);
+
+    this._fov = [];
+    this.setupFov();
+
+    this._explored = new Array(this._depth);
+    this.setupExploredArray();
   }
 
-  public static generate(map: Array<Array<Tile>>, width: number, height: number, player: Player)
-  {
-    let generator = new ROT.Map.Cellular(width, height);
-    generator.randomize(0.5);
-
-    let totalIterations = 3;
-    for (let i = 0; i < totalIterations - 1; i++) {
-      generator.create();
-    }
-
-    generator.create((x, y, v) => {
-      if (v === 1) {
-        map[x][y] = Tile.floorTile();
-      } else {
-        map[x][y] = Tile.wallTile();
-      }
-    })
-  }
 
   public getTile(x: number, y: number, z: number): Tile
   {
-    if (x < 0 || x >= this._width ||
-        y < 0 || y >= this._height ||
+    if (x < 0 || x >= this._width   ||
+        y < 0 || y >= this._height  ||
         z < 0 || z >= this._depth) {
       return Tile.nullTile();
     } else {
       return this.tiles[z][x][y] || Tile.nullTile();
+    }
+  }
+
+  public setupFov() 
+  {
+    let map = this;
+    for (let z = 0; z < this._depth; z++) {
+      (function() {
+        let depth = z;
+        map._fov.push(new ROT.FOV.PreciseShadowcasting((x: number, y: number): boolean => {
+          return !map.getTile(x, y, depth).opaque;
+        }, {topology: 4}));
+      })();
+    }
+  }
+
+  public getFov(depth: number)
+  {
+    return this._fov[depth];
+  }
+
+  public setupExploredArray()
+  {
+    for (let z = 0; z < this._depth; z++) {
+      this._explored[z] = new Array(this._width);
+      for (let x = 0; x < this._width; x++) {
+        this._explored[z][x] = new Array(this._height);
+          for (let y = 0; y < this._height; y++) {
+            this._explored[z][x][y] = false;
+        }
+      }
+    }
+  }
+
+  public setExplored(x: number, y: number, z: number, state: boolean) 
+  {
+    let tile = this.getTile(x, y, z)
+    if (tile.walkable || tile.diggable || tile.traversable) {
+      this._explored[z][x][y] = state;
+    }
+  }
+
+  public isExplored(x: number, y: number, z: number) 
+  {
+    if (this.getTile(x, y, z) !== Tile.nullTile()) {
+      return this._explored[z][x][y];
+    } else {
+      return false;
     }
   }
 

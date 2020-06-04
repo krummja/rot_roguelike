@@ -20,10 +20,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
-var ROT = __importStar(require("rot-js"));
-var utils_1 = require("./utils");
-var Game = /** @class */ (function () {
-    function Game() {
+const ROT = __importStar(require("rot-js"));
+const utils_1 = require("./utils");
+class Game {
+    constructor() {
         var _a;
         this._display = null;
         this._currentScreen = null;
@@ -45,34 +45,18 @@ var Game = /** @class */ (function () {
         this.container = this.display.getContainer();
         (_a = document.getElementById('game')) === null || _a === void 0 ? void 0 : _a.appendChild(this.container);
     }
-    Object.defineProperty(Game.prototype, "display", {
-        get: function () { return this._display; },
-        set: function (v) { this._display = v; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "currentScreen", {
-        get: function () { return this._currentScreen; },
-        set: function (v) { this._currentScreen = v; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "screenWidth", {
-        get: function () { return this._screenWidth; },
-        set: function (v) { this._screenWidth = v; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "screenHeight", {
-        get: function () { return this._screenHeight; },
-        set: function (v) { this._screenHeight = v; },
-        enumerable: false,
-        configurable: true
-    });
-    Game.prototype.init = function () {
-        var game = this;
-        var bindEventToScreen = function (event) {
-            window.addEventListener(event, function (e) {
+    get display() { return this._display; }
+    set display(v) { this._display = v; }
+    get currentScreen() { return this._currentScreen; }
+    set currentScreen(v) { this._currentScreen = v; }
+    get screenWidth() { return this._screenWidth; }
+    set screenWidth(v) { this._screenWidth = v; }
+    get screenHeight() { return this._screenHeight; }
+    set screenHeight(v) { this._screenHeight = v; }
+    init() {
+        let game = this;
+        let bindEventToScreen = (event) => {
+            window.addEventListener(event, (e) => {
                 if (game.currentScreen !== null) {
                     game.currentScreen.handleInput(event, e);
                 }
@@ -80,12 +64,12 @@ var Game = /** @class */ (function () {
         };
         bindEventToScreen('keydown');
         bindEventToScreen('keypress');
-    };
-    Game.prototype.refresh = function () {
+    }
+    refresh() {
         this._display.clear();
         this._currentScreen.render((this._display));
-    };
-    Game.prototype.switchScreen = function (screen) {
+    }
+    switchScreen(screen) {
         if (this.currentScreen !== null) {
             this.currentScreen.exit();
         }
@@ -95,11 +79,11 @@ var Game = /** @class */ (function () {
             this.currentScreen.enter();
             this.refresh();
         }
-    };
-    Game.getNeighborPositions = function (x, y) {
-        var tiles = [];
-        for (var dX = -1; dX < 2; dX++) {
-            for (var dY = -1; dY < 2; dY++) {
+    }
+    static getNeighborPositions(x, y) {
+        let tiles = [];
+        for (let dX = -1; dX < 2; dX++) {
+            for (let dY = -1; dY < 2; dY++) {
                 if (dX == 0 && dY == 0) {
                     continue;
                 }
@@ -107,7 +91,6 @@ var Game = /** @class */ (function () {
             }
         }
         return utils_1.shuffleCoordArray(tiles);
-    };
-    return Game;
-}());
+    }
+}
 exports.Game = Game;

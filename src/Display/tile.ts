@@ -1,27 +1,27 @@
 import { IProperties } from '../types';
-import { Map } from './';
+import { Map } from '.';
 import { Game } from '../game';
 
 class Glyph
 {
-  private _char: string;
+  private _character: string;
   private _font: string;
-  private _fg: string;
-  private _bg: string;
+  private _foreground: string;
+  private _background: string;
   private _walkable: boolean;
   private _diggable: boolean;
-  private _traverseable: boolean;
-  private _blocksLight: boolean;
+  private _traversable: boolean;
+  private _opaque: boolean;
   private _map: Map = null;
 
-  public get char(): string { return this._char; }
-  public set char(v: string) { this._char = v; }
+  public get char(): string { return this._character; }
+  public set char(v: string) { this._character = v; }
 
-  public get fg(): string { return this._fg; }
-  public set fg(v: string) { this._fg = v; }
+  public get fg(): string { return this._foreground; }
+  public set fg(v: string) { this._foreground = v; }
 
-  public get bg(): string { return this._bg; }
-  public set bg(v: string) { this._bg = v; }
+  public get bg(): string { return this._background; }
+  public set bg(v: string) { this._background = v; }
 
   public get walkable(): boolean { return this._walkable; }
   public set walkable(v: boolean) { this._walkable = v; }
@@ -29,24 +29,24 @@ class Glyph
   public get diggable(): boolean { return this._diggable; }
   public set diggable(v: boolean) { this._diggable = v; }
 
-  public get traverseable(): boolean { return this._traverseable; }
-  public set traverseable(v: boolean) { this._traverseable = v; }
+  public get traversable(): boolean { return this._traversable; }
+  public set traversable(v: boolean) { this._traversable = v; }
 
-  public get blocksLight(): boolean { return this._blocksLight; }
-  public set blocksLight(value: boolean) { this._blocksLight = value; }
+  public get opaque(): boolean { return this._opaque; }
+  public set opaque(value: boolean) { this._opaque = value; }
 
   public get map(): Map { return this._map; }
   public set map(value: Map) { this._map = value; }
 
   constructor(properties: IProperties)
   {
-    this._char = properties['character'] || ' ';
-    this._fg = properties['foreground'] || 'white';
-    this._bg = properties['background'] || 'black';
-    this._walkable = properties['isWalkable'] || false;
-    this._diggable = properties['isDiggable'] || false;
-    this._traverseable = properties['isTraverseable'] || false;
-    this._blocksLight = (properties['blocksLight'] !== undefined) ? properties['blocksLight'] : true;
+    this._character = properties['character'] || ' ';
+    this._foreground = properties['foreground'] || 'white';
+    this._background = properties['background'] || 'black';
+    this._walkable = properties['walkable'] || false;
+    this._diggable = properties['diggable'] || false;
+    this._traversable = properties['traversable'] || false;
+    this._opaque = (properties['opaque'] !== undefined) ? properties['opaque'] : true;
   }
 }
 
@@ -70,9 +70,9 @@ class Tile extends Glyph
     return new Tile({
       character: ' ',
       background: this.pickColor(colors),
-      isWalkable: true,
-      isTraverseable: false,
-      blocksLight: false,
+      walkable: true,
+      traversable: false,
+      opaque: false,
     });
   }
 
@@ -83,9 +83,9 @@ class Tile extends Glyph
     return new Tile({
       character: ' ',
       background: this.pickColor(colors),
-      isDiggable: true,
-      isTraverseable: false,
-      blocksLight: true
+      diggable: true,
+      traversable: false,
+      opaque: true
     });
   }
 
@@ -94,8 +94,9 @@ class Tile extends Glyph
     return new Tile({
       character: '<',
       foreground: 'white',
-      isWalkable: true,
-      isTraverseable: true,
+      walkable: true,
+      traversable: true,
+      opaque: false
     })
   }
 
@@ -104,8 +105,9 @@ class Tile extends Glyph
     return new Tile({
       character: '>',
       foreground: 'gray',
-      isWalkable: true,
-      isTraverseable: true,
+      walkable: true,
+      traversable: true,
+      opaque: false
     })
   }
 
