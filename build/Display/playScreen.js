@@ -21,22 +21,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayScreen = void 0;
 const ROT = __importStar(require("rot-js"));
+const builder_1 = require("../builder");
 const _1 = require("./");
 class PlayScreen {
-    constructor(game, world) {
+    constructor(game) {
         this.mapArray = null;
+        this.mapWidth = 200;
+        this.mapHeight = 100;
         this.game = game;
         this._player = new _1.Player({
             character: '@',
             name: 'Player',
             foreground: [228, 79, 163],
             background: [0, 0, 0] || null,
-            sightRadius: 20
         }, this.game, this.map);
-        this.world = world;
     }
     enter() {
-        let tiles = this.world;
+        let width = this.mapWidth;
+        let height = this.mapHeight;
+        let depth = 3;
+        let ratio = 0.70;
+        let iterations = 100;
+        let tilesFilled = 50;
+        let tiles = new builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
         this.map = new _1.Map(tiles, this._player);
         this.map.engine.start();
     }

@@ -10,9 +10,9 @@ class PlayScreen implements IScreen
 
   public map: Map;
   public mapArray: Array<Array<Tile>> = null;
-  public world: any;
+  public mapWidth: number = 200;
+  public mapHeight: number = 100;
 
-  public done: boolean;
 
   constructor(game: Game)
   {
@@ -22,14 +22,20 @@ class PlayScreen implements IScreen
       name: 'Player',
       foreground: [228, 79, 163],
       background: [0, 0, 0] || null,
-      sightRadius: 20
     }, this.game, this.map);
   }
 
 
   public enter()
   {
-    let tiles = new Builder()
+    let width = this.mapWidth;
+    let height = this.mapHeight;
+    let depth = 3;
+    let ratio = 0.70;
+    let iterations = 100;
+    let tilesFilled = 50;
+
+    let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
     
     this.map = new Map(tiles, this._player);
     this.map.engine.start();
