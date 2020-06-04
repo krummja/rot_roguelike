@@ -34,8 +34,10 @@ class PlayScreen {
             name: 'Player',
             foreground: [228, 79, 163],
             background: [0, 0, 0] || null,
+            sightRadius: 20,
         }, this.game, this.map);
     }
+    get player() { return this._player; }
     enter() {
         let width = this.mapWidth;
         let height = this.mapHeight;

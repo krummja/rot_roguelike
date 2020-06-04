@@ -5,14 +5,15 @@ import { Map, IScreen, Tile, Entity, Player } from './';
 
 class PlayScreen implements IScreen
 {
-  private readonly _player: Player;
   public game: Game;
-
+  
   public map: Map;
   public mapArray: Array<Array<Tile>> = null;
   public mapWidth: number = 200;
   public mapHeight: number = 100;
 
+  public get player(): Player { return this._player; }
+  private readonly _player: Player;
 
   constructor(game: Game)
   {
@@ -22,6 +23,7 @@ class PlayScreen implements IScreen
       name: 'Player',
       foreground: [228, 79, 163],
       background: [0, 0, 0] || null,
+      sightRadius: 20,
     }, this.game, this.map);
   }
 

@@ -1,9 +1,9 @@
 import * as ROT from 'rot-js';
+import { Player } from '.';
 
 
 interface IScreen
 {
-  done?: boolean;
   enter(): void;
   exit(): void;
   render(display: ROT.Display): void;

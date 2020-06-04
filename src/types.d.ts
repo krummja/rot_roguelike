@@ -1,8 +1,10 @@
 import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
 import { Game } from './game';
+import { Player } from './Display';
 
 type Screen = {
+  player?: Player
   enter(): void;
   exit(): void;
   render(display: ROT.Display): void;
