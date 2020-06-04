@@ -11,8 +11,9 @@ type Screen = {
 
 interface IProperties {
   character ?: string,
-  foreground ?: string,
-  background ?: string,
+  foreground ?: [number, number, number],
+  background ?: [number, number, number],
+  darkBackground ?: [number, number, number],
   walkable ?: boolean,
   diggable ?: boolean,
   traversable ?: boolean,

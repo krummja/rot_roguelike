@@ -1,3 +1,4 @@
+import * as ROT from 'rot-js';
 import { IProperties } from '../types';
 import { Map } from '.';
 import { Game } from '../game';
@@ -6,8 +7,9 @@ class Glyph
 {
   private _character: string;
   private _font: string;
-  private _foreground: string;
-  private _background: string;
+  private _foreground: [number, number, number];
+  private _background: [number, number, number];
+  private _darkBackground: [number, number, number];
   private _walkable: boolean;
   private _diggable: boolean;
   private _traversable: boolean;
@@ -17,11 +19,14 @@ class Glyph
   public get char(): string { return this._character; }
   public set char(v: string) { this._character = v; }
 
-  public get fg(): string { return this._foreground; }
-  public set fg(v: string) { this._foreground = v; }
+  public get fg(): [number, number, number] { return this._foreground; }
+  public set fg(v: [number, number, number]) { this._foreground = v; }
 
-  public get bg(): string { return this._background; }
-  public set bg(v: string) { this._background = v; }
+  public get bg(): [number, number, number] { return this._background; }
+  public set bg(v: [number, number, number]) { this._background = v; }
+
+  public get dbg(): [number, number, number] { return this._darkBackground; }
+  public set dbg(v: [number, number, number]) { this._darkBackground = v; }
 
   public get walkable(): boolean { return this._walkable; }
   public set walkable(v: boolean) { this._walkable = v; }
@@ -38,11 +43,13 @@ class Glyph
   public get map(): Map { return this._map; }
   public set map(value: Map) { this._map = value; }
 
+
   constructor(properties: IProperties)
   {
     this._character = properties['character'] || ' ';
-    this._foreground = properties['foreground'] || 'white';
-    this._background = properties['background'] || 'black';
+    this._foreground = properties['foreground'] || [255, 255, 255];
+    this._background = properties['background'] || [255, 255, 255];
+    this._darkBackground = properties['darkBackground'] || [255, 255, 255];
     this._walkable = properties['walkable'] || false;
     this._diggable = properties['diggable'] || false;
     this._traversable = properties['traversable'] || false;
@@ -65,8 +72,9 @@ class Tile extends Glyph
 
   public static floorTile(): Tile
   {
-    let colors = ['#29231c', '#332d25', '#25211d', '#292018']
-
+    // let colors = ['#29231c', '#332d25', '#25211d', '#292018']
+    let colors = [[41, 35, 28], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
+    
     return new Tile({
       character: ' ',
       background: this.pickColor(colors),
@@ -78,7 +86,8 @@ class Tile extends Glyph
 
   public static wallTile(): Tile
   {
-    let colors = ['#9a7e61', '#a78a6d', '#a08467', '#ad9173'];
+    // let colors = ['#9a7e61', '#a78a6d', '#a08467', '#ad9173'];
+    let colors = [[154, 126, 97], [167, 138, 109], [160, 132, 103], [173, 145, 115]]
 
     return new Tile({
       character: ' ',
@@ -91,9 +100,12 @@ class Tile extends Glyph
 
   public static stairsUpTile(): Tile
   {
+    let colors = [[173, 145, 115], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
+
     return new Tile({
       character: '<',
-      foreground: 'white',
+      foreground: [255, 255, 255],
+      background: this.pickColor(colors),
       walkable: true,
       traversable: true,
       opaque: false
@@ -102,9 +114,12 @@ class Tile extends Glyph
 
   public static stairsDownTile(): Tile
   {
+    let colors = [[173, 145, 115], [51, 45, 37], [37, 33, 29], [41, 32, 24]]
+
     return new Tile({
       character: '>',
-      foreground: 'gray',
+      foreground: [200, 200, 200],
+      background: this.pickColor(colors),
       walkable: true,
       traversable: true,
       opaque: false
@@ -112,7 +127,7 @@ class Tile extends Glyph
   }
 
 
-  public static pickColor: Function = (colors: string[]): string => {
+  public static pickColor: Function = (colors: Array<Array<number>>): number[] => {
     let index = Math.floor(Tile.random(0, 4));
     return colors[index];
   };
@@ -122,8 +137,6 @@ class Tile extends Glyph
   }
 
 }
-
-
 
 
 export { Tile };

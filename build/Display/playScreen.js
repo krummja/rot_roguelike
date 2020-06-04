@@ -32,8 +32,9 @@ class PlayScreen {
         this._player = new _1.Player({
             character: '@',
             name: 'Player',
-            foreground: '#e44fa3',
-            background: '' || 'black'
+            foreground: [228, 79, 163],
+            background: [0, 0, 0] || null,
+            sightRadius: 20
         }, this.game, this.map);
     }
     enter() {
@@ -73,34 +74,27 @@ class PlayScreen {
         // Put bounds on the viewport movement relative to the map edge
         for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
             for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
-                // Check if the cell is within FOV
-                // if (visibleCells[x+','+y]) {
-                //   let tile = this.map.getTile(x, y, this._player.z);
-                //   display.draw(
-                //       x - topLeftX,
-                //       y - topLeftY,
-                //       tile.char,
-                //       tile.fg,
-                //       tile.bg,
-                //   );
-                // }
                 // Check if the cell has been explored
                 if (map.isExplored(x, y, currentDepth)) {
                     let tile = this.map.getTile(x, y, currentDepth);
-                    let foreground;
+                    let background = tile.bg;
+                    let darken = (color) => {
+                        let darkerColor = ROT.Color.interpolate(ROT.Color.multiply(color, [50, 50, 50]), [0, 0, 0]);
+                        return darkerColor;
+                    };
                     if (visibleCells[x + ',' + y]) {
-                        foreground = tile.fg;
+                        background = tile.bg;
                     }
                     else {
-                        foreground = 'darkGray';
+                        background = (darken(background));
                     }
-                    display.draw(x - topLeftX, y - topLeftY, tile.char, foreground, tile.bg);
+                    display.draw(x - topLeftX, y - topLeftY, tile.char, (ROT.Color.toHex(tile.fg)).toString(), (ROT.Color.toHex(background)).toString());
                 }
             }
         }
         // Render the player
         if (visibleCells[this._player.x + ',' + this._player.y]) {
-            display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, this._player.fg, this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map));
+            display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, (ROT.Color.toHex(this._player.fg)).toString(), (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString());
         }
     }
     handleInput(inputType, inputData) {
@@ -143,7 +137,7 @@ class PlayScreen {
         let newY = this._player.y + dY;
         let newZ = this._player.z + dZ;
         this._player.tryMove(newX, newY, newZ, this.map);
-        console.log(this.map.explored);
+        // console.log(this.map.explored);
     }
 }
 exports.PlayScreen = PlayScreen;

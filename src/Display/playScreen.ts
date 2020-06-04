@@ -20,8 +20,9 @@ class PlayScreen implements IScreen
     this._player = new Player({
       character: '@',
       name: 'Player',
-      foreground: '#e44fa3',
-      background: '' || 'black'
+      foreground: [228, 79, 163],
+      background: [0, 0, 0] || null,
+      sightRadius: 20
     }, this.game, this.map);
   }
 
@@ -66,8 +67,12 @@ class PlayScreen implements IScreen
     let visibleCells: { [key: string]: boolean } = {};
     let map = this.map;
     let currentDepth = this._player.z;
+
     map.getFov(this._player.z).compute(
-      this._player.x, this._player.y, this._player.sightRadius, (x: number, y: number, r: number, vis: number) => {
+      this._player.x, 
+      this._player.y, 
+      this._player.sightRadius, 
+      (x: number, y: number, r: number, vis: number) => {
         visibleCells[x+","+y] = true;
         map.setExplored(x, y, currentDepth, true);
       }
@@ -76,37 +81,29 @@ class PlayScreen implements IScreen
     // Put bounds on the viewport movement relative to the map edge
     for (let x = topLeftX; x < topLeftX + screenWidth; x++) {
       for (let y = topLeftY; y < topLeftY + screenHeight; y++) {
-        
-        // Check if the cell is within FOV
-        // if (visibleCells[x+','+y]) {
-        //   let tile = this.map.getTile(x, y, this._player.z);
-        //   display.draw(
-        //       x - topLeftX,
-        //       y - topLeftY,
-        //       tile.char,
-        //       tile.fg,
-        //       tile.bg,
-        //   );
-        // }
 
         // Check if the cell has been explored
         if (map.isExplored(x, y, currentDepth)) {
           let tile = this.map.getTile(x, y, currentDepth);
-          let foreground: string;
+          let background: [number, number, number] = tile.bg;
 
-          // FIXME: This doesn't seem to be working...?
+          let darken = (color: [number, number, number]): [number, number, number] => {
+            let darkerColor = ROT.Color.interpolate(ROT.Color.multiply(color, [50, 50, 50]), [0, 0, 0]);
+            return darkerColor;
+          }
+
           if (visibleCells[x+','+y]) {
-            foreground = tile.fg;
+            background = tile.bg;
           } else {
-            foreground = 'darkGray';
+            background = (darken(background));
           }
 
           display.draw(
             x - topLeftX,
             y - topLeftY,
             tile.char,
-            foreground,
-            tile.bg
+            (ROT.Color.toHex(tile.fg)).toString(),
+            (ROT.Color.toHex(background)).toString()
           );
         }
       }
@@ -118,8 +115,8 @@ class PlayScreen implements IScreen
         this._player.x - topLeftX,
         this._player.y - topLeftY,
         this._player.char,
-        this._player.fg,
-        this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map)
+        (ROT.Color.toHex(this._player.fg)).toString(),
+        (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString()
         );
     }
   }

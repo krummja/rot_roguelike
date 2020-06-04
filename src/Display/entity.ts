@@ -123,7 +123,7 @@ class Moveable
       }
       return false;
     }
-    this.getBgTint = (x: number, y: number, z: number, map: Map): string => {
+    this.getBgTint = (x: number, y: number, z: number, map: Map): [number, number, number] => {
       let tile = map.getTile(x, y, z);
       return tile.bg;
     }
