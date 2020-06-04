@@ -44,13 +44,8 @@ class PlayScreen {
         let ratio = 0.70;
         let iterations = 100;
         let tilesFilled = 50;
-        console.log("SCENE >> PLAY >> Generating TILES...");
         let tiles = new builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
-        console.log("SCENE >> PLAY >> TILES Generated! OK.");
-        console.log("SCENE >> PLAY >> Generating MAP...");
         this.map = new _1.Map(tiles, this._player);
-        console.log("SCENE >> PLAY >> MAP Generated! OK.");
-        console.log("Starting ROT Engine! Here we go!");
         this.map.engine.start();
     }
     exit() {
