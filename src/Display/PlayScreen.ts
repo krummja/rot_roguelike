@@ -1,8 +1,8 @@
 import * as ROT from 'rot-js';
-import { Builder } from '../builder';
-import { Game } from '../game';
-import { Map, IScreen, Tile } from './';
-import { Entity, Player } from './';
+
+import { Builder } from '../Builder';
+import { Game } from '../Game';
+import { IScreen, Map, Player, Tile } from './';
 
 class PlayScreen implements IScreen
 {

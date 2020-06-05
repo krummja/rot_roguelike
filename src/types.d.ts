@@ -1,6 +1,6 @@
 import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
-import { Game } from './game';
+
 import { Player } from './Display';
 
 type Screen = {
@@ -11,6 +11,7 @@ type Screen = {
   handleInput(inputType: string, inputData: any): void;
 }
 
+// FIXME: Split this into separate configs.
 interface IProperties {
   character ?: string,
   foreground ?: [number, number, number],
@@ -28,7 +29,6 @@ interface IProperties {
   y ?: number,
   z ?: number,
   name ?: string,
-  mixins ?: any[],
   multiplier ?: number,
 }
 

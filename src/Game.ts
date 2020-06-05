@@ -1,9 +1,9 @@
-import { vsprintf } from 'sprintf';
 import * as ROT from 'rot-js';
-import {Screen} from './types';
-import { shuffleCoordArray } from './utils';
-import { Player } from './Display';
+import { vsprintf } from 'sprintf';
 
+import { Player } from './Display';
+import { Screen } from './types';
+import { shuffleCoordArray } from './utils';
 
 class Game
 {

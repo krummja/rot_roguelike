@@ -35,6 +35,8 @@ class StartScreen {
     render(display) {
         display.drawText(1, 1, "%c{yellow}TypeScript Roguelike");
         display.drawText(1, 2, "Press [Enter] to start!");
+        display.drawText(1, 4, "Use Numpad Arrows (2, 4, 6, 8) to Navigate.");
+        display.drawText(1, 5, "Use Numpad 7 to Ascend, Numpad 1 to Descend.");
     }
     handleInput(inputType, inputData) {
         if (inputType === 'keydown') {

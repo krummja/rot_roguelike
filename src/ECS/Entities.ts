@@ -1,5 +1,7 @@
 import { Mixin, settings } from 'ts-mixer';
-import { Entity, Moveable, Sight, Actor, Recipient } from './mixins';
+
+import { Actor, Moveable, Recipient, Sight } from './Mixins';
+import { Entity } from "./Entity";
 
 settings.prototypeStrategy = 'copy';
 settings.initFunction = 'init';

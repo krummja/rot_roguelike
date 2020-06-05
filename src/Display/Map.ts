@@ -1,9 +1,9 @@
 import * as ROT from 'rot-js';
 import Engine from 'rot-js/lib/engine';
-import Scheduler from 'rot-js/lib/scheduler/scheduler';
-import { Player, Tile, Entity, Actor } from '.';
 import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
+import Scheduler from 'rot-js/lib/scheduler/scheduler';
 
+import { Entity, Player, Tile } from './';
 
 class Map
 {

@@ -1,3 +1,3 @@
-import { Interface} from './interface';
+import { Interface} from './Interface';
 
 export { Interface };

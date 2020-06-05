@@ -1,7 +1,5 @@
-import * as ROT from 'rot-js';
-
-import { Game } from './game';
 import { StartScreen } from './Display';
+import { Game } from './Game';
 import { Interface } from './Interface';
 
 window.onload = () => {

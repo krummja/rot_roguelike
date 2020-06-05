@@ -1,6 +1,7 @@
 import * as ROT from 'rot-js';
-import { Game} from './game';
+
 import { Tile } from './Display';
+import { Game } from './Game';
 
 type Map = Array<Array<Tile>>;
 type Connection = { [key: string]: boolean };

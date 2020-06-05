@@ -1,8 +1,7 @@
 import * as ROT from 'rot-js';
 
-import { Game } from '../game';
-import { PlayScreen, IScreen } from '.';
-
+import { Game } from '../Game';
+import { IScreen, PlayScreen } from './';
 
 class StartScreen implements IScreen
 {
@@ -29,6 +28,9 @@ class StartScreen implements IScreen
   {
     display.drawText(1, 1, "%c{yellow}TypeScript Roguelike");
     display.drawText(1, 2, "Press [Enter] to start!");
+
+    display.drawText(1, 4, "Use Numpad Arrows (2, 4, 6, 8) to Navigate.");
+    display.drawText(1, 5, "Use Numpad 7 to Ascend, Numpad 1 to Descend.");
   }
 
   public handleInput(inputType: string, inputData: any): void

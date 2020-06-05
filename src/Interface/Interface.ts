@@ -1,5 +1,5 @@
-import { LeftPanel } from './leftPanel';
-import { Game } from '../game';
+import { Game } from '../Game';
+import { LeftPanel } from './LeftPanel';
 
 class Interface
 {
