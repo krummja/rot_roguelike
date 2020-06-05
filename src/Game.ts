@@ -1,37 +1,42 @@
 import * as ROT from 'rot-js';
+import { EventEmitter } from 'events';
 import { vsprintf } from 'sprintf';
 
-import { Player } from './Display';
+import { Player } from './ECS';
 import { Screen } from './types';
 import { shuffleCoordArray } from './utils';
 
+import { MessageManager } from './MessageManager';
+
 class Game
 {
+  public container: HTMLElement | null;
+  public messageManager: MessageManager;
+  
+  public static EVENTS: EventEmitter = new EventEmitter();
+   
+  public get display(): ROT.Display { return this._display; }
+  public set display(v: ROT.Display) { this._display = v; }
   private _display: ROT.Display = null;
+  
+  public get currentScreen(): Screen { return this._currentScreen; }
+  public set currentScreen(v: Screen) { this._currentScreen = v; }
   private _currentScreen: Screen = null;
+  
+  public get screenWidth(): number { return this._screenWidth; }
+  public set screenWidth(v: number) { this._screenWidth = v; }
   private _screenWidth: number = 64;
+  
+  public get screenHeight(): number { return this._screenHeight; }
+  public set screenHeight(v: number) { this._screenHeight = v; }
   private _screenHeight: number = 40;
+  
   private _fontFamily: string = 'Fira Code';
   private _fontStyle: string = 'normal';
   private _fontSize: number = 12;
   private _spacing: number = 1.0;
   private _squareRatio: boolean = true;
-
-  public container: HTMLElement | null;
-
-
-  public get display(): ROT.Display { return this._display; }
-  public set display(v: ROT.Display) { this._display = v; }
-
-  public get currentScreen(): Screen { return this._currentScreen; }
-  public set currentScreen(v: Screen) { this._currentScreen = v; }
-
-  public get screenWidth(): number { return this._screenWidth; }
-  public set screenWidth(v: number) { this._screenWidth = v; }
-
-  public get screenHeight(): number { return this._screenHeight; }
-  public set screenHeight(v: number) { this._screenHeight = v; }
-
+  
 
   public constructor()
   {
@@ -45,6 +50,8 @@ class Game
     });
     this.container = this.display.getContainer();
     document.getElementById('game')?.appendChild(this.container);
+
+    this.messageManager = new MessageManager(this);
   }
 
 
@@ -97,12 +104,6 @@ class Game
       }
     }
     return shuffleCoordArray(tiles);
-  }
-
-  public sendMessage(recipient: Player, message: string, args: any)
-  {
-    message = vsprintf(message, args);
-    recipient.receiveMessage(message);
   }
 }
 

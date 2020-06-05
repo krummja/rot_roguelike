@@ -1,7 +1,7 @@
 import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
 
-import { Player } from './Display';
+import { Player } from './ECS';
 
 type Screen = {
   player?: Player

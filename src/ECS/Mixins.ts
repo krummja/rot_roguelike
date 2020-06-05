@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { settings } from 'ts-mixer';
 
 import { Map } from '../Display';
@@ -25,12 +26,16 @@ export class Moveable implements IMixin
   public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
   public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
   
+  private _EVENTS: EventEmitter;
+
   public init(properties: IProperties): void
   {
     this.properties = properties;
     this.x = this.properties['x'];
     this.y = this.properties['y'];
     this.z = this.properties['z'];
+
+    this._EVENTS = Game.EVENTS;
 
     this.tryMove = (
       x: number, 
@@ -45,29 +50,32 @@ export class Moveable implements IMixin
           this.x = x;
           this.y = y;
           this.z = z;
+          this._EVENTS.emit('tryMove', 'You follow the passage upward.');
         } else {
-          console.log("You can't ascend here!");
-          
+           this._EVENTS.emit('tryMove', 'You can\'t ascend here!');
         }
       } else if (z > this.z) {
         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
           this.x = x;
           this.y = y;
           this.z = z;
+          this._EVENTS.emit('tryMove', 'You follow the passage downward.');
         } else {
-          console.log("You can't descend here!");
+          this._EVENTS.emit('tryMove', 'You can\'t descend here!');
         }
       } else if (tile.walkable) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this._EVENTS.emit('tryMove', ' ');
         return true;
       } else if (tile.diggable) {
         map.dig(x, y, z);
+        this._EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
         return true;
       }
       return false;
-    }
+    };
 
     this.getBgTint = (
       x: number, 
@@ -77,7 +85,7 @@ export class Moveable implements IMixin
     ): [number, number, number] => {
       let tile = map.getTile(x, y, z);
       return tile.bg;
-    }
+    };
   }
 }
 
@@ -100,23 +108,22 @@ export class Sight implements IMixin
 
 export class Recipient implements IMixin
 {
-  public get messages(): Array<string> { return this._messages; }
-  private _messages: Array<string>;
+  public get messages(): {[key: string]: Array<string>} { return this._messages; }
+  private _messages: {[key: string]: Array<string>};
 
-  public receiveMessage: (message: string) => void;
-  public clearMessages: () => void;
+  public receiveMessage: (sender: string, message: string) => void;
+  public clearMessages: (buffer: number) => void;
 
   public init()
   {
-    this._messages = [];
-    this.receiveMessage = (message: string): void => {
-      this._messages.push(message);
+    this._messages = {
+      position: [],
+      tryMove: [],
+      combat: []
     }
-    this.clearMessages = (): void => {
-      if (this._messages.length >= 2) {
-        this._messages.shift();
-      }
-    }
+    this.receiveMessage = (sender: string, message: string): void => {
+      this._messages[sender].push(message);
+    };
   }
 }
 
@@ -132,8 +139,9 @@ export class Actor extends Recipient implements IMixin
     this.act = (): void => {
       this.game.refresh();
       this.map.engine.lock();
-      this.clearMessages();
-    }
+      this.game.messageManager.clearMessages(0, 'position');
+      this.game.messageManager.clearMessages(3, 'tryMove');
+    };
   }
 }
 

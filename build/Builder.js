@@ -21,8 +21,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Builder = void 0;
 const ROT = __importStar(require("rot-js"));
-const game_1 = require("./game");
 const Display_1 = require("./Display");
+const Game_1 = require("./Game");
 class Builder {
     constructor(width, height, depth, ratio, iterations, tilesFilled) {
         this.done = false;
@@ -93,7 +93,7 @@ class Builder {
         this._regions[z][x][y] = region;
         while (tiles.length > 0) {
             tile = tiles.pop();
-            neighbors = game_1.Game.getNeighborPositions(tile.x, tile.y);
+            neighbors = Game_1.Game.getNeighborPositions(tile.x, tile.y);
             while (neighbors.length > 0) {
                 tile = neighbors.pop();
                 if (this._canFillRegion(tile.x, tile.y, z)) {

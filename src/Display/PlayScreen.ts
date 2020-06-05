@@ -1,8 +1,9 @@
 import * as ROT from 'rot-js';
 
+import { Player } from '../ECS';
 import { Builder } from '../Builder';
 import { Game } from '../Game';
-import { IScreen, Map, Player, Tile } from './';
+import { IScreen, Map, Tile } from './';
 
 class PlayScreen implements IScreen
 {
@@ -40,11 +41,8 @@ class PlayScreen implements IScreen
     let tilesFilled = 50;
 
     let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
-    
     this.map = new Map(tiles, this._player);
     this.map.engine.start();
-
-    // this._player.messages.push("Hello, player...");
   }
 
   public exit(): void
@@ -90,7 +88,7 @@ class PlayScreen implements IScreen
           let darken = (color: [number, number, number]): [number, number, number] => {
             let darkerColor = ROT.Color.interpolate(ROT.Color.multiply(color, [50, 50, 50]), [0, 0, 0]);
             return darkerColor;
-          }
+          };
 
           if (visibleCells[x+','+y]) {
             background = tile.bg;
@@ -120,16 +118,8 @@ class PlayScreen implements IScreen
         );
     }
 
-    // Render messages
-    let messages = this._player.messages;
-    let messageY = 0;
-    for (let i = 0; i < messages.length; i++) {
-      messageY += display.drawText(
-        0,
-        messageY,
-        '%c{white}%b{black}' + messages[i]
-      )
-    }
+    this.game.messageManager.renderMessage(0, 0, 'position');
+    this.game.messageManager.renderMessage(0, 39, 'tryMove', 'up');
   }
 
   public handleInput(inputType: string, inputData: any): void
@@ -163,8 +153,11 @@ class PlayScreen implements IScreen
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
     this._player.tryMove(newX, newY, newZ, this.map);
-    this.game.sendMessage(this._player, "Position: %s", [this._player.x + "," + this._player.y])
-    // console.log("Position: %s", [this._player.x + "," + this._player.y]);
+    this.game.messageManager.sendMessage(
+      this._player, 
+      'position', 
+      "Position: %s", [this._player.x + "," + this._player.y]
+    );
   }
 }
 

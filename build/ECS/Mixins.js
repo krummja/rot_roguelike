@@ -1,41 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Actor = exports.Recipient = exports.Sight = exports.Moveable = void 0;
 const ts_mixer_1 = require("ts-mixer");
-const _1 = require("./");
+const Game_1 = require("../Game");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
 ts_mixer_1.settings.initFunction = 'init';
-class Entity extends _1.Glyph {
-    constructor(properties) {
-        super(properties);
-        this._name = properties['name'] || ' ';
-        this._x = properties['x'] || 0;
-        this._y = properties['y'] || 0;
-        this._z = properties['z'] || 0;
-        this.map = null;
-    }
-    // I think the movement system is changing the Entity base class's x,y,z values...
-    get name() { return this._name; }
-    set name(v) { this._name = v; }
-    get x() { return this._x; }
-    set x(v) { this._x = v; }
-    get y() { return this._y; }
-    set y(v) { this._y = v; }
-    get z() { return this._z; }
-    set z(v) { this._z = v; }
-    setPosition(x, y, z) {
-        this._x = x;
-        this._y = y;
-        this._z = z;
-    }
-}
 class Moveable {
-    constructor(properties) {
+    init(properties) {
         this.properties = properties;
         this.x = this.properties['x'];
         this.y = this.properties['y'];
         this.z = this.properties['z'];
-    }
-    init(properties) {
+        this._EVENTS = Game_1.Game.EVENTS;
         this.tryMove = (x, y, z, map) => {
             let tile = map.getTile(x, y, this.z);
             if (z < this.z) {
@@ -43,9 +19,10 @@ class Moveable {
                     this.x = x;
                     this.y = y;
                     this.z = z;
+                    this._EVENTS.emit('tryMove', 'You follow the passage upward.');
                 }
                 else {
-                    console.log("You can't ascend here!");
+                    this._EVENTS.emit('tryMove', 'You can\'t ascend here!');
                 }
             }
             else if (z > this.z) {
@@ -53,19 +30,22 @@ class Moveable {
                     this.x = x;
                     this.y = y;
                     this.z = z;
+                    this._EVENTS.emit('tryMove', 'You follow the passage downward.');
                 }
                 else {
-                    console.log("You can't descend here!");
+                    this._EVENTS.emit('tryMove', 'You can\'t descend here!');
                 }
             }
             else if (tile.walkable) {
                 this.x = x;
                 this.y = y;
                 this.z = z;
+                this._EVENTS.emit('tryMove', ' ');
                 return true;
             }
             else if (tile.diggable) {
                 map.dig(x, y, z);
+                this._EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
                 return true;
             }
             return false;
@@ -76,41 +56,38 @@ class Moveable {
         };
     }
 }
+exports.Moveable = Moveable;
 class Sight {
-    constructor(properties) {
-        this.properties = properties;
-        this._sightRadius = properties['sightRadius'];
-    }
     get sightRadius() { return this._sightRadius; }
     set sightRadius(value) { this._sightRadius = value; }
     init(properties) {
+        this.properties = properties;
         this._sightRadius = properties['sightRadius'] || 5;
     }
 }
-class Actor {
-    constructor(properties, game, map) {
-        this.properties = properties;
-        this.game = game;
-        this.map = map;
-    }
-    init(properties) {
-        this.act = () => {
-            this.game.refresh();
-            this.map.engine.lock();
+exports.Sight = Sight;
+class Recipient {
+    get messages() { return this._messages; }
+    init() {
+        this._messages = {
+            position: [],
+            tryMove: [],
+            combat: []
+        };
+        this.receiveMessage = (sender, message) => {
+            this._messages[sender].push(message);
         };
     }
 }
-class MessageRecipient {
-    constructor() {
-        this.name = 'Recipient';
-    }
-    get messages() { return this._messages; }
-    init(template) {
-        this._messages = [];
-    }
-    receiveMessage(message) {
-        this._messages.push(message);
+exports.Recipient = Recipient;
+class Actor extends Recipient {
+    init() {
+        this.act = () => {
+            this.game.refresh();
+            this.map.engine.lock();
+            this.game.messageManager.clearMessages(0, 'position');
+            this.game.messageManager.clearMessages(3, 'tryMove');
+        };
     }
 }
-class Player extends ts_mixer_1.Mixin(Entity, Moveable, Sight, Actor, MessageRecipient) {
-}
+exports.Actor = Actor;

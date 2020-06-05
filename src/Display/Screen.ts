@@ -1,5 +1,5 @@
 import * as ROT from 'rot-js';
-import { Player } from '.';
+import { Player } from '../ECS';
 
 
 interface IScreen

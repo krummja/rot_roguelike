@@ -21,7 +21,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Map = void 0;
 const ROT = __importStar(require("rot-js"));
-const _1 = require(".");
+const _1 = require("./");
 class Map {
     constructor(tiles, player) {
         this._tiles = tiles;
