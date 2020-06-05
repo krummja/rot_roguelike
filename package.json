@@ -24,8 +24,12 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.10.2",
     "@bryntum/chronograph": "^1.0.1",
+    "@types/sprintf": "^0.1.0",
+    "babel": "^6.23.0",
     "chronograph": "0.0.0",
+    "sprintf": "^0.1.5",
     "ts-mixer": "^5.2.1"
   }
 }

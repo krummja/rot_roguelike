@@ -113,7 +113,19 @@ class Actor {
     }
 }
 exports.Actor = Actor;
-class Player extends ts_mixer_1.Mixin(Entity, Moveable, Sight, Actor) {
+class MessageRecipient {
+    constructor() {
+        this.name = 'Recipient';
+    }
+    get messages() { return this._messages; }
+    init(template) {
+        this._messages = [];
+    }
+    receiveMessage(message) {
+        this._messages.push(message);
+    }
+}
+class Player extends ts_mixer_1.Mixin(Entity, Moveable, Sight, Actor, MessageRecipient) {
 }
 exports.Player = Player;
 class Mob extends ts_mixer_1.Mixin(Entity, Moveable, Actor) {

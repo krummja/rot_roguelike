@@ -91,7 +91,7 @@ class Map {
     }
     setExplored(x, y, z, state) {
         let tile = this.getTile(x, y, z);
-        if (tile.walkable || tile.diggable || tile.traversable) {
+        if (tile.walkable || tile.diggable || tile.traversable['open'] === true) {
             this._explored[z][x][y] = state;
         }
     }

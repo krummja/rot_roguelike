@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
+const sprintf_1 = require("sprintf");
 const ROT = __importStar(require("rot-js"));
 const utils_1 = require("./utils");
 class Game {
@@ -91,6 +92,12 @@ class Game {
             }
         }
         return utils_1.shuffleCoordArray(tiles);
+    }
+    sendMessage(recipient, message, args) {
+        if (args) {
+            message = sprintf_1.vsprintf(message, args);
+        }
+        recipient.receiveMessage(message);
     }
 }
 exports.Game = Game;

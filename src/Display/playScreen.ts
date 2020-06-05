@@ -63,6 +63,7 @@ class PlayScreen implements IScreen
     let map = this.map;
     let currentDepth = this._player.z;
 
+    // Handle FOV and explored flagging
     map.getFov(this._player.z).compute(
       this._player.x, 
       this._player.y, 
@@ -114,14 +115,23 @@ class PlayScreen implements IScreen
         (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString()
         );
     }
+
+    // Render messages
+    let messages = this._player.messages;
+    let messageY = 0;
+    for (let i = 0; i < messages.length; i++) {
+      messageY += display.drawText(
+        0,
+        messageY,
+        '%c{white}%b{black}' + messages[i]
+      )
+    }
   }
 
   public handleInput(inputType: string, inputData: any): void
   {
     if (inputType === 'keydown') {
-      if (inputData.keyCode === ROT.KEYS.VK_RETURN) {
-        console.log('Enter key pressed!');
-      }
+      
       if (inputData.keyCode === ROT.KEYS.VK_NUMPAD4) {
         this.move(-1, 0, 0);
       } else if (inputData.keyCode === ROT.KEYS.VK_NUMPAD6) {
@@ -137,8 +147,15 @@ class PlayScreen implements IScreen
       } else {
         return;
       }
+
       this.map.engine.unlock();
       this.game.refresh();
+
+      // Update the message display
+      if (this._player.messages.length <= 2) {
+        this._player.messages.shift();
+      }
+      this.game.sendMessage(this._player, "Position: %s", [this._player.x + "," +this._player.y])
     }
   }
 
@@ -148,7 +165,7 @@ class PlayScreen implements IScreen
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
     this._player.tryMove(newX, newY, newZ, this.map);
-    // console.log(this.map.explored);
+
   }
 }
 

@@ -1,6 +1,8 @@
+import { vsprintf } from 'sprintf';
 import * as ROT from 'rot-js';
 import {Screen} from './types';
 import { shuffleCoordArray } from './utils';
+import { Player } from './Display';
 
 
 class Game
@@ -95,6 +97,14 @@ class Game
       }
     }
     return shuffleCoordArray(tiles);
+  }
+
+  public sendMessage(recipient: Player, message: string, args: any)
+  {
+    if (args) {
+      message = vsprintf(message, args);
+    }
+    recipient.receiveMessage(message);
   }
 }
 

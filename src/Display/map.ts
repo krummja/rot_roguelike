@@ -2,7 +2,6 @@ import * as ROT from 'rot-js';
 import Engine from 'rot-js/lib/engine';
 import Scheduler from 'rot-js/lib/scheduler/scheduler';
 import { Player, Tile, Entity, Actor } from '.';
-import DiscreteShadowcasting from 'rot-js/lib/fov/discrete-shadowcasting';
 import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
 
 
@@ -101,7 +100,7 @@ class Map
   public setExplored(x: number, y: number, z: number, state: boolean) 
   {
     let tile = this.getTile(x, y, z)
-    if (tile.walkable || tile.diggable || tile.traversable) {
+    if (tile.walkable || tile.diggable || tile.traversable['open'] === true) {
       this._explored[z][x][y] = state;
     }
   }

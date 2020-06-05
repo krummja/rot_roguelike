@@ -103,6 +103,7 @@ class Moveable
           this.z = z;
         } else {
           console.log("You can't ascend here!");
+          
         }
       } else if (z > this.z) {
         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
@@ -174,8 +175,26 @@ class Actor
   }
 }
 
+class MessageRecipient
+{
+  public name: string = 'Recipient';
 
-class Player extends Mixin(Entity, Moveable, Sight, Actor) {}
+  public get messages(): Array<string> { return this._messages; }
+  private _messages: Array<string>;
+
+  protected init(template: any): void
+  {
+    this._messages = [];
+  }
+
+  public receiveMessage(message: string): void
+  {
+    this._messages.push(message);
+  }
+}
+
+
+class Player extends Mixin(Entity, Moveable, Sight, Actor, MessageRecipient) {}
 class Mob extends Mixin(Entity, Moveable, Actor) {}
 
 export { Entity, Player, Mob, Actor };
