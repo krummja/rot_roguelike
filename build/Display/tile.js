@@ -42,8 +42,12 @@ let Tile = /** @class */ (() => {
             return new Tile({});
         }
         static floorTile() {
-            // let colors = ['#29231c', '#332d25', '#25211d', '#292018']
-            let colors = [[41, 35, 28], [51, 45, 37], [37, 33, 29], [41, 32, 24]];
+            let colors = [
+                [41, 35, 28],
+                [51, 45, 37],
+                [37, 33, 29],
+                [41, 32, 24]
+            ];
             return new Tile({
                 character: ' ',
                 background: this.pickColor(colors),
@@ -56,8 +60,12 @@ let Tile = /** @class */ (() => {
             });
         }
         static wallTile() {
-            // let colors = ['#9a7e61', '#a78a6d', '#a08467', '#ad9173'];
-            let colors = [[154, 126, 97], [167, 138, 109], [160, 132, 103], [173, 145, 115]];
+            let colors = [
+                [154, 126, 97],
+                [167, 138, 109],
+                [160, 132, 103],
+                [173, 145, 115]
+            ];
             return new Tile({
                 character: ' ',
                 background: this.pickColor(colors),
@@ -70,7 +78,12 @@ let Tile = /** @class */ (() => {
             });
         }
         static stairsUpTile() {
-            let colors = [[41, 35, 28], [51, 45, 37], [37, 33, 29], [41, 32, 24]];
+            let colors = [
+                [41, 35, 28],
+                [51, 45, 37],
+                [37, 33, 29],
+                [41, 32, 24]
+            ];
             return new Tile({
                 character: '▲',
                 foreground: [255, 255, 255],
@@ -84,7 +97,12 @@ let Tile = /** @class */ (() => {
             });
         }
         static stairsDownTile() {
-            let colors = [[41, 35, 28], [51, 45, 37], [37, 33, 29], [41, 32, 24]];
+            let colors = [
+                [41, 35, 28],
+                [51, 45, 37],
+                [37, 33, 29],
+                [41, 32, 24]
+            ];
             return new Tile({
                 character: '▼',
                 foreground: [200, 200, 200],

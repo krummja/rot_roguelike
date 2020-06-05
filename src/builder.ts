@@ -1,8 +1,6 @@
 import * as ROT from 'rot-js';
 import { Game} from './game';
 import { Tile } from './Display';
-import { shuffleCoordArray } from './utils';
-import { EVENTS } from './utils';
 
 type Map = Array<Array<Tile>>;
 type Connection = { [key: string]: boolean };
@@ -205,8 +203,6 @@ class Builder
         }
       }
     }
-
-    EVENTS.emit('done')
   }
 
 }

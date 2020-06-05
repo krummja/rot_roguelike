@@ -1,18 +1,30 @@
-interface Lengthwise { length: number; }
+import { Mixin } from 'ts-mixer';
 
-// arg can be Object {... length: value, ...} or an array.
-function loggingIdentity<T extends Lengthwise>(arg: T): T {
-  console.log(arg.length);
-  return arg;
+
+class Foo
+{
+  public makeFoo(): string {
+    console.log("foo");
+    return 'foo';
+  }
 }
 
-let test = loggingIdentity([0, 1, 2]);
-console.log(test.length);
+class Bar
+{
+  public makeBar(): string {
+    console.log("bar");
+    return 'bar';
+  }
+}
 
-import * as Mixins from './mixins2';
+class FooBar extends Mixin(Foo, Bar)
+{
+  
+}
 
 
-let rectangle: Mixins.Rectangle = new Mixins.Rectangle(4, 3);
+let foobar = new FooBar();
 
-let display = rectangle.h;
-console.log(display);
+
+foobar.makeFoo();
+foobar.makeBar();

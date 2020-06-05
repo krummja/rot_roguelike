@@ -6,9 +6,11 @@ class LeftPanel {
         this._game = game;
         this._container = document.getElementById("left-panel");
         let textBox = document.createElement("span");
-        let text = document.createTextNode("Position: " + "... placeholder");
-        textBox.appendChild(text);
-        this._container.appendChild(textBox);
+        // let text = document.createTextNode(
+        //   "Position: " + "... placeholder"
+        // );
+        // textBox.appendChild(text);
+        // this._container.appendChild(textBox);
     }
 }
 exports.LeftPanel = LeftPanel;

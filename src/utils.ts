@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { Tile } from './Display';
 
 function shuffleCoordArray(array: Array<{x: number, y: number}>): Array<{x: number, y: number}> {
   let shuffled: Array<{x: number, y: number}>
@@ -10,5 +11,7 @@ function shuffleCoordArray(array: Array<{x: number, y: number}>): Array<{x: numb
 }
 
 const EVENTS = new EventEmitter();
+
+
 
 export { shuffleCoordArray, EVENTS };

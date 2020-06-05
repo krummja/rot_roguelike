@@ -10,7 +10,8 @@ Object.defineProperty(exports, "StartScreen", { enumerable: true, get: function 
 const tile_1 = require("./tile");
 Object.defineProperty(exports, "Glyph", { enumerable: true, get: function () { return tile_1.Glyph; } });
 Object.defineProperty(exports, "Tile", { enumerable: true, get: function () { return tile_1.Tile; } });
-const entity_1 = require("./entity");
-Object.defineProperty(exports, "Entity", { enumerable: true, get: function () { return entity_1.Entity; } });
-Object.defineProperty(exports, "Player", { enumerable: true, get: function () { return entity_1.Player; } });
-Object.defineProperty(exports, "Actor", { enumerable: true, get: function () { return entity_1.Actor; } });
+const mixins_1 = require("./mixins");
+Object.defineProperty(exports, "Entity", { enumerable: true, get: function () { return mixins_1.Entity; } });
+Object.defineProperty(exports, "Actor", { enumerable: true, get: function () { return mixins_1.Actor; } });
+const entities_1 = require("./entities");
+Object.defineProperty(exports, "Player", { enumerable: true, get: function () { return entities_1.Player; } });

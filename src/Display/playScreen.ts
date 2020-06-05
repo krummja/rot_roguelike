@@ -1,7 +1,8 @@
 import * as ROT from 'rot-js';
 import { Builder } from '../builder';
 import { Game } from '../game';
-import { Map, IScreen, Tile, Entity, Player } from './';
+import { Map, IScreen, Tile } from './';
+import { Entity, Player } from './';
 
 class PlayScreen implements IScreen
 {
@@ -14,6 +15,7 @@ class PlayScreen implements IScreen
 
   public get player(): Player { return this._player; }
   private readonly _player: Player;
+
 
   constructor(game: Game)
   {
@@ -41,6 +43,8 @@ class PlayScreen implements IScreen
     
     this.map = new Map(tiles, this._player);
     this.map.engine.start();
+
+    // this._player.messages.push("Hello, player...");
   }
 
   public exit(): void
@@ -150,12 +154,6 @@ class PlayScreen implements IScreen
 
       this.map.engine.unlock();
       this.game.refresh();
-
-      // Update the message display
-      if (this._player.messages.length <= 2) {
-        this._player.messages.shift();
-      }
-      this.game.sendMessage(this._player, "Position: %s", [this._player.x + "," +this._player.y])
     }
   }
 
@@ -165,7 +163,8 @@ class PlayScreen implements IScreen
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
     this._player.tryMove(newX, newY, newZ, this.map);
-
+    this.game.sendMessage(this._player, "Position: %s", [this._player.x + "," + this._player.y])
+    // console.log("Position: %s", [this._player.x + "," + this._player.y]);
   }
 }
 

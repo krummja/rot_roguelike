@@ -101,13 +101,10 @@ class Game
 
   public sendMessage(recipient: Player, message: string, args: any)
   {
-    if (args) {
-      message = vsprintf(message, args);
-    }
+    message = vsprintf(message, args);
     recipient.receiveMessage(message);
   }
 }
-
 
 
 export {Game};

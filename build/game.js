@@ -94,9 +94,7 @@ class Game {
         return utils_1.shuffleCoordArray(tiles);
     }
     sendMessage(recipient, message, args) {
-        if (args) {
-            message = sprintf_1.vsprintf(message, args);
-        }
+        message = sprintf_1.vsprintf(message, args);
         recipient.receiveMessage(message);
     }
 }

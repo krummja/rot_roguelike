@@ -52,28 +52,6 @@ class Entity extends Glyph
 }
 
 
-
-class HitCounter
-{
-  private readonly _multiplier: number;
-  private _totalHits: number;
-
-  public incrementHit: Function;
-  public getTotalHits: Function;
-
-
-  constructor(properties: IProperties)
-  {
-    this._multiplier = properties["multiplier"];
-    this._totalHits = 0;
-    this.incrementHit = (): void => { this._totalHits += this._multiplier; }
-    this.getTotalHits = (): number => { return this._totalHits; }
-  }
-}
-
-class Combatant extends Mixin(Entity, HitCounter) {}
-
-
 class Moveable
 {
   public x: number;
@@ -195,6 +173,3 @@ class MessageRecipient
 
 
 class Player extends Mixin(Entity, Moveable, Sight, Actor, MessageRecipient) {}
-class Mob extends Mixin(Entity, Moveable, Actor) {}
-
-export { Entity, Player, Mob, Actor };

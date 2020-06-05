@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Actor = exports.Mob = exports.Player = exports.Entity = void 0;
 const ts_mixer_1 = require("ts-mixer");
 const _1 = require("./");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
@@ -28,17 +27,6 @@ class Entity extends _1.Glyph {
         this._y = y;
         this._z = z;
     }
-}
-exports.Entity = Entity;
-class HitCounter {
-    constructor(properties) {
-        this._multiplier = properties["multiplier"];
-        this._totalHits = 0;
-        this.incrementHit = () => { this._totalHits += this._multiplier; };
-        this.getTotalHits = () => { return this._totalHits; };
-    }
-}
-class Combatant extends ts_mixer_1.Mixin(Entity, HitCounter) {
 }
 class Moveable {
     constructor(properties) {
@@ -112,7 +100,6 @@ class Actor {
         };
     }
 }
-exports.Actor = Actor;
 class MessageRecipient {
     constructor() {
         this.name = 'Recipient';
@@ -127,7 +114,3 @@ class MessageRecipient {
 }
 class Player extends ts_mixer_1.Mixin(Entity, Moveable, Sight, Actor, MessageRecipient) {
 }
-exports.Player = Player;
-class Mob extends ts_mixer_1.Mixin(Entity, Moveable, Actor) {
-}
-exports.Mob = Mob;

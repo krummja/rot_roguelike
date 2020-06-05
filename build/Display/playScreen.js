@@ -23,13 +23,14 @@ exports.PlayScreen = void 0;
 const ROT = __importStar(require("rot-js"));
 const builder_1 = require("../builder");
 const _1 = require("./");
+const _2 = require("./");
 class PlayScreen {
     constructor(game) {
         this.mapArray = null;
         this.mapWidth = 200;
         this.mapHeight = 100;
         this.game = game;
-        this._player = new _1.Player({
+        this._player = new _2.Player({
             character: '@',
             name: 'Player',
             foreground: [228, 79, 163],
@@ -48,6 +49,7 @@ class PlayScreen {
         let tiles = new builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
         this.map = new _1.Map(tiles, this._player);
         this.map.engine.start();
+        // this._player.messages.push("Hello, player...");
     }
     exit() {
         console.log('PlayScreen.exit:   Exited play screen.');
@@ -125,10 +127,6 @@ class PlayScreen {
             }
             this.map.engine.unlock();
             this.game.refresh();
-            if (this._player.messages.length <= 2) {
-                this._player.messages.shift();
-            }
-            this.game.sendMessage(this._player, "Position: %s", [this._player.x + "," + this._player.y]);
         }
     }
     move(dX, dY, dZ) {
@@ -136,6 +134,8 @@ class PlayScreen {
         let newY = this._player.y + dY;
         let newZ = this._player.z + dZ;
         this._player.tryMove(newX, newY, newZ, this.map);
+        this.game.sendMessage(this._player, "Position: %s", [this._player.x + "," + this._player.y]);
+        // console.log("Position: %s", [this._player.x + "," + this._player.y]);
     }
 }
 exports.PlayScreen = PlayScreen;
