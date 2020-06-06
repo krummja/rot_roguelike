@@ -24,12 +24,11 @@ const ROT = __importStar(require("rot-js"));
 const _1 = require("./");
 class Map {
     constructor(tiles, player) {
-        console.log("Map constructor.");
         this._tiles = tiles;
         this._depth = tiles.length;
         this._width = tiles[0].length;
         this._height = tiles[0][0].length;
-        this._entities = {};
+        this._entities = [];
         this._scheduler = new ROT.Scheduler.Simple();
         this.engine = new ROT.Engine(this._scheduler);
         this.addEntityAtRandomPosition(player, 0);
@@ -119,60 +118,33 @@ class Map {
         return { x: x, y: y, z: z };
     }
     getEntityAt(x, y, z) {
-        return this._entities[x + ',' + y + ',' + z];
-    }
-    addEntityAtRandomPosition(entity, z) {
-        console.log("addEntityAtRandomPosition.");
-        let position = this.getRandomFloorPosition(z);
-        console.log(position);
-        entity.x = position.x;
-        entity.y = position.y;
-        entity.z = position.z;
-        console.log(entity);
-        this.addEntity(entity);
+        for (let i = 0; i < this._entities.length; i++) {
+            if (this._entities[i].x == x &&
+                this._entities[i].y == y &&
+                this._entities[i].z == z) {
+                return this._entities[i];
+            }
+        }
+        return false;
     }
     addEntity(entity) {
-        console.log("addEntity");
+        if (entity.x < 0 || entity.x >= this._width ||
+            entity.y < 0 || entity.y >= this._height ||
+            entity.z < 0 || entity.z >= this._depth) {
+            throw new Error('Adding entity out of bounds');
+        }
         entity.map = this;
-        console.log(entity);
-        this.updateEntityPosition(entity);
+        this._entities.push(entity);
         if (entity.hasOwnProperty('act')) {
             this._scheduler.add(entity, true);
         }
     }
-    removeEntity(entity) {
-        let key = entity.x + ',' + entity.y + ',' + entity.z;
-        if (this._entities[key] == entity) {
-            delete this._entities[key];
-        }
-        if (entity.hasOwnProperty('act')) {
-            this._scheduler.remove(entity);
-        }
-    }
-    updateEntityPosition(entity, oldX, oldY, oldZ) {
-        console.log("updateEntityPosition");
-        if (typeof (oldX) !== "undefined") {
-            let oldKey = oldX + ',' + oldY + ',' + oldZ;
-            if (this._entities[oldKey] == entity) {
-                delete this._entities[oldKey];
-            }
-        }
-        console.log(entity.x);
-        console.log(entity.y);
-        console.log(entity.z);
-        console.log(this._width);
-        console.log(this._height);
-        console.log(this._depth);
-        if (entity.x < 0 || entity.x >= this._width ||
-            entity.y < 0 || entity.y >= this._height ||
-            entity.z < 0 || entity.z >= this._depth) {
-            throw new Error('Entity\'s position is out of bounds.');
-        }
-        let key = entity.x + ',' + entity.y + ',' + entity.z;
-        if (this._entities[key]) {
-            throw new Error('Tried to add an entity at an occupied position.');
-        }
-        this._entities[key] = entity;
+    addEntityAtRandomPosition(entity, z) {
+        let position = this.getRandomFloorPosition(z);
+        entity.x = position.x;
+        entity.y = position.y;
+        entity.z = position.z;
+        this.addEntity(entity);
     }
 }
 exports.Map = Map;

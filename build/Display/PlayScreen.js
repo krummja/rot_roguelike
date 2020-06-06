@@ -69,7 +69,7 @@ class PlayScreen {
         let map = this.map;
         let currentDepth = this._player.z;
         // Handle FOV and explored flagging
-        map.getFov(currentDepth).compute(this._player.x, this._player.y, this._player.sightRadius, (x, y, r, vis) => {
+        map.getFov(this._player.z).compute(this._player.x, this._player.y, this._player.sightRadius, (x, y, r, vis) => {
             visibleCells[x + "," + y] = true;
             map.setExplored(x, y, currentDepth, true);
         });
