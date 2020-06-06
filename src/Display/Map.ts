@@ -3,7 +3,7 @@ import Engine from 'rot-js/lib/engine';
 import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
 import Scheduler from 'rot-js/lib/scheduler/scheduler';
 
-import { Entity, Player } from '../ECS';
+import { Actor, Entity, Player } from '../ECS';
 import { Tile } from './';
 
 class Map
@@ -11,21 +11,21 @@ class Map
   public engine: Engine;
   public player: Player;
   
-  public get tiles(): Array<Array<Array<Tile>>> { return this._tiles };
-  public set tiles(v: Array<Array<Array<Tile>>>) { this._tiles = v };
+  public get tiles(): Array<Array<Array<Tile>>> { return this._tiles; };
+  public set tiles(v: Array<Array<Array<Tile>>>) { this._tiles = v; };
   private _tiles: Array<Array<Array<Tile>>>;
   
-  public get width(): number { return this._width };
-  public set width(v: number) { this._width = v };
+  public get width(): number { return this._width; };
+  public set width(v: number) { this._width = v; };
   private _width: number;
   
-  public get height(): number { return this._height };
-  public set height(v: number) { this._height = v };
+  public get height(): number { return this._height; };
+  public set height(v: number) { this._height = v; };
   private _height: number;
   
-  public get entities(): Array<Entity> { return this._entities; }
-  public set entities(value: Array<Entity>) { this._entities = value; }
-  private _entities: Array<Entity>;
+  public get entities(): {[key: string]: Entity} { return this._entities; }
+  public set entities(value: {[key: string]: Entity}) { this._entities = value; }
+  private _entities: {[key: string]: Entity};
   
   public get scheduler(): Scheduler { return this._scheduler; }
   public set scheduler(value: Scheduler) { this._scheduler = value; }
@@ -43,9 +43,10 @@ class Map
     this._depth = tiles.length;
     this._width = tiles[0].length;
     this._height = tiles[0][0].length;
-    this._entities = [];
+    this._entities = {};
     this._scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this._scheduler);
+    
     this.addEntityAtRandomPosition(player, 0);
 
     this._fov = [];
@@ -100,7 +101,7 @@ class Map
 
   public setExplored(x: number, y: number, z: number, state: boolean) 
   {
-    let tile = this.getTile(x, y, z)
+    let tile = this.getTile(x, y, z);
     if (tile.walkable || tile.diggable || tile.traversable['open'] === true) {
       this._explored[z][x][y] = state;
     }
@@ -131,43 +132,89 @@ class Map
       x = Math.floor(Math.random() * this._width);
       y = Math.floor(Math.random() * this._height);
     }
-    return { x: x, y: y, z: z }
+    return { x: x, y: y, z: z };
   }
 
-  public getEntityAt(x: number, y: number, z: number): Entity | boolean
+  public getEntityAt(x: number, y: number, z: number): Entity
   {
-    for (let i = 0; i < this._entities.length; i++) {
-      if (this._entities[i].x == x &&
-          this._entities[i].y == y &&
-          this._entities[i].z == z) {
-        return this._entities[i];
+    return this._entities[x + ',' + y + ',' + z];
+  }
+
+  public getEntitiesWithinRadius(x: number, y: number, z: number, radius: number)
+  {
+    let results = [];
+
+    let leftX = x - radius;
+    let rightX = x + radius;
+    let topY = y - radius;
+    let bottomY = y + radius;
+
+    for (let key in this._entities) {
+      let entity = this._entities[key];
+      if (entity.x >= leftX && entity.x <= rightX &&
+          entity.y >= topY  && entity.y <= bottomY &&
+          entity.z == z) {
+        results.push(entity);
       }
-    }
-    return false;
-  }
-
-  public addEntity(entity: Entity): void
-  {
-    if (entity.x < 0 || entity.x >= this._width ||
-        entity.y < 0 || entity.y >= this._height ||
-        entity.z < 0 || entity.z >= this._depth) {
-      throw new Error('Adding entity out of bounds');
-    }
-
-    entity.map = this;
-    this._entities.push(entity);
-    if (entity.hasOwnProperty('act')) {
-      this._scheduler.add(entity, true);
     }
   }
 
   public addEntityAtRandomPosition(entity: Entity, z: number): void
   {
     let position = this.getRandomFloorPosition(z);
+    
     entity.x = position.x;
     entity.y = position.y;
     entity.z = position.z;
+    
     this.addEntity(entity);
+  }
+
+  public addEntity(entity: Entity)
+  {
+    entity.map = this;
+    
+    this.updateEntityPosition(entity);
+
+    if (entity.hasOwnProperty('act')) {
+      this._scheduler.add(entity, true);
+    }
+  }
+
+  public removeEntity(entity: Entity)
+  {
+    let key = entity.x + ',' + entity.y + ',' + entity.z;
+    if (this._entities[key] == entity) {
+      delete this._entities[key];
+    }
+
+    if (entity.hasOwnProperty('act')) {
+      this._scheduler.remove(entity);
+    }
+  }
+
+
+  public updateEntityPosition(entity: Entity, oldX?: number, oldY?: number, oldZ?: number)
+  {    
+    if (typeof(oldX) !== "undefined") {
+      let oldKey = oldX + ',' + oldY + ',' + oldZ;
+      if (this._entities[oldKey] == entity) {
+        delete this._entities[oldKey];
+      }
+    }
+  
+    if (entity.x < 0 || entity.x >= this._width  ||
+        entity.y < 0 || entity.y >= this._height ||
+        entity.z < 0 || entity.z >= this._depth) {
+      throw new Error('Entity\'s position is out of bounds.');
+    }
+
+    let key = entity.x + ',' + entity.y + ',' + entity.z;
+    if (this._entities[key]) {
+      throw new Error('Tried to add an entity at an occupied position.');
+    }
+
+    this._entities[key] = entity;
   }
 }
 

@@ -72,7 +72,7 @@ class PlayScreen implements IScreen
     let currentDepth = this._player.z;
 
     // Handle FOV and explored flagging
-    map.getFov(this._player.z).compute(
+    map.getFov(currentDepth).compute(
       this._player.x, 
       this._player.y, 
       this._player.sightRadius, 
