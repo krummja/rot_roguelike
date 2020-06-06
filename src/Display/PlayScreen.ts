@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
-import { Player } from '../ECS';
+import { Player, Entity, NPC } from '../ECS';
 import { Builder } from '../Builder';
 import { Game } from '../Game';
 import { IScreen, Map, Tile } from './';
@@ -20,6 +20,7 @@ class PlayScreen implements IScreen
   private readonly _player: Player;
 
   private _EVENTS: EventEmitter;
+
 
   constructor(game: Game)
   {
@@ -61,6 +62,8 @@ class PlayScreen implements IScreen
     let screenWidth = this.game.screenWidth;
     let screenHeight = this.game.screenHeight;
 
+    let entities = this.map.entities;
+    
     // Figure out the viewport dimensions
     let topLeftX = Math.max(0, this._player.x - (screenWidth / 2));
     topLeftX = Math.min(topLeftX, this.map.width - screenWidth);
@@ -70,7 +73,7 @@ class PlayScreen implements IScreen
     let visibleCells: { [key: string]: boolean } = {};
     let map = this.map;
     let currentDepth = this._player.z;
-
+    
     // Handle FOV and explored flagging
     map.getFov(this._player.z).compute(
       this._player.x, 
@@ -113,16 +116,35 @@ class PlayScreen implements IScreen
       }
     }
 
-    // Render the player
-    if (visibleCells[this._player.x + ',' + this._player.y]) {
-      display.draw(
-        this._player.x - topLeftX,
-        this._player.y - topLeftY,
-        this._player.char,
-        (ROT.Color.toHex(this._player.fg)).toString(),
-        (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString()
-        );
+    // Render all entities
+    for (let key in entities) {
+      let entity: Entity = entities[key];
+      if (entity.x >= topLeftX && entity.y >= topLeftY &&
+          entity.x < topLeftX + screenWidth &&
+          entity.y < topLeftY + screenHeight &&
+          entity.z == this._player.z) {
+        if (visibleCells[entity.x + ',' + entity.y]) {
+          display.draw(
+            entity.x - topLeftX,
+            entity.y - topLeftY,
+            entity.char,
+            (ROT.Color.toHex(entity.fg)).toString(),
+            (ROT.Color.toHex(entity.map.getBgTint(entity.x, entity.y, entity.z, this.map))).toString()
+          )
+        }
+      }
     }
+
+    // // Render the player
+    // if (visibleCells[this._player.x + ',' + this._player.y]) {
+    //   display.draw(
+    //     this._player.x - topLeftX,
+    //     this._player.y - topLeftY,
+    //     this._player.char,
+    //     (ROT.Color.toHex(this._player.fg)).toString(),
+    //     (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString()
+    //     );
+    // }
 
     this.game.messageManager.renderMessage(0, 0, 'position');
     this.game.messageManager.renderMessage(0, 55, 'tryMove');
@@ -158,7 +180,7 @@ class PlayScreen implements IScreen
     let newX = this._player.x + dX;
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
-    this._player.tryMove(newX, newY, newZ, this.map);
+    this._player.tryMove(newX, newY, newZ);
     this._EVENTS.emit('position')
   }
 }

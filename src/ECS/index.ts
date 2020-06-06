@@ -1,5 +1,5 @@
-import { Player } from './Entities';
+import { Player, NPC } from './Entities';
 import { Entity } from './Entity';
-import { Actor, Moveable, Recipient, Sight } from './Mixins';
+import { Actor, Recipient, Sight, Combatant, Mob } from './Mixins';
 
-export { Actor, Moveable, Sight, Recipient, Entity, Player };
+export { Actor, Sight, Recipient, Entity, Player, NPC, Mob };

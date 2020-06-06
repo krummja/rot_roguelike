@@ -4,6 +4,7 @@ import { settings } from 'ts-mixer';
 import { Map } from '../Display';
 import { Game } from '../Game';
 import { IProperties } from '../types';
+import { Entity } from '.';
 
 settings.prototypeStrategy = 'copy';
 settings.initFunction = 'init';
@@ -16,79 +17,69 @@ interface IMixin
 }
 
 
-export class Moveable implements IMixin
-{
-  public properties: IProperties;
+// export class Moveable implements IMixin
+// {
+//   public properties: IProperties;
 
-  public x: number;
-  public y: number;
-  public z: number;
+//   public x: number;
+//   public y: number;
+//   public z: number;
 
-  public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
-  public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
+//   public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
+//   public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
   
-  private _EVENTS: EventEmitter;
+//   private _EVENTS: EventEmitter;
 
-  public init(properties: IProperties): void
-  {
-    this.properties = properties;
-    this.x = this.properties['x'];
-    this.y = this.properties['y'];
-    this.z = this.properties['z'];
+//   public init(properties: IProperties): void
+//   {
+//     this.properties = properties;
+//     this.x = this.properties['x'];
+//     this.y = this.properties['y'];
+//     this.z = this.properties['z'];
 
-    this._EVENTS = Game.EVENTS;
+//     this._EVENTS = Game.EVENTS;
 
-    this.tryMove = (
-      x: number, 
-      y: number, 
-      z: number,
-      map: Map
-    ): boolean => {
-      let tile = map.getTile(x, y, this.z);
+//     this.tryMove = (
+//       x: number, 
+//       y: number, 
+//       z: number,
+//       map: Map
+//     ): boolean => {
+//       let tile = map.getTile(x, y, this.z);
 
-      if (z < this.z) {
-        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
-          this.x = x;
-          this.y = y;
-          this.z = z;
-          this._EVENTS.emit('tryMove', 'You follow the passage upward.');
-        } else {
-           this._EVENTS.emit('tryMove', 'You can\'t ascend here!');
-        }
-      } else if (z > this.z) {
-        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
-          this.x = x;
-          this.y = y;
-          this.z = z;
-          this._EVENTS.emit('tryMove', 'You follow the passage downward.');
-        } else {
-          this._EVENTS.emit('tryMove', 'You can\'t descend here!');
-        }
-      } else if (tile.walkable) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this._EVENTS.emit('tryMove', "");
-        return true;
-      } else if (tile.diggable) {
-        map.dig(x, y, z);
-        this._EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
-        return true;
-      }
-      return false;
-    };
-
-    this.getBgTint = (
-      x: number, 
-      y: number, 
-      z: number, 
-      map: Map
-    ): [number, number, number] => {
-      let tile = map.getTile(x, y, z);
-      return tile.bg;
-    };
-  }
-}
+//       if (z < this.z) {
+//         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
+//             this.x = x;
+//             this.y = y;
+//             this.z = z;
+//           this._EVENTS.emit('tryMove', 'You follow the passage upward.');
+//         } else {
+//            this._EVENTS.emit('tryMove', 'You can\'t ascend here!');
+//         }
+//       } else if (z > this.z) {
+//         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
+//           this.x = x;
+//           this.y = y;
+//           this.z = z;
+//           this._EVENTS.emit('tryMove', 'You follow the passage downward.');
+//         } else {
+//           this._EVENTS.emit('tryMove', 'You can\'t descend here!');
+//         }
+//       } else if (tile.walkable) {
+//         this.x = x;
+//         this.y = y;
+//         this.z = z;
+//         this._EVENTS.emit('tryMove', "");
+//         return true;
+//       } else if (tile.diggable) {
+//         map.dig(x, y, z);
+//         this._EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
+//         return true;
+//       }
+//       return false;
+//     };
+//   }
+// }
 
 
 export class Sight implements IMixin
@@ -129,7 +120,7 @@ export class Recipient implements IMixin
 }
 
 
-export class Actor extends Recipient implements IMixin
+export class Actor implements IMixin
 {
   public game: Game;
   public map: Map;
@@ -146,11 +137,51 @@ export class Actor extends Recipient implements IMixin
   }
 }
 
+export class Mob implements IMixin
+{
+  public properties: IProperties;
+
+  public x: number;
+  public y: number;
+  public z: number;
+
+  public game: Game;
+  public map: Map;
+  public act: () => void;
+  public tryMove: (x: number, y: number, z: number) => boolean;
+  
+  public init(properties: IProperties)
+  {
+    this.x = this.properties['x'];
+    this.y = this.properties['y'];
+    this.z = this.properties['z'];
+
+    this.act = (): void => {
+      let moveOffset = (Math.round(Math.random()) === 1) ? 1 : -1;
+      if (Math.round(Math.random()) === 1) {
+        this.tryMove(this.x + moveOffset, this.y, this.z);
+      } else {
+        this.tryMove(this.x, this.y + moveOffset, this.z);
+      }
+      this.game.refresh();
+      this.map.engine.lock();
+    }
+  }
+}
+
 
 export class Combatant implements IMixin
 {
+  public attack: (attacker: Entity, target: Entity) => void;
+  
   public init()
   {
-    
+    Game.EVENTS.on("attack", (attacker: Entity, target: Entity) => {
+      this.attack(attacker, target);
+    });
+
+    this.attack = (attacker: Entity, target: Entity): void => {
+
+    }
   }
 }
