@@ -3,7 +3,7 @@ import { settings } from 'ts-mixer';
 
 import { Map } from '../Display';
 import { Game } from '../Game';
-import { IProperties } from '../types';
+import { IProperties, Position } from '../types';
 import { Entity } from '.';
 
 settings.prototypeStrategy = 'copy';
@@ -120,7 +120,7 @@ export class Recipient implements IMixin
 }
 
 
-export class Actor implements IMixin
+export class PlayerActor implements IMixin
 {
   public game: Game;
   public map: Map;
@@ -137,34 +137,44 @@ export class Actor implements IMixin
   }
 }
 
-export class Mob implements IMixin
+
+export class MobActor implements IMixin
 {
   public properties: IProperties;
-
-  public x: number;
-  public y: number;
-  public z: number;
-
+  
   public game: Game;
   public map: Map;
+  public position: Position;
   public act: () => void;
   public tryMove: (x: number, y: number, z: number) => boolean;
   
-  public init(properties: IProperties)
+  public init()
   {
-    this.x = this.properties['x'];
-    this.y = this.properties['y'];
-    this.z = this.properties['z'];
-
+    this.position = this.properties['position'];
     this.act = (): void => {
-      let moveOffset = (Math.round(Math.random()) === 1) ? 1 : -1;
-      if (Math.round(Math.random()) === 1) {
-        this.tryMove(this.x + moveOffset, this.y, this.z);
-      } else {
-        this.tryMove(this.x, this.y + moveOffset, this.z);
-      }
       this.game.refresh();
       this.map.engine.lock();
+    }
+  }
+}
+
+
+export class WanderActor implements IMixin
+{
+  public properties: IProperties;
+  public position: Position;
+
+  public tryMove: (x: number, y: number, z: number) => boolean;
+
+  public init()
+  {
+    this.position = this.properties['position'];
+
+    let moveOffset = (Math.round(Math.random()) === 1) ? 1 : -1;
+    if (Math.round(Math.random()) === 1) {
+      this.tryMove(this.position['x'] + moveOffset, this.position['y'], this.position['z']);
+    } else {
+      this.tryMove(this.position['x'], this.position['y'] + moveOffset, this.position['z']);
     }
   }
 }

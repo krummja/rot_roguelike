@@ -29,9 +29,13 @@ class Map {
         this._width = tiles[0].length;
         this._height = tiles[0][0].length;
         this._entities = {};
+        // Start the ROT Engine
         this._scheduler = new ROT.Scheduler.Simple();
         this.engine = new ROT.Engine(this._scheduler);
+        // Initialize player
         this.addEntityAtRandomPosition(player, 0);
+        // Initialize mobs
+        // Start FOV calculations
         this._fov = [];
         this.setupFov();
         this._explored = new Array(this._depth);

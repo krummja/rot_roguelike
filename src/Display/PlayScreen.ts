@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
-import { Player, Entity, NPC } from '../ECS';
+import { Player, Entity, Mob } from '../ECS';
 import { Builder } from '../Builder';
 import { Game } from '../Game';
 import { IScreen, Map, Tile } from './';
@@ -134,17 +134,6 @@ class PlayScreen implements IScreen
         }
       }
     }
-
-    // // Render the player
-    // if (visibleCells[this._player.x + ',' + this._player.y]) {
-    //   display.draw(
-    //     this._player.x - topLeftX,
-    //     this._player.y - topLeftY,
-    //     this._player.char,
-    //     (ROT.Color.toHex(this._player.fg)).toString(),
-    //     (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString()
-    //     );
-    // }
 
     this.game.messageManager.renderMessage(0, 0, 'position');
     this.game.messageManager.renderMessage(0, 55, 'tryMove');

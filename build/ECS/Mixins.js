@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Combatant = exports.Mob = exports.Actor = exports.Recipient = exports.Sight = void 0;
+exports.Combatant = exports.WanderActor = exports.MobActor = exports.PlayerActor = exports.Recipient = exports.Sight = void 0;
 const ts_mixer_1 = require("ts-mixer");
 const Game_1 = require("../Game");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
@@ -84,7 +84,7 @@ class Recipient {
     }
 }
 exports.Recipient = Recipient;
-class Actor {
+class PlayerActor {
     init() {
         this.act = () => {
             this.game.refresh();
@@ -94,26 +94,30 @@ class Actor {
         };
     }
 }
-exports.Actor = Actor;
-class Mob {
-    init(properties) {
-        this.x = this.properties['x'];
-        this.y = this.properties['y'];
-        this.z = this.properties['z'];
+exports.PlayerActor = PlayerActor;
+class MobActor {
+    init() {
+        this.position = this.properties['position'];
         this.act = () => {
-            let moveOffset = (Math.round(Math.random()) === 1) ? 1 : -1;
-            if (Math.round(Math.random()) === 1) {
-                this.tryMove(this.x + moveOffset, this.y, this.z);
-            }
-            else {
-                this.tryMove(this.x, this.y + moveOffset, this.z);
-            }
             this.game.refresh();
             this.map.engine.lock();
         };
     }
 }
-exports.Mob = Mob;
+exports.MobActor = MobActor;
+class WanderActor {
+    init() {
+        this.position = this.properties['position'];
+        let moveOffset = (Math.round(Math.random()) === 1) ? 1 : -1;
+        if (Math.round(Math.random()) === 1) {
+            this.tryMove(this.position['x'] + moveOffset, this.position['y'], this.position['z']);
+        }
+        else {
+            this.tryMove(this.position['x'], this.position['y'] + moveOffset, this.position['z']);
+        }
+    }
+}
+exports.WanderActor = WanderActor;
 class Combatant {
     init() {
         Game_1.Game.EVENTS.on("attack", (attacker, target) => {
