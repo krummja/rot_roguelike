@@ -68,7 +68,7 @@ export class Moveable implements IMixin
         this.x = x;
         this.y = y;
         this.z = z;
-        this._EVENTS.emit('tryMove', 'Your footsteps echo...');
+        this._EVENTS.emit('tryMove', "");
         return true;
       } else if (tile.diggable) {
         map.dig(x, y, z);
@@ -141,7 +141,7 @@ export class Actor extends Recipient implements IMixin
       this.game.refresh();
       this.map.engine.lock();
       this.game.messageManager.clearMessages(0, 'position');
-      this.game.messageManager.clearMessages(3, 'tryMove');
+      this.game.messageManager.clearMessages(4, 'tryMove', true);
     };
   }
 }

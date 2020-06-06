@@ -20,21 +20,15 @@ class MessageManager {
         recipient.receiveMessage(sender, message);
     }
     // Change this so that as y decreases, the text fades out
-    renderMessage(x, y, sender, direction = 'down') {
+    renderMessage(x, y, sender) {
         let messages = this._game.currentScreen.player.messages[sender];
         for (let i = 0; i < messages.length; i++) {
-            if (direction === 'up') {
-                y -= this._game.display.drawText(x, y, '%c{white}%b{black}' + messages[i]);
-            }
-            else if (direction === 'down') {
-                y += this._game.display.drawText(x, y, '%c{white}%b{black}' + messages[i]);
-                console.log(y);
-            }
+            y += this._game.display.drawText(x, y, '%c{white}%b{black}' + messages[i]);
         }
     }
-    clearMessages(buffer = 0, sender) {
+    clearMessages(buffer = 0, sender, fade = false) {
         let messages = this._game.currentScreen.player.messages[sender];
-        if (messages.length >= 2 + buffer) {
+        if (messages.length > 1 + buffer) {
             messages.shift();
         }
     }

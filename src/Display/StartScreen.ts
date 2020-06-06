@@ -61,7 +61,7 @@ class StartScreen implements IScreen
         setTimeout(()=>{
           let play = new PlayScreen(start.game);
           start.game.switchScreen(play);
-        }, 3000);
+        }, 1000);
       }
     }
   }

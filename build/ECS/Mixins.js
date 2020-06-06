@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Actor = exports.Recipient = exports.Sight = exports.Moveable = void 0;
+exports.Combatant = exports.Actor = exports.Recipient = exports.Sight = exports.Moveable = void 0;
 const ts_mixer_1 = require("ts-mixer");
 const Game_1 = require("../Game");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
@@ -40,7 +40,7 @@ class Moveable {
                 this.x = x;
                 this.y = y;
                 this.z = z;
-                this._EVENTS.emit('tryMove', 'Your footsteps echo...');
+                this._EVENTS.emit('tryMove', "");
                 return true;
             }
             else if (tile.diggable) {
@@ -86,8 +86,13 @@ class Actor extends Recipient {
             this.game.refresh();
             this.map.engine.lock();
             this.game.messageManager.clearMessages(0, 'position');
-            this.game.messageManager.clearMessages(3, 'tryMove');
+            this.game.messageManager.clearMessages(4, 'tryMove', true);
         };
     }
 }
 exports.Actor = Actor;
+class Combatant {
+    init() {
+    }
+}
+exports.Combatant = Combatant;

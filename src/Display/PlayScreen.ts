@@ -125,7 +125,7 @@ class PlayScreen implements IScreen
     }
 
     this.game.messageManager.renderMessage(0, 0, 'position');
-    this.game.messageManager.renderMessage(0, 56, 'tryMove', 'down');
+    this.game.messageManager.renderMessage(0, 55, 'tryMove');
   }
 
   public handleInput(inputType: string, inputData: any): void

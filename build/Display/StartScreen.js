@@ -60,7 +60,7 @@ class StartScreen {
                 setTimeout(() => {
                     let play = new _1.PlayScreen(start.game);
                     start.game.switchScreen(play);
-                }, 3000);
+                }, 1000);
             }
         }
     }
