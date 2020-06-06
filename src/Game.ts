@@ -1,11 +1,7 @@
 import * as ROT from 'rot-js';
 import { EventEmitter } from 'events';
-import { vsprintf } from 'sprintf';
 
-import { Player } from './ECS';
 import { Screen } from './types';
-import { shuffleCoordArray } from './utils';
-
 import { MessageManager } from './MessageManager';
 
 class Game
@@ -25,15 +21,14 @@ class Game
   
   public get screenWidth(): number { return this._screenWidth; }
   public set screenWidth(v: number) { this._screenWidth = v; }
-  private _screenWidth: number = 64;
+  private _screenWidth: number = 100;
   
   public get screenHeight(): number { return this._screenHeight; }
   public set screenHeight(v: number) { this._screenHeight = v; }
-  private _screenHeight: number = 40;
+  private _screenHeight: number = 60;
   
   private _fontFamily: string = 'Fira Code';
   private _fontStyle: string = 'normal';
-  private _fontSize: number = 12;
   private _spacing: number = 1.0;
   private _squareRatio: boolean = true;
   
@@ -58,10 +53,8 @@ class Game
   public init(): void
   {
     let game = this;
-    let bindEventToScreen = (event: string): void =>
-    {
-      window.addEventListener(event, (e: any): void =>
-      {
+    let bindEventToScreen = (event: string): void => {
+      window.addEventListener(event, (e: any): void => {
         if (game.currentScreen !== null) {
           game.currentScreen.handleInput(event, e);
         }
@@ -80,30 +73,16 @@ class Game
 
   public switchScreen(screen: Screen): void
   {
-    if (this.currentScreen !== null) {
-      this.currentScreen.exit();
+    if (this._currentScreen !== null) {
+      this._currentScreen.exit();
     }
-
-    this.display.clear();
-    this.currentScreen = screen;
-    if (this.currentScreen) {
-      this.currentScreen.enter();
-      this.refresh()
+    
+    this._display.clear();
+    this._currentScreen = screen;
+    if (this._currentScreen) {
+      this._currentScreen.enter();
+      this.refresh();
     }
-  }
-
-  public static getNeighborPositions(x: number, y: number): Array<{x: number, y: number}>
-  {
-    let tiles: Array<{x: number, y: number}> = [];
-    for (let dX = -1; dX < 2; dX++) {
-      for (let dY = -1; dY < 2; dY++) {
-        if (dX == 0 && dY == 0) {
-          continue;
-        }
-        tiles.push({x: x + dX, y: y + dY});
-      }
-    }
-    return shuffleCoordArray(tiles);
   }
 }
 

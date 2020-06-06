@@ -1,5 +1,6 @@
 import * as ROT from 'rot-js';
 
+import { shuffleCoordArray } from './utils';
 import { Tile } from './Display';
 import { Game } from './Game';
 
@@ -112,7 +113,7 @@ class Builder
 
     while (tiles.length > 0) {
       tile = tiles.pop();
-      neighbors = Game.getNeighborPositions(tile.x, tile.y);
+      neighbors = this.getNeighborPositions(tile.x, tile.y);
 
       while (neighbors.length > 0) {
         tile = neighbors.pop();
@@ -206,6 +207,19 @@ class Builder
     }
   }
 
+  public getNeighborPositions(x: number, y: number): Array<{x: number, y: number}>
+  {
+    let tiles: Array<{x: number, y: number}> = [];
+    for (let dX = -1; dX < 2; dX++) {
+      for (let dY = -1; dY < 2; dY++) {
+        if (dX == 0 && dY == 0) {
+          continue;
+        }
+        tiles.push({x: x + dX, y: y + dY});
+      }
+    }
+    return shuffleCoordArray(tiles);
+  }
 }
 
 

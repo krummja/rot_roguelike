@@ -15,6 +15,7 @@ interface IMixin
   init(properties: IProperties): void;
 }
 
+
 export class Moveable implements IMixin
 {
   public properties: IProperties;
@@ -67,7 +68,7 @@ export class Moveable implements IMixin
         this.x = x;
         this.y = y;
         this.z = z;
-        this._EVENTS.emit('tryMove', ' ');
+        this._EVENTS.emit('tryMove', 'Your footsteps echo...');
         return true;
       } else if (tile.diggable) {
         map.dig(x, y, z);
@@ -118,7 +119,7 @@ export class Recipient implements IMixin
   {
     this._messages = {
       position: [],
-      tryMove: [],
+      tryMove: ['', '', '', ''],
       combat: []
     }
     this.receiveMessage = (sender: string, message: string): void => {
@@ -145,3 +146,11 @@ export class Actor extends Recipient implements IMixin
   }
 }
 
+
+export class Combatant implements IMixin
+{
+  public init()
+  {
+    
+  }
+}

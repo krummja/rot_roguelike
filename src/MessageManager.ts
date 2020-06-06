@@ -14,6 +14,13 @@ export class MessageManager
     this._game = game;
     this._EVENTS = Game.EVENTS;
     
+    this._EVENTS.on('position', () => {
+      let player = this._game.currentScreen.player;
+      this.sendMessage(player, 
+        'position',
+        "Position: %s", [player.x + "," + player.y]);
+    })
+
     this._EVENTS.on('tryMove', (s: string) => {
       this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
     });
@@ -25,6 +32,7 @@ export class MessageManager
     recipient.receiveMessage(sender, message);
   }
 
+  // Change this so that as y decreases, the text fades out
   public renderMessage(x: number, y: number, sender: string, direction: string = 'down')
   {
     let messages = this._game.currentScreen.player.messages[sender];
@@ -34,6 +42,7 @@ export class MessageManager
         y -= this._game.display.drawText(x, y, '%c{white}%b{black}' + messages[i]);
       } else if (direction === 'down') {
         y += this._game.display.drawText(x, y, '%c{white}%b{black}' + messages[i]);
+        console.log(y);
       }
     }
   }

@@ -7,6 +7,10 @@ class MessageManager {
     constructor(game) {
         this._game = game;
         this._EVENTS = Game_1.Game.EVENTS;
+        this._EVENTS.on('position', () => {
+            let player = this._game.currentScreen.player;
+            this.sendMessage(player, 'position', "Position: %s", [player.x + "," + player.y]);
+        });
         this._EVENTS.on('tryMove', (s) => {
             this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
         });
@@ -15,6 +19,7 @@ class MessageManager {
         message = sprintf_1.vsprintf(message, args);
         recipient.receiveMessage(sender, message);
     }
+    // Change this so that as y decreases, the text fades out
     renderMessage(x, y, sender, direction = 'down') {
         let messages = this._game.currentScreen.player.messages[sender];
         for (let i = 0; i < messages.length; i++) {
@@ -23,6 +28,7 @@ class MessageManager {
             }
             else if (direction === 'down') {
                 y += this._game.display.drawText(x, y, '%c{white}%b{black}' + messages[i]);
+                console.log(y);
             }
         }
     }

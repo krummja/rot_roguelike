@@ -23,9 +23,11 @@ exports.PlayScreen = void 0;
 const ROT = __importStar(require("rot-js"));
 const ECS_1 = require("../ECS");
 const Builder_1 = require("../Builder");
+const Game_1 = require("../Game");
 const _1 = require("./");
 class PlayScreen {
     constructor(game) {
+        this.key = "PLAY";
         this.mapArray = null;
         this.mapWidth = 200;
         this.mapHeight = 100;
@@ -37,6 +39,7 @@ class PlayScreen {
             background: [0, 0, 0] || null,
             sightRadius: 20,
         }, this.game, this.map);
+        this._EVENTS = Game_1.Game.EVENTS;
     }
     get player() { return this._player; }
     enter() {
@@ -49,6 +52,7 @@ class PlayScreen {
         let tiles = new Builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
         this.map = new _1.Map(tiles, this._player);
         this.map.engine.start();
+        this._EVENTS.emit('ready');
     }
     exit() {
         console.log('PlayScreen.exit:   Exited play screen.');
@@ -95,7 +99,7 @@ class PlayScreen {
             display.draw(this._player.x - topLeftX, this._player.y - topLeftY, this._player.char, (ROT.Color.toHex(this._player.fg)).toString(), (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString());
         }
         this.game.messageManager.renderMessage(0, 0, 'position');
-        this.game.messageManager.renderMessage(0, 39, 'tryMove', 'up');
+        this.game.messageManager.renderMessage(0, 56, 'tryMove', 'down');
     }
     handleInput(inputType, inputData) {
         if (inputType === 'keydown') {
@@ -129,7 +133,7 @@ class PlayScreen {
         let newY = this._player.y + dY;
         let newZ = this._player.z + dZ;
         this._player.tryMove(newX, newY, newZ, this.map);
-        this.game.messageManager.sendMessage(this._player, 'position', "Position: %s", [this._player.x + "," + this._player.y]);
+        this._EVENTS.emit('position');
     }
 }
 exports.PlayScreen = PlayScreen;

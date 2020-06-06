@@ -40,7 +40,7 @@ class Moveable {
                 this.x = x;
                 this.y = y;
                 this.z = z;
-                this._EVENTS.emit('tryMove', ' ');
+                this._EVENTS.emit('tryMove', 'Your footsteps echo...');
                 return true;
             }
             else if (tile.diggable) {
@@ -71,7 +71,7 @@ class Recipient {
     init() {
         this._messages = {
             position: [],
-            tryMove: [],
+            tryMove: ['', '', '', ''],
             combat: []
         };
         this.receiveMessage = (sender, message) => {

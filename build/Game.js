@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Game = void 0;
 const ROT = __importStar(require("rot-js"));
 const events_1 = require("events");
-const utils_1 = require("./utils");
 const MessageManager_1 = require("./MessageManager");
 let Game = /** @class */ (() => {
     class Game {
@@ -30,11 +29,10 @@ let Game = /** @class */ (() => {
             var _a;
             this._display = null;
             this._currentScreen = null;
-            this._screenWidth = 64;
-            this._screenHeight = 40;
+            this._screenWidth = 100;
+            this._screenHeight = 60;
             this._fontFamily = 'Fira Code';
             this._fontStyle = 'normal';
-            this._fontSize = 12;
             this._spacing = 1.0;
             this._squareRatio = true;
             this.display = new ROT.Display({
@@ -74,27 +72,15 @@ let Game = /** @class */ (() => {
             this._currentScreen.render((this._display));
         }
         switchScreen(screen) {
-            if (this.currentScreen !== null) {
-                this.currentScreen.exit();
+            if (this._currentScreen !== null) {
+                this._currentScreen.exit();
             }
-            this.display.clear();
-            this.currentScreen = screen;
-            if (this.currentScreen) {
-                this.currentScreen.enter();
+            this._display.clear();
+            this._currentScreen = screen;
+            if (this._currentScreen) {
+                this._currentScreen.enter();
                 this.refresh();
             }
-        }
-        static getNeighborPositions(x, y) {
-            let tiles = [];
-            for (let dX = -1; dX < 2; dX++) {
-                for (let dY = -1; dY < 2; dY++) {
-                    if (dX == 0 && dY == 0) {
-                        continue;
-                    }
-                    tiles.push({ x: x + dX, y: y + dY });
-                }
-            }
-            return utils_1.shuffleCoordArray(tiles);
         }
     }
     Game.EVENTS = new events_1.EventEmitter();

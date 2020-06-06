@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
 import { Player } from '../ECS';
@@ -8,6 +9,7 @@ import { IScreen, Map, Tile } from './';
 class PlayScreen implements IScreen
 {
   public game: Game;
+  public key: string = "PLAY";
   
   public map: Map;
   public mapArray: Array<Array<Tile>> = null;
@@ -17,6 +19,7 @@ class PlayScreen implements IScreen
   public get player(): Player { return this._player; }
   private readonly _player: Player;
 
+  private _EVENTS: EventEmitter;
 
   constructor(game: Game)
   {
@@ -28,6 +31,8 @@ class PlayScreen implements IScreen
       background: [0, 0, 0] || null,
       sightRadius: 20,
     }, this.game, this.map);
+
+    this._EVENTS = Game.EVENTS;
   }
 
 
@@ -39,10 +44,11 @@ class PlayScreen implements IScreen
     let ratio = 0.70;
     let iterations = 100;
     let tilesFilled = 50;
-
+    
     let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
     this.map = new Map(tiles, this._player);
     this.map.engine.start();
+    this._EVENTS.emit('ready');
   }
 
   public exit(): void
@@ -119,7 +125,7 @@ class PlayScreen implements IScreen
     }
 
     this.game.messageManager.renderMessage(0, 0, 'position');
-    this.game.messageManager.renderMessage(0, 39, 'tryMove', 'up');
+    this.game.messageManager.renderMessage(0, 56, 'tryMove', 'down');
   }
 
   public handleInput(inputType: string, inputData: any): void
@@ -153,11 +159,7 @@ class PlayScreen implements IScreen
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
     this._player.tryMove(newX, newY, newZ, this.map);
-    this.game.messageManager.sendMessage(
-      this._player, 
-      'position', 
-      "Position: %s", [this._player.x + "," + this._player.y]
-    );
+    this._EVENTS.emit('position')
   }
 }
 

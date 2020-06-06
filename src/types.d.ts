@@ -2,9 +2,12 @@ import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
 
 import { Player } from './ECS';
+import { Game } from './Game';
 
 type Screen = {
-  player?: Player
+  game: Game;
+  key: string;
+  player?: Player;
   enter(): void;
   exit(): void;
   render(display: ROT.Display): void;
