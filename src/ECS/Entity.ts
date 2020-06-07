@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import { Glyph, Map } from '../Display';
 import { Game } from '../Game';
 import { IProperties } from '../types';
@@ -25,8 +24,6 @@ export class Entity extends Glyph
   public set z(v: number) { this._z = v; }
   private _z: number;
 
-  private _EVENTS: EventEmitter;
-
   constructor(properties: IProperties, game?: Game, map?: Map) 
   {
     super(properties);
@@ -37,8 +34,6 @@ export class Entity extends Glyph
     this._z         = properties['z']     || 0;
     this.game       = game                || null;
     this.map        = map                 || null;
-
-    this._EVENTS = Game.EVENTS;
   }
 
   public setPosition(x: number, y: number, z: number): void
@@ -66,11 +61,11 @@ export class Entity extends Glyph
       if (tile.traversable['open'] === true && 
           tile.traversable['direction'] === 'up') {
         this.setPosition(x, y, z);
-        this._EVENTS.emit('tryMove', 'You follow the passage upward.');
+        Game.EVENTS.emit('tryMove', 'You follow the passage upward.');
       } 
       
       else {
-        this._EVENTS.emit('tryMove', 'You can\'t ascend here!');
+        Game.EVENTS.emit('tryMove', 'You can\'t ascend here!');
       }
     } 
     
@@ -78,17 +73,17 @@ export class Entity extends Glyph
       if (tile.traversable['open'] === true && 
           tile.traversable['direction'] === 'down') {
         this.setPosition(x, y, z);
-        this._EVENTS.emit('tryMove', 'You follow the passage downward.');
+        Game.EVENTS.emit('tryMove', 'You follow the passage downward.');
       } 
       
       else {
-        this._EVENTS.emit('tryMove', 'You can\'t descend here!');
+        Game.EVENTS.emit('tryMove', 'You can\'t descend here!');
       }
     } 
     
     else if (target) {
       if (this.hasOwnProperty('attack')) {
-        this._EVENTS.emit('attack', this, target);
+        Game.EVENTS.emit('attack', this, target);
         return true;
       } else {
         return false;
@@ -97,13 +92,13 @@ export class Entity extends Glyph
 
     else if (tile.walkable) {
       this.setPosition(x, y, z);
-      this._EVENTS.emit('tryMove', "");
+      Game.EVENTS.emit('tryMove', "");
       return true;
     } 
     
     else if (tile.diggable) {
       map.dig(x, y, z);
-      this._EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
+      Game.EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
       return true;
     }
 
