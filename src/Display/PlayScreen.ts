@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
-import { Player, Entity, Mob } from '../ECS';
+import { Player, Entity } from '../ECS';
 import { Builder } from '../Builder';
 import { Game } from '../Game';
 import { IScreen, Map, Tile } from './';

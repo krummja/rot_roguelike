@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Combatant = exports.WanderActor = exports.MobActor = exports.PlayerActor = exports.Recipient = exports.Sight = void 0;
+exports.Combatant = exports.WanderActor = exports.MobActor = exports.PlayerActor = exports.Recipient = exports.Sight = exports.Moveable = void 0;
 const ts_mixer_1 = require("ts-mixer");
 const Game_1 = require("../Game");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
 ts_mixer_1.settings.initFunction = 'init';
-// export class Moveable implements IMixin
+// export class Controllable implements IMixin
 // {
 //   public properties: IProperties;
 //   public x: number;
@@ -13,14 +13,13 @@ ts_mixer_1.settings.initFunction = 'init';
 //   public z: number;
 //   public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
 //   public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
-//   private _EVENTS: EventEmitter;
 //   public init(properties: IProperties): void
 //   {
 //     this.properties = properties;
 //     this.x = this.properties['x'];
 //     this.y = this.properties['y'];
 //     this.z = this.properties['z'];
-//     this._EVENTS = Game.EVENTS;
+//     Game.EVENTS = Game.EVENTS;
 //     this.tryMove = (
 //       x: number, 
 //       y: number, 
@@ -33,34 +32,71 @@ ts_mixer_1.settings.initFunction = 'init';
 //             this.x = x;
 //             this.y = y;
 //             this.z = z;
-//           this._EVENTS.emit('tryMove', 'You follow the passage upward.');
+//           Game.EVENTS.emit('tryMove', 'You follow the passage upward.');
 //         } else {
-//            this._EVENTS.emit('tryMove', 'You can\'t ascend here!');
+//            Game.EVENTS.emit('tryMove', 'You can\'t ascend here!');
 //         }
 //       } else if (z > this.z) {
 //         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
 //           this.x = x;
 //           this.y = y;
 //           this.z = z;
-//           this._EVENTS.emit('tryMove', 'You follow the passage downward.');
+//           Game.EVENTS.emit('tryMove', 'You follow the passage downward.');
 //         } else {
-//           this._EVENTS.emit('tryMove', 'You can\'t descend here!');
+//           Game.EVENTS.emit('tryMove', 'You can\'t descend here!');
 //         }
 //       } else if (tile.walkable) {
 //         this.x = x;
 //         this.y = y;
 //         this.z = z;
-//         this._EVENTS.emit('tryMove', "");
+//         Game.EVENTS.emit('tryMove', "");
 //         return true;
 //       } else if (tile.diggable) {
 //         map.dig(x, y, z);
-//         this._EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
+//         Game.EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
 //         return true;
 //       }
 //       return false;
 //     };
 //   }
 // }
+class Moveable {
+    init(properties) {
+        this.properties = properties;
+        this.x = this.properties['x'];
+        this.y = this.properties['y'];
+        this.z = this.properties['z'];
+        this.tryMove = (x, y, z, map) => {
+            let tile = map.getTile(x, y, this.z);
+            if (z < this.z) {
+                if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
+                    this.x = x;
+                    this.y = y;
+                    this.z = z;
+                }
+            }
+            else if (z > this.z) {
+                if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
+                    this.x = x;
+                    this.y = y;
+                    this.z = z;
+                }
+            }
+            else if (tile.walkable) {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                return true;
+            }
+            else if (tile.diggable) {
+                map.dig(x, y, z);
+                return true;
+            }
+            return false;
+        };
+    }
+}
+exports.Moveable = Moveable;
 class Sight {
     get sightRadius() { return this._sightRadius; }
     set sightRadius(value) { this._sightRadius = value; }

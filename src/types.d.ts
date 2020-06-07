@@ -1,7 +1,7 @@
 import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
 
-import { Player, Entity, Mob } from './ECS';
+import { Player, Entity } from './ECS';
 import { Game } from './Game';
 
 declare type Screen = {
@@ -21,7 +21,6 @@ declare type Position = {
 // declare type GameEntity = Entity | Mob;
 
 
-// FIXME: Split this into separate configs.
 interface IProperties {
   character ?: string,
   foreground ?: [number, number, number],

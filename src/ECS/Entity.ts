@@ -32,7 +32,6 @@ export class Entity extends Glyph
     super(properties);
     this.properties = properties;
     this._name      = properties['name']  || ' ';
-    // FIXME: Update to properties['position']
     this._x         = properties['x']     || 0;
     this._y         = properties['y']     || 0;
     this._z         = properties['z']     || 0;

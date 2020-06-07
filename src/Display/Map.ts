@@ -3,7 +3,7 @@ import Engine from 'rot-js/lib/engine';
 import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
 import Scheduler from 'rot-js/lib/scheduler/scheduler';
 
-import { PlayerActor, Entity, Mob, Player } from '../ECS';
+import { PlayerActor, Entity, Player } from '../ECS';
 import { Tile } from './';
 
 class Map

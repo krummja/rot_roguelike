@@ -1,13 +1,9 @@
-import { 
-  Entity 
-} from './Entity';
-import { 
-  Mob, 
-  Player 
-} from './Entities';
+import { Entity } from './Entity';
+import { Player } from './Player';
 import { 
   Combatant, 
-  MobActor, 
+  // Controllable,
+  Moveable,
   PlayerActor, 
   Recipient, 
   Sight, 
@@ -16,9 +12,9 @@ import {
 
 export { 
   Combatant, 
+  // Controllable,
   Entity, 
-  Mob, 
-  MobActor, 
+  Moveable,
   Player, 
   PlayerActor, 
   Recipient, 
