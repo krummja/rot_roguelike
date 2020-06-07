@@ -16,68 +16,6 @@ interface IMixin
 }
 
 
-// export class Controllable implements IMixin
-// {
-//   public properties: IProperties;
-
-//   public x: number;
-//   public y: number;
-//   public z: number;
-
-//   public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
-//   public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
-  
-//   public init(properties: IProperties): void
-//   {
-//     this.properties = properties;
-//     this.x = this.properties['x'];
-//     this.y = this.properties['y'];
-//     this.z = this.properties['z'];
-
-//     Game.EVENTS = Game.EVENTS;
-
-//     this.tryMove = (
-//       x: number, 
-//       y: number, 
-//       z: number,
-//       map: Map
-//     ): boolean => {
-//       let tile = map.getTile(x, y, this.z);
-
-//       if (z < this.z) {
-//         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
-//             this.x = x;
-//             this.y = y;
-//             this.z = z;
-//           Game.EVENTS.emit('tryMove', 'You follow the passage upward.');
-//         } else {
-//            Game.EVENTS.emit('tryMove', 'You can\'t ascend here!');
-//         }
-//       } else if (z > this.z) {
-//         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
-//           this.x = x;
-//           this.y = y;
-//           this.z = z;
-//           Game.EVENTS.emit('tryMove', 'You follow the passage downward.');
-//         } else {
-//           Game.EVENTS.emit('tryMove', 'You can\'t descend here!');
-//         }
-//       } else if (tile.walkable) {
-//         this.x = x;
-//         this.y = y;
-//         this.z = z;
-//         Game.EVENTS.emit('tryMove', "");
-//         return true;
-//       } else if (tile.diggable) {
-//         map.dig(x, y, z);
-//         Game.EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
-//         return true;
-//       }
-//       return false;
-//     };
-//   }
-// }
-
 export class Moveable implements IMixin
 {
   public properties: IProperties;

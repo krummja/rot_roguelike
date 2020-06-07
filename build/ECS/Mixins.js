@@ -5,61 +5,6 @@ const ts_mixer_1 = require("ts-mixer");
 const Game_1 = require("../Game");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
 ts_mixer_1.settings.initFunction = 'init';
-// export class Controllable implements IMixin
-// {
-//   public properties: IProperties;
-//   public x: number;
-//   public y: number;
-//   public z: number;
-//   public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
-//   public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
-//   public init(properties: IProperties): void
-//   {
-//     this.properties = properties;
-//     this.x = this.properties['x'];
-//     this.y = this.properties['y'];
-//     this.z = this.properties['z'];
-//     Game.EVENTS = Game.EVENTS;
-//     this.tryMove = (
-//       x: number, 
-//       y: number, 
-//       z: number,
-//       map: Map
-//     ): boolean => {
-//       let tile = map.getTile(x, y, this.z);
-//       if (z < this.z) {
-//         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
-//             this.x = x;
-//             this.y = y;
-//             this.z = z;
-//           Game.EVENTS.emit('tryMove', 'You follow the passage upward.');
-//         } else {
-//            Game.EVENTS.emit('tryMove', 'You can\'t ascend here!');
-//         }
-//       } else if (z > this.z) {
-//         if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
-//           this.x = x;
-//           this.y = y;
-//           this.z = z;
-//           Game.EVENTS.emit('tryMove', 'You follow the passage downward.');
-//         } else {
-//           Game.EVENTS.emit('tryMove', 'You can\'t descend here!');
-//         }
-//       } else if (tile.walkable) {
-//         this.x = x;
-//         this.y = y;
-//         this.z = z;
-//         Game.EVENTS.emit('tryMove', "");
-//         return true;
-//       } else if (tile.diggable) {
-//         map.dig(x, y, z);
-//         Game.EVENTS.emit('tryMove', 'The stone gives and crumbles at your feet!');
-//         return true;
-//       }
-//       return false;
-//     };
-//   }
-// }
 class Moveable {
     init(properties) {
         this.properties = properties;
