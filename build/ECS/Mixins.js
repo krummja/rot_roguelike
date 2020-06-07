@@ -1,10 +1,48 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Combatant = exports.WanderActor = exports.MobActor = exports.PlayerActor = exports.Recipient = exports.Sight = exports.Moveable = void 0;
+exports.Combatant = exports.WanderActor = exports.MobActor = exports.PlayerActor = exports.Recipient = exports.Sight = exports.Moveable = exports.Controllable = void 0;
 const ts_mixer_1 = require("ts-mixer");
 const Game_1 = require("../Game");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
 ts_mixer_1.settings.initFunction = 'init';
+class Controllable {
+    init(properties, map) {
+        this.properties = properties;
+        this.map = map;
+        this.x = this.properties['x'];
+        this.y = this.properties['y'];
+        this.z = this.properties['z'];
+        this.tryMove = (x, y, z) => {
+            let tile = this.map.getTile(x, y, this.z);
+            if (z < this.z) {
+                if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
+                    this.x = x;
+                    this.y = y;
+                    this.z = z;
+                }
+            }
+            else if (z > this.z) {
+                if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
+                    this.x = x;
+                    this.y = y;
+                    this.z = z;
+                }
+            }
+            else if (tile.walkable) {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                return true;
+            }
+            else if (tile.diggable) {
+                this.map.dig(x, y, z);
+                return true;
+            }
+            return false;
+        };
+    }
+}
+exports.Controllable = Controllable;
 class Moveable {
     init(properties) {
         this.properties = properties;

@@ -33,8 +33,7 @@ class PlayScreen {
         this.mapWidth = 200;
         this.mapHeight = 100;
         this.game = game;
-        this._player = new ECS_1.Player(Entities_1.playerTemplate, this.game, this.map);
-        this._EVENTS = Game_1.Game.EVENTS;
+        this._player = new ECS_1.Player(Entities_1.playerTemplate, this.game);
     }
     get player() { return this._player; }
     enter() {
@@ -47,7 +46,7 @@ class PlayScreen {
         let tiles = new Builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
         this.map = new _1.Map(tiles, this._player);
         this.map.engine.start();
-        this._EVENTS.emit('ready');
+        Game_1.Game.EVENTS.emit('ready');
     }
     exit() {
         console.log('PlayScreen.exit:   Exited play screen.');
@@ -137,7 +136,7 @@ class PlayScreen {
         let newY = this._player.y + dY;
         let newZ = this._player.z + dZ;
         this._player.tryMove(newX, newY, newZ);
-        this._EVENTS.emit('position');
+        Game_1.Game.EVENTS.emit('position');
     }
 }
 exports.PlayScreen = PlayScreen;

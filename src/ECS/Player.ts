@@ -1,8 +1,10 @@
 import { Mixin, settings } from 'ts-mixer';
 
 import { Entity } from './Entity';
+
 import { 
-  Combatant, 
+  Combatant,
+  Controllable,
   PlayerActor, 
   Recipient, 
   Sight 
@@ -14,6 +16,7 @@ settings.initFunction = 'init';
 export class Player extends Mixin(
   Entity, 
   Combatant,
+  Controllable,
   PlayerActor, 
   Recipient,
   Sight, 

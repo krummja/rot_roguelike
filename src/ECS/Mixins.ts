@@ -12,9 +12,63 @@ settings.initFunction = 'init';
 interface IMixin
 {
   properties?: IProperties;
-  init(properties: IProperties): void;
+  init(properties: IProperties, map?: Map): void;
 }
 
+
+export class Controllable implements IMixin
+{
+  public properties: IProperties;
+  public map: Map;
+
+  public x: number;
+  public y: number;
+  public z: number;
+
+  public setPosition: (x: number, y: number, z: number) => void;
+  public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
+  public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
+
+  public init(properties: IProperties, map: Map): void
+  {
+    this.properties = properties;
+    this.map = map;
+    this.x = this.properties['x'];
+    this.y = this.properties['y'];
+    this.z = this.properties['z'];
+
+    this.tryMove = (
+      x: number, 
+      y: number, 
+      z: number,
+    ): boolean => {
+      let tile = this.map.getTile(x, y, this.z);
+
+      if (z < this.z) {
+        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+      } else if (z > this.z) {
+        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
+          this.x = x;
+          this.y = y;
+          this.z = z;
+        }
+      } else if (tile.walkable) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return true;
+      } else if (tile.diggable) {
+        this.map.dig(x, y, z);
+        return true;
+      }
+      return false;
+    };
+  }
+}
 
 export class Moveable implements IMixin
 {

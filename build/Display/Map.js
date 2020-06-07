@@ -166,6 +166,15 @@ class Map {
             this._scheduler.remove(entity);
         }
     }
+    setPosition(entity, x, y, z) {
+        let oldX = entity.x;
+        let oldY = entity.y;
+        let oldZ = entity.z;
+        entity.x = x;
+        entity.y = y;
+        entity.z = z;
+        this.updateEntityPosition(entity, oldX, oldY, oldZ);
+    }
     updateEntityPosition(entity, oldX, oldY, oldZ) {
         if (typeof (oldX) !== "undefined") {
             let oldKey = oldX + ',' + oldY + ',' + oldZ;

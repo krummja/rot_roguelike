@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
 import { Builder } from '../Builder';
@@ -20,15 +19,12 @@ class PlayScreen implements IScreen
   public get player(): Player { return this._player; }
   private readonly _player: Player;
 
-  private _EVENTS: EventEmitter;
-
 
   constructor(game: Game)
   {
     this.game = game;
-    this._player = new Player(playerTemplate, this.game, this.map);
+    this._player = new Player(playerTemplate, this.game);
   }
-
 
   public enter()
   {

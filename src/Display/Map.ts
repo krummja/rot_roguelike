@@ -206,6 +206,18 @@ class Map
     }
   }
 
+  public setPosition(entity: Entity, x: number, y: number, z: number): void
+  {
+    let oldX = entity.x;
+    let oldY = entity.y;
+    let oldZ = entity.z;
+
+    entity.x = x;
+    entity.y = y;
+    entity.z = z;
+
+    this.updateEntityPosition(entity, oldX, oldY, oldZ);
+  }
 
   public updateEntityPosition(entity: Entity, oldX?: number, oldY?: number, oldZ?: number)
   {    
