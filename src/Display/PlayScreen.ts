@@ -1,8 +1,9 @@
 import { EventEmitter } from 'events';
 import * as ROT from 'rot-js';
 
-import { Player, Entity, NPC } from '../ECS';
 import { Builder } from '../Builder';
+import { Entity, Player } from '../ECS';
+import { playerTemplate } from '../ECS/Entities';
 import { Game } from '../Game';
 import { IScreen, Map, Tile } from './';
 
@@ -25,15 +26,7 @@ class PlayScreen implements IScreen
   constructor(game: Game)
   {
     this.game = game;
-    this._player = new Player({
-      character: '@',
-      name: 'Player',
-      foreground: [228, 79, 163],
-      background: [0, 0, 0] || null,
-      sightRadius: 20,
-    }, this.game, this.map);
-
-    this._EVENTS = Game.EVENTS;
+    this._player = new Player(playerTemplate, this.game, this.map);
   }
 
 
@@ -49,7 +42,7 @@ class PlayScreen implements IScreen
     let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
     this.map = new Map(tiles, this._player);
     this.map.engine.start();
-    this._EVENTS.emit('ready');
+    Game.EVENTS.emit('ready');
   }
 
   public exit(): void
@@ -170,7 +163,7 @@ class PlayScreen implements IScreen
     let newY = this._player.y + dY;
     let newZ = this._player.z + dZ;
     this._player.tryMove(newX, newY, newZ);
-    this._EVENTS.emit('position')
+    Game.EVENTS.emit('position')
   }
 }
 

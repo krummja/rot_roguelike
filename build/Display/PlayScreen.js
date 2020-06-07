@@ -21,8 +21,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayScreen = void 0;
 const ROT = __importStar(require("rot-js"));
-const ECS_1 = require("../ECS");
 const Builder_1 = require("../Builder");
+const ECS_1 = require("../ECS");
+const Entities_1 = require("../ECS/Entities");
 const Game_1 = require("../Game");
 const _1 = require("./");
 class PlayScreen {
@@ -32,13 +33,7 @@ class PlayScreen {
         this.mapWidth = 200;
         this.mapHeight = 100;
         this.game = game;
-        this._player = new ECS_1.Player({
-            character: '@',
-            name: 'Player',
-            foreground: [228, 79, 163],
-            background: [0, 0, 0] || null,
-            sightRadius: 20,
-        }, this.game, this.map);
+        this._player = new ECS_1.Player(Entities_1.playerTemplate, this.game, this.map);
         this._EVENTS = Game_1.Game.EVENTS;
     }
     get player() { return this._player; }
@@ -107,16 +102,6 @@ class PlayScreen {
                 }
             }
         }
-        // // Render the player
-        // if (visibleCells[this._player.x + ',' + this._player.y]) {
-        //   display.draw(
-        //     this._player.x - topLeftX,
-        //     this._player.y - topLeftY,
-        //     this._player.char,
-        //     (ROT.Color.toHex(this._player.fg)).toString(),
-        //     (ROT.Color.toHex(this._player.getBgTint(this._player.x, this._player.y, this._player.z, this.map))).toString()
-        //     );
-        // }
         this.game.messageManager.renderMessage(0, 0, 'position');
         this.game.messageManager.renderMessage(0, 55, 'tryMove');
     }

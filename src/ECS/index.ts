@@ -1,5 +1,23 @@
-import { Player, NPC } from './Entities';
 import { Entity } from './Entity';
-import { Actor, Recipient, Sight, Combatant, Mob } from './Mixins';
+import { Player } from './Player';
+import { 
+  Combatant, 
+  // Controllable,
+  Moveable,
+  PlayerActor, 
+  Recipient, 
+  Sight, 
+  WanderActor 
+} from './Mixins';
 
-export { Actor, Sight, Recipient, Entity, Player, NPC, Mob };
+export { 
+  Combatant, 
+  // Controllable,
+  Entity, 
+  Moveable,
+  Player, 
+  PlayerActor, 
+  Recipient, 
+  Sight, 
+  WanderActor 
+};

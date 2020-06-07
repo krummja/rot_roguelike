@@ -1,11 +1,16 @@
-import { Mixin, settings } from 'ts-mixer';
+import { IProperties } from '../types';
 
-import { Actor, Mob, Combatant, Recipient, Sight } from './Mixins';
-import { Entity } from "./Entity";
+export const playerTemplate: IProperties = {
+  character: '@',
+  name: 'Player',
+  foreground: [228, 79, 163],
+  background: [0, 0, 0] || null,
+  sightRadius: 20,
+};
 
-settings.prototypeStrategy = 'copy';
-settings.initFunction = 'init';
-
-
-export class Player extends Mixin(Entity, Sight, Actor, Recipient, Combatant) {}
-export class NPC extends Mixin(Entity, Mob, Combatant) {}
+export const batTemplate: IProperties = {
+  character: 'w',
+  name: 'Bat',
+  foreground: [255, 255, 74],
+  background: [0, 0, 0] || null,
+};

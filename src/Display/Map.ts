@@ -3,7 +3,7 @@ import Engine from 'rot-js/lib/engine';
 import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
 import Scheduler from 'rot-js/lib/scheduler/scheduler';
 
-import { Actor, Entity, Player } from '../ECS';
+import { PlayerActor, Entity, Player } from '../ECS';
 import { Tile } from './';
 
 class Map
@@ -37,6 +37,7 @@ class Map
   private _fov: PreciseShadowcasting[];
   private _depth: number;
 
+
   constructor(tiles: Array<Array<Array<Tile>>>, player: Player)
   {
     this._tiles = tiles;
@@ -44,14 +45,20 @@ class Map
     this._width = tiles[0].length;
     this._height = tiles[0][0].length;
     this._entities = {};
+
+    // Start the ROT Engine
     this._scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this._scheduler);
     
+    // Initialize player
     this.addEntityAtRandomPosition(player, 0);
 
+    // Initialize mobs
+    
+
+    // Start FOV calculations
     this._fov = [];
     this.setupFov();
-
     this._explored = new Array(this._depth);
     this.setupExploredArray();
   }
@@ -165,7 +172,7 @@ class Map
     }
   }
 
-  public addEntityAtRandomPosition(entity: Entity, z: number): void
+  public addEntityAtRandomPosition(entity: Player, z: number): void
   {
     let position = this.getRandomFloorPosition(z);
     
@@ -176,7 +183,7 @@ class Map
     this.addEntity(entity);
   }
 
-  public addEntity(entity: Entity)
+  public addEntity(entity: Player)
   {
     entity.map = this;
     

@@ -1,10 +1,10 @@
 import * as ROT from 'rot-js';
 import { FOV } from 'rot-js';
 
-import { Player } from './ECS';
+import { Player, Entity } from './ECS';
 import { Game } from './Game';
 
-type Screen = {
+declare type Screen = {
   game: Game;
   key: string;
   player?: Player;
@@ -14,7 +14,13 @@ type Screen = {
   handleInput(inputType: string, inputData: any): void;
 }
 
-// FIXME: Split this into separate configs.
+declare type Position = {
+  x: number, y: number, z: number
+}
+
+// declare type GameEntity = Entity | Mob;
+
+
 interface IProperties {
   character ?: string,
   foreground ?: [number, number, number],
@@ -28,6 +34,7 @@ interface IProperties {
   },
   opaque ?: boolean,
   sightRadius ?: number,
+  position?: Position,
   x ?: number,
   y ?: number,
   z ?: number,
@@ -40,4 +47,4 @@ type Constructor<T = {}> = new (...args: any[]) => T;
 
 type FOV = typeof FOV.PreciseShadowcasting;
 
-export { Constructor, Screen, IProperties, FOV };
+export { Constructor, Screen, IProperties, Position, FOV };
