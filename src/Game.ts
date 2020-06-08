@@ -3,11 +3,14 @@ import { EventEmitter } from 'events';
 
 import { Screen } from './types';
 import { MessageManager } from './MessageManager';
+import { PositionManager } from './PositionManager';
+
 
 class Game
 {
   public container: HTMLElement | null;
   public messageManager: MessageManager;
+  public positionManager: PositionManager;
   
   public static EVENTS: EventEmitter = new EventEmitter();
    
@@ -88,3 +91,5 @@ class Game
 
 
 export {Game};
+
+

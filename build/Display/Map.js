@@ -21,9 +21,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Map = void 0;
 const ROT = __importStar(require("rot-js"));
+const ECS_1 = require("../ECS");
 const _1 = require("./");
+const Entities_1 = require("../ECS/Entities");
 class Map {
-    constructor(tiles, player) {
+    constructor(screen, tiles, player) {
         this._tiles = tiles;
         this._depth = tiles.length;
         this._width = tiles[0].length;
@@ -32,9 +34,15 @@ class Map {
         // Start the ROT Engine
         this._scheduler = new ROT.Scheduler.Simple();
         this.engine = new ROT.Engine(this._scheduler);
+        this.screen = screen;
         // Initialize player
         this.addEntityAtRandomPosition(player, 0);
         // Initialize mobs
+        for (let z = 0; z < this._depth; z++) {
+            for (let i = 0; i < 15; i++) {
+                this.addEntityAtRandomPosition(new ECS_1.Mob(Entities_1.batTemplate, this.screen.game, this), z);
+            }
+        }
         // Start FOV calculations
         this._fov = [];
         this.setupFov();

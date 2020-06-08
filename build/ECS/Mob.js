@@ -2,14 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mob = void 0;
 const ts_mixer_1 = require("ts-mixer");
+const Entity_1 = require("./Entity");
+const Mixins_1 = require("./Mixins");
 ts_mixer_1.settings.prototypeStrategy = 'copy';
 ts_mixer_1.settings.initFunction = 'init';
-// export class Mob extends Mixin(
-//   Entity, 
-//   Combatant,
-//   MobActor,
-//   Moveable
-// ) {}
-class Mob {
+class Mob extends ts_mixer_1.Mixin(Entity_1.Entity, Mixins_1.Combatant, Mixins_1.MobActor, Mixins_1.Moveable) {
 }
 exports.Mob = Mob;

@@ -3,10 +3,12 @@ import { FOV } from 'rot-js';
 
 import { Player, Entity } from './ECS';
 import { Game } from './Game';
+import { Map } from './Display';
 
 declare type Screen = {
   game: Game;
   key: string;
+  map?: Map;
   player?: Player;
   enter(): void;
   exit(): void;

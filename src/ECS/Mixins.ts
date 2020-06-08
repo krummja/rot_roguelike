@@ -25,7 +25,69 @@ export class Controllable implements IMixin
   public y: number;
   public z: number;
 
-  public setPosition: (x: number, y: number, z: number) => void;
+  public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
+  public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
+
+  public init(properties: IProperties, map: Map): void
+  {
+    this.properties = properties;
+    this.map = map;
+    this.x = this.properties['x'];
+    this.y = this.properties['y'];
+    this.z = this.properties['z'];
+
+    this.tryMove = (
+      x: number, 
+      y: number, 
+      z: number,
+    ): boolean => {
+      let tile = this.map.getTile(x, y, this.z);
+
+      if (z < this.z) {
+        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
+          Game.EVENTS.emit('player', 'tryMove', 'up', 'success');
+          Game.EVENTS.emit('player', 'move', x, y, z);
+        } else {
+          Game.EVENTS.emit('player', 'tryMove', 'up', 'failure');
+        }
+      } 
+      
+      else if (z > this.z) {
+        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
+          Game.EVENTS.emit('player', 'tryMove', 'down', 'success');
+          Game.EVENTS.emit('player', 'move', x, y, z);
+        } else {
+          Game.EVENTS.emit('player', 'tryMove', 'down', 'failure');
+        }
+      } 
+      
+      else if (tile.walkable) {
+        Game.EVENTS.emit('player', 'tryMove', 'move', 'success');
+        Game.EVENTS.emit('player', 'move', x, y, z);
+        return true;
+      }
+      
+      else if (tile.diggable) {
+        Game.EVENTS.emit('player', 'tryMove', 'dig', 'success')
+        this.map.dig(x, y, z);
+        return true;
+      }
+
+      // Game.EVENTS.emit('player', 'tryMove', 'move', 'failure');
+      return false;
+    };
+  }
+}
+
+export class Moveable implements IMixin
+{
+  public properties: IProperties;
+  public map: Map;
+
+  public x: number;
+  public y: number;
+  public z: number;
+
   public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
   public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
 
@@ -61,66 +123,12 @@ export class Controllable implements IMixin
         this.y = y;
         this.z = z;
         return true;
-      } else if (tile.diggable) {
-        this.map.dig(x, y, z);
-        return true;
       }
       return false;
     };
   }
 }
 
-export class Moveable implements IMixin
-{
-  public properties: IProperties;
-
-  public x: number;
-  public y: number;
-  public z: number;
-
-  public tryMove: (x: number, y: number, z: number, ...args: any[]) => boolean;
-  public getBgTint: (x: number, y: number, z: number, ...args: any[]) => [number, number, number];
-
-  public init(properties: IProperties): void
-  {
-    this.properties = properties;
-    this.x = this.properties['x'];
-    this.y = this.properties['y'];
-    this.z = this.properties['z'];
-
-    this.tryMove = (
-      x: number, 
-      y: number, 
-      z: number,
-      map: Map
-    ): boolean => {
-      let tile = map.getTile(x, y, this.z);
-
-      if (z < this.z) {
-        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-      } else if (z > this.z) {
-        if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
-          this.x = x;
-          this.y = y;
-          this.z = z;
-        }
-      } else if (tile.walkable) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        return true;
-      } else if (tile.diggable) {
-        map.dig(x, y, z);
-        return true;
-      }
-      return false;
-    };
-  }
-}
 
 export class Sight implements IMixin
 {
@@ -179,21 +187,35 @@ export class PlayerActor implements IMixin
 
 
 export class MobActor implements IMixin
-{
+{  
   public properties: IProperties;
-  
+
+  public x: number;
+  public y: number;
+  public z: number;
+
   public game: Game;
   public map: Map;
-  public position: Position;
   public act: () => void;
   public tryMove: (x: number, y: number, z: number) => boolean;
   
-  public init()
-  {
-    this.position = this.properties['position'];
+  public init(properties: IProperties) {
+    this.properties = properties;
+    
+    this.x = this.properties['x'];
+    this.y = this.properties['y'];
+    this.z = this.properties['z'];
+
     this.act = (): void => {
-      this.game.refresh();
-      this.map.engine.lock();
+      // this.game.refresh();
+      // this.map.engine.lock();
+      
+      let moveOffset = (Math.round(Math.random()) === 1) ? 1: -1;
+      if (Math.round(Math.random()) === 1) {
+        this.tryMove(this.x + moveOffset, this.y, this.z);
+      } else {
+        this.tryMove(this.x, this.y + moveOffset, this.z);
+      }
     }
   }
 }

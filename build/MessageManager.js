@@ -6,13 +6,63 @@ const Game_1 = require("./Game");
 class MessageManager {
     constructor(game) {
         this._game = game;
-        this._EVENTS = Game_1.Game.EVENTS;
-        this._EVENTS.on('position', () => {
+        Game_1.Game.EVENTS.on('position', () => {
             let player = this._game.currentScreen.player;
             this.sendMessage(player, 'position', "Position: %s", [player.x + "," + player.y]);
         });
-        this._EVENTS.on('tryMove', (s) => {
-            this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+        // Player Events
+        Game_1.Game.EVENTS.on('player', (action, type, result) => {
+            // Action: tryMove
+            if (action === 'tryMove') {
+                // Action Type: up
+                if (type === 'up') {
+                    // Success?
+                    if (result === 'success') {
+                        let s = 'You follow the passage upward.';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                    // Failure?
+                    else if (result === 'failure') {
+                        let s = 'You can\'t ascend here!.';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                }
+                // Action Type: down
+                else if (type === 'down') {
+                    // Success?
+                    if (result === 'success') {
+                        let s = 'You follow the passage downward.';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                    // Failure?
+                    else if (result === 'failure') {
+                        let s = 'You can\'t descend here!';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                }
+                // Action Type: move
+                else if (type === 'move') {
+                    // Success?
+                    if (result === 'success') {
+                        let s = ' ';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                    // Failure?
+                    else if (result === 'failure') {
+                        let s = 'You can\'t move there!';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                }
+                // Action Type: dig
+                else if (type === 'dig') {
+                    // Success?
+                    if (result === 'success') {
+                        let s = 'The stone gives and crumbles at your feet!';
+                        this.sendMessage(this._game.currentScreen.player, 'tryMove', '%s', [s]);
+                    }
+                }
+            }
+            // End
         });
     }
     sendMessage(recipient, sender, message, args) {

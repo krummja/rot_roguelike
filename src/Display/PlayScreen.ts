@@ -5,6 +5,8 @@ import { Entity, Player } from '../ECS';
 import { playerTemplate } from '../ECS/Entities';
 import { Game } from '../Game';
 import { IScreen, Map, Tile } from './';
+import { PositionManager } from '../PositionManager';
+
 
 class PlayScreen implements IScreen
 {
@@ -15,6 +17,8 @@ class PlayScreen implements IScreen
   public mapArray: Array<Array<Tile>> = null;
   public mapWidth: number = 200;
   public mapHeight: number = 100;
+
+  public positionManager: PositionManager;
 
   public get player(): Player { return this._player; }
   private readonly _player: Player;
@@ -36,9 +40,11 @@ class PlayScreen implements IScreen
     let tilesFilled = 50;
     
     let tiles = new Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
-    this.map = new Map(tiles, this._player);
+    this.map = new Map(this, tiles, this._player);
     this.map.engine.start();
     Game.EVENTS.emit('ready');
+    
+    this.positionManager = new PositionManager(this);
   }
 
   public exit(): void

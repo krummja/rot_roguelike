@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WanderActor = exports.Sight = exports.Recipient = exports.PlayerActor = exports.Player = exports.Moveable = exports.Entity = exports.Combatant = void 0;
+exports.WanderActor = exports.Sight = exports.Recipient = exports.PlayerActor = exports.Player = exports.Moveable = exports.Mob = exports.Entity = exports.Controllable = exports.Combatant = void 0;
 const Entity_1 = require("./Entity");
 Object.defineProperty(exports, "Entity", { enumerable: true, get: function () { return Entity_1.Entity; } });
 const Player_1 = require("./Player");
 Object.defineProperty(exports, "Player", { enumerable: true, get: function () { return Player_1.Player; } });
+const Mob_1 = require("./Mob");
+Object.defineProperty(exports, "Mob", { enumerable: true, get: function () { return Mob_1.Mob; } });
 const Mixins_1 = require("./Mixins");
 Object.defineProperty(exports, "Combatant", { enumerable: true, get: function () { return Mixins_1.Combatant; } });
-Object.defineProperty(exports, "Moveable", { enumerable: true, get: function () { return 
-    // Controllable,
-    Mixins_1.Moveable; } });
+Object.defineProperty(exports, "Controllable", { enumerable: true, get: function () { return Mixins_1.Controllable; } });
+Object.defineProperty(exports, "Moveable", { enumerable: true, get: function () { return Mixins_1.Moveable; } });
 Object.defineProperty(exports, "PlayerActor", { enumerable: true, get: function () { return Mixins_1.PlayerActor; } });
 Object.defineProperty(exports, "Recipient", { enumerable: true, get: function () { return Mixins_1.Recipient; } });
 Object.defineProperty(exports, "Sight", { enumerable: true, get: function () { return Mixins_1.Sight; } });

@@ -3,13 +3,16 @@ import Engine from 'rot-js/lib/engine';
 import PreciseShadowcasting from 'rot-js/lib/fov/precise-shadowcasting';
 import Scheduler from 'rot-js/lib/scheduler/scheduler';
 
-import { PlayerActor, Entity, Player } from '../ECS';
+import { Entity, Mob, Player } from '../ECS';
 import { Tile } from './';
+import { batTemplate } from '../ECS/Entities';
+import { IScreen } from './Screen';
 
 class Map
 {
   public engine: Engine;
   public player: Player;
+  public screen: IScreen;
   
   public get tiles(): Array<Array<Array<Tile>>> { return this._tiles; };
   public set tiles(v: Array<Array<Array<Tile>>>) { this._tiles = v; };
@@ -38,7 +41,7 @@ class Map
   private _depth: number;
 
 
-  constructor(tiles: Array<Array<Array<Tile>>>, player: Player)
+  constructor(screen: IScreen, tiles: Array<Array<Array<Tile>>>, player: Player)
   {
     this._tiles = tiles;
     this._depth = tiles.length;
@@ -50,11 +53,18 @@ class Map
     this._scheduler = new ROT.Scheduler.Simple();
     this.engine = new ROT.Engine(this._scheduler);
     
+    this.screen = screen;
+
     // Initialize player
     this.addEntityAtRandomPosition(player, 0);
 
+    // FIXME: This works, but the entity's actual position does not update. Need to refactor using a proper Manager.
     // Initialize mobs
-    
+    for (let z = 0; z < this._depth; z++) {
+      for (let i = 0; i < 15; i++) {
+        this.addEntityAtRandomPosition(new Mob(batTemplate, this.screen.game, this), z);
+      }
+    }    
 
     // Start FOV calculations
     this._fov = [];
@@ -172,7 +182,7 @@ class Map
     }
   }
 
-  public addEntityAtRandomPosition(entity: Player, z: number): void
+  public addEntityAtRandomPosition(entity: Entity, z: number): void
   {
     let position = this.getRandomFloorPosition(z);
     
@@ -183,7 +193,7 @@ class Map
     this.addEntity(entity);
   }
 
-  public addEntity(entity: Player)
+  public addEntity(entity: Entity)
   {
     entity.map = this;
     

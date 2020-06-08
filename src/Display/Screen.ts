@@ -1,9 +1,11 @@
 import * as ROT from 'rot-js';
-import { Player } from '../ECS';
-
+import { Game } from '../Game';
+import { Map } from '../Display';
 
 interface IScreen
 {
+  game?: Game;
+  map?: Map;
   key: string;
   enter(): void;
   exit(): void;

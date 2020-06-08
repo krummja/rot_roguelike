@@ -16,41 +16,47 @@ class Controllable {
             let tile = this.map.getTile(x, y, this.z);
             if (z < this.z) {
                 if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
-                    this.x = x;
-                    this.y = y;
-                    this.z = z;
+                    Game_1.Game.EVENTS.emit('player', 'tryMove', 'up', 'success');
+                    Game_1.Game.EVENTS.emit('player', 'move', x, y, z);
+                }
+                else {
+                    Game_1.Game.EVENTS.emit('player', 'tryMove', 'up', 'failure');
                 }
             }
             else if (z > this.z) {
                 if (tile.traversable['open'] === true && tile.traversable['direction'] === 'down') {
-                    this.x = x;
-                    this.y = y;
-                    this.z = z;
+                    Game_1.Game.EVENTS.emit('player', 'tryMove', 'down', 'success');
+                    Game_1.Game.EVENTS.emit('player', 'move', x, y, z);
+                }
+                else {
+                    Game_1.Game.EVENTS.emit('player', 'tryMove', 'down', 'failure');
                 }
             }
             else if (tile.walkable) {
-                this.x = x;
-                this.y = y;
-                this.z = z;
+                Game_1.Game.EVENTS.emit('player', 'tryMove', 'move', 'success');
+                Game_1.Game.EVENTS.emit('player', 'move', x, y, z);
                 return true;
             }
             else if (tile.diggable) {
+                Game_1.Game.EVENTS.emit('player', 'tryMove', 'dig', 'success');
                 this.map.dig(x, y, z);
                 return true;
             }
+            // Game.EVENTS.emit('player', 'tryMove', 'move', 'failure');
             return false;
         };
     }
 }
 exports.Controllable = Controllable;
 class Moveable {
-    init(properties) {
+    init(properties, map) {
         this.properties = properties;
+        this.map = map;
         this.x = this.properties['x'];
         this.y = this.properties['y'];
         this.z = this.properties['z'];
-        this.tryMove = (x, y, z, map) => {
-            let tile = map.getTile(x, y, this.z);
+        this.tryMove = (x, y, z) => {
+            let tile = this.map.getTile(x, y, this.z);
             if (z < this.z) {
                 if (tile.traversable['open'] === true && tile.traversable['direction'] === 'up') {
                     this.x = x;
@@ -69,10 +75,6 @@ class Moveable {
                 this.x = x;
                 this.y = y;
                 this.z = z;
-                return true;
-            }
-            else if (tile.diggable) {
-                map.dig(x, y, z);
                 return true;
             }
             return false;
@@ -115,11 +117,21 @@ class PlayerActor {
 }
 exports.PlayerActor = PlayerActor;
 class MobActor {
-    init() {
-        this.position = this.properties['position'];
+    init(properties) {
+        this.properties = properties;
+        this.x = this.properties['x'];
+        this.y = this.properties['y'];
+        this.z = this.properties['z'];
         this.act = () => {
-            this.game.refresh();
-            this.map.engine.lock();
+            // this.game.refresh();
+            // this.map.engine.lock();
+            let moveOffset = (Math.round(Math.random()) === 1) ? 1 : -1;
+            if (Math.round(Math.random()) === 1) {
+                this.tryMove(this.x + moveOffset, this.y, this.z);
+            }
+            else {
+                this.tryMove(this.x, this.y + moveOffset, this.z);
+            }
         };
     }
 }

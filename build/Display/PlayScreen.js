@@ -26,6 +26,7 @@ const ECS_1 = require("../ECS");
 const Entities_1 = require("../ECS/Entities");
 const Game_1 = require("../Game");
 const _1 = require("./");
+const PositionManager_1 = require("../PositionManager");
 class PlayScreen {
     constructor(game) {
         this.key = "PLAY";
@@ -44,9 +45,10 @@ class PlayScreen {
         let iterations = 100;
         let tilesFilled = 50;
         let tiles = new Builder_1.Builder(width, height, depth, ratio, iterations, tilesFilled).tiles;
-        this.map = new _1.Map(tiles, this._player);
+        this.map = new _1.Map(this, tiles, this._player);
         this.map.engine.start();
         Game_1.Game.EVENTS.emit('ready');
+        this.positionManager = new PositionManager_1.PositionManager(this);
     }
     exit() {
         console.log('PlayScreen.exit:   Exited play screen.');
